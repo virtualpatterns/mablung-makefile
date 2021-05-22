@@ -100,8 +100,6 @@ node: build
 test: build
 	@npx shx rm -rf coverage process
 	@npx c8 ava $(argument)
-	@git add release package-lock.json
-	@git commit --message="post-test" --quiet
 
 release: clean upgrade refresh test
 	@npm version prerelease
