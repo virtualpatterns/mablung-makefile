@@ -1,0 +1,1 @@
+{"version":3,"sources":["../source/index.mjs"],"names":[],"mappings":"AAAA,OAAO,MAAM,EAAE,GAAG,IAAX","file":"index.mjs","sourcesContent":["export const OK = true\n"]}
