@@ -16,6 +16,7 @@ upgrade:
 
 projectPath ?= $(CURDIR)
 export projectPath
+export MAKEFILE_LIST
 
 makefilePath := $(realpath $(firstword $(MAKEFILE_LIST)))
 binaryPath := $(projectPath)/node_modules/.bin
@@ -98,9 +99,10 @@ debug:
 	@$(MAKE) --directory=source --file=$(makefilePath) --no-print-directory debug-one
 
 debug-one: $(debugPath)
-	@$(binaryPath)/shx echo Debug ......... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
-	@$(binaryPath)/shx echo sourcePath .... $(addprefix $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)/,$(sourcePath))
-	@$(binaryPath)/shx echo releasePath ... $(patsubst $(projectPath)/%,%,$(releasePath))
+	@$(binaryPath)/shx echo Debug ........... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
+	@$(binaryPath)/shx echo MAKEFILE_LIST ... $(MAKEFILE_LIST)
+	@$(binaryPath)/shx echo sourcePath ...... $(addprefix $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)/,$(sourcePath))
+	@$(binaryPath)/shx echo releasePath ..... $(patsubst $(projectPath)/%,%,$(releasePath))
 	@$(binaryPath)/shx echo
 
 # ----------
