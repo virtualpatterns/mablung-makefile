@@ -1,9 +1,10 @@
+
 .PHONY: default refresh upgrade build build-one debug debug-one clean node test release
 
 default: build
 
 refresh:
-	@rm -rf node_modules package-lock.json
+	@rm -Rf node_modules package-lock.json
 	@npm install
 
 upgrade:
@@ -13,18 +14,24 @@ upgrade:
 
 # - Build ---------
 
+projectPath ?= $(CURDIR)
+export projectPath
+
+makefilePath := $(realpath $(firstword $(MAKEFILE_LIST)))
+binaryPath := $(projectPath)/node_modules/.bin
+
 contentOf =	$(strip \
 							$(filter-out ..,\
 							$(filter-out .,\
 								$(patsubst ./%,%,\
 									$(wildcard $(1)/.*) $(wildcard $(1)/*)))))
 
-currentSourcePath		:=	$(shell $(or $(rootPath),.)/node_modules/.bin/shx pwd)
-currentReleasePath	:=	$(subst /source/,/release/,\
+currentSourcePath := $(CURDIR)
+currentReleasePath :=	$(subst /source/,/release/,\
 												$(subst /source,/release,\
 													$(currentSourcePath)))
 
-sourcePath	:=	$(call contentOf,.)
+sourcePath :=	$(call contentOf,.)
 releasePath :=	$(foreach \
 									path,\
 									$(sourcePath),\
@@ -33,14 +40,13 @@ releasePath :=	$(foreach \
 										$(path)/.build,\
 										$(currentReleasePath)/$(path)))
 
-%/.build: export rootPath
 %/.build:
-	@$(MAKE) --directory=$* --file=$(rootPath)/makefile --no-print-directory build-one
+	@$(MAKE) --directory=$* --file=$(makefilePath) --no-print-directory build-one
 
 define runCompile
-@$(rootPath)/node_modules/.bin/shx echo Compile ... $(patsubst $(rootPath)/%,%,$(currentSourcePath)/$<)
-@$(rootPath)/node_modules/.bin/eslint --fix $<
-@$(rootPath)/node_modules/.bin/babel $< --out-file $@ --source-maps
+@$(binaryPath)/shx echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+@$(binaryPath)/eslint --fix $<
+@$(binaryPath)/babel $< --out-file $@ --source-maps
 endef
 
 $(currentReleasePath)/%.cjs: %.cjs
@@ -50,21 +56,31 @@ $(currentReleasePath)/%.js: %.js
 $(currentReleasePath)/%.mjs: %.mjs
 	$(runCompile)
 
-$(currentReleasePath)/.DS_Store: ;
-$(currentReleasePath)/.babelrc.json: ;
-$(currentReleasePath)/.eslintrc.json: ;
+define runIgnore
+@$(binaryPath)/shx echo Ignore .... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+endef
+
+$(currentReleasePath)/.DS_Store: .DS_Store
+	$(runIgnore)
+$(currentReleasePath)/.babelrc.json: .babelrc.json
+	$(runIgnore)
+$(currentReleasePath)/.eslintrc.json: .eslintrc.json
+	$(runIgnore)
+
+define runCopy
+@$(binaryPath)/shx echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+@$(binaryPath)/shx mkdir -p $(patsubst %/,%,$(dir $@))
+@$(binaryPath)/shx cp -R $< $@
+endef
 
 $(currentReleasePath)/%: %
-	@$(rootPath)/node_modules/.bin/shx echo Copy ...... $(patsubst $(rootPath)/%,%,$(currentSourcePath)/$<)
-	@$(rootPath)/node_modules/.bin/shx mkdir -p $(patsubst %/,%,$(dir $@))
-	@$(rootPath)/node_modules/.bin/shx cp -R $< $@
+	$(runCopy)
 
-build: export rootPath = $(CURDIR)
 build:
-	@$(MAKE) --directory=source --file=$(rootPath)/makefile --jobs --no-print-directory build-one
+	@$(MAKE) --directory=source --file=$(makefilePath) --jobs --no-print-directory build-one
 
 build-one: $(releasePath);
-	@$(rootPath)/node_modules/.bin/shx echo -n 
+	@$(binaryPath)/shx echo -n 
 
 # - Debug ---------
 
@@ -75,19 +91,17 @@ debugPath :=	$(foreach \
 									$(call contentOf,$(path)),\
 									$(path)/.debug))
 
-%/.debug: export rootPath
 %/.debug:
-	@$(MAKE) --directory=$* --file=$(rootPath)/makefile --no-print-directory debug-one
+	@$(MAKE) --directory=$* --file=$(makefilePath) --no-print-directory debug-one
 
-debug: export rootPath ?= $(CURDIR)
 debug:
-	@$(MAKE) --directory=source --file=$(rootPath)/makefile --no-print-directory debug-one
+	@$(MAKE) --directory=source --file=$(makefilePath) --no-print-directory debug-one
 
 debug-one: $(debugPath)
-	@$(rootPath)/node_modules/.bin/shx echo Debug ......... $(patsubst $(rootPath)/%/,%,$(currentSourcePath)/$*)
-	@$(rootPath)/node_modules/.bin/shx echo sourcePath .... $(addprefix $(patsubst $(rootPath)/%/,%,$(currentSourcePath)/$*)/,$(sourcePath))
-	@$(rootPath)/node_modules/.bin/shx echo releasePath ... $(patsubst $(rootPath)/%,%,$(releasePath))
-	@$(rootPath)/node_modules/.bin/shx echo
+	@$(binaryPath)/shx echo Debug ......... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
+	@$(binaryPath)/shx echo sourcePath .... $(addprefix $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)/,$(sourcePath))
+	@$(binaryPath)/shx echo releasePath ... $(patsubst $(projectPath)/%,%,$(releasePath))
+	@$(binaryPath)/shx echo
 
 # ----------
 
@@ -100,6 +114,8 @@ node: build
 test: build
 	@npx shx rm -rf coverage process
 	@npx c8 ava $(argument)
+	@git add release package-lock.json
+	@git commit --message="post-test" --quiet
 
 release: clean upgrade refresh test
 	@npm version prerelease
