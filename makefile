@@ -118,6 +118,7 @@ test: build
 	@git commit --message="post-test" --quiet
 
 pre-release: clean upgrade refresh test
+	@npx shx echo -n
 
 release: pre-release
 	@npm version prerelease
