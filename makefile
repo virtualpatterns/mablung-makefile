@@ -117,6 +117,8 @@ test: build
 	@git add release package-lock.json
 	@git commit --message="post-test" --quiet
 
-release: clean upgrade refresh test
+pre-release: clean upgrade refresh test
+
+release: pre-release
 	@npm version prerelease
 	@git push origin master
