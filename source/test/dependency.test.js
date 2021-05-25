@@ -4,7 +4,7 @@ import Test from 'ava'
 
 const Process = process
 
-Test('depcheck', async (test) => {
+Test('dependency', async (test) => {
 
   let unused = await Check(Process.cwd(), {
     'ignorePatterns': [

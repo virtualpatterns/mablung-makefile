@@ -14,11 +14,11 @@ upgrade:
 
 # - Build ---------
 
-projectPath ?= $(CURDIR)
-export projectPath
-export MAKEFILE_LIST
+export projectPath ?= $(CURDIR)
+export makefilePath ?= $(realpath $(MAKEFILE_LIST))
 
-makefilePath := $(realpath $(firstword $(MAKEFILE_LIST)))
+export MAKEFILE_PATH := $(makefilePath)
+
 binaryPath := $(projectPath)/node_modules/.bin
 
 contentOf =	$(strip \
@@ -42,7 +42,13 @@ releasePath :=	$(foreach \
 										$(currentReleasePath)/$(path)))
 
 %/.build:
-	@$(MAKE) --directory=$* --file=$(makefilePath) --no-print-directory build-one
+	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-one
+
+build:
+	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-one
+
+build-one: $(releasePath);
+	@$(binaryPath)/shx echo -n 
 
 define runCompile
 @$(binaryPath)/shx echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
@@ -77,12 +83,6 @@ endef
 $(currentReleasePath)/%: %
 	$(runCopy)
 
-build:
-	@$(MAKE) --directory=source --file=$(makefilePath) --jobs --no-print-directory build-one
-
-build-one: $(releasePath);
-	@$(binaryPath)/shx echo -n 
-
 # - Debug ---------
 
 debugPath :=	$(foreach \
@@ -93,16 +93,20 @@ debugPath :=	$(foreach \
 									$(path)/.debug))
 
 %/.debug:
-	@$(MAKE) --directory=$* --file=$(makefilePath) --no-print-directory debug-one
+	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory debug-one
 
 debug:
-	@$(MAKE) --directory=source --file=$(makefilePath) --no-print-directory debug-one
+	@$(binaryPath)/shx echo
+	@$(binaryPath)/shx echo .FEATURES ............ $(.FEATURES)
+	@$(binaryPath)/shx echo projectPath .......... $(projectPath)
+	@$(binaryPath)/shx echo makefilePath ......... $(makefilePath)
+	@$(binaryPath)/shx echo
+	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory debug-one
 
 debug-one: $(debugPath)
-	@$(binaryPath)/shx echo Debug ........... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
-	@$(binaryPath)/shx echo MAKEFILE_LIST ... $(MAKEFILE_LIST)
-	@$(binaryPath)/shx echo sourcePath ...... $(addprefix $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)/,$(sourcePath))
-	@$(binaryPath)/shx echo releasePath ..... $(patsubst $(projectPath)/%,%,$(releasePath))
+	@$(binaryPath)/shx echo currentSourcePath .... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
+	@$(binaryPath)/shx echo currentReleasePath ... $(patsubst $(projectPath)/%/,%,$(currentReleasePath)/$*)
+	@$(binaryPath)/shx echo sourcePath ........... $(sourcePath)
 	@$(binaryPath)/shx echo
 
 # ----------
