@@ -40,7 +40,7 @@
     "node": "run-s --silent \"node:10 argument='{@}'\" --"
   },
   "type": "module",
-  "version": "0.0.1-5",
+  "version": "0.0.1-6",
   "dependencies": {
     "@babel/cli": "^7.14.3",
     "@babel/core": "^7.14.3",
