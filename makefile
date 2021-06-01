@@ -20,6 +20,9 @@ export makefilePath ?= $(realpath $(MAKEFILE_LIST))
 export MAKEFILE_PATH := $(makefilePath)
 
 binaryPath := $(projectPath)/node_modules/.bin
+shx := $(binaryPath)/shx
+eslint := $(binaryPath)/eslint
+babel := $(binaryPath)/babel
 
 contentOf =	$(strip \
 							$(filter-out ..,\
@@ -44,17 +47,12 @@ releasePath :=	$(foreach \
 %/.build:
 	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-one
 
-build:
-	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-one
-
-build-one: $(releasePath);
-	@$(binaryPath)/shx echo -n 
-
 define runCompile
-@$(binaryPath)/shx echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-@$(binaryPath)/eslint --fix $<
-@$(binaryPath)/babel $< --out-file $@ --source-maps
+@$(eslint) --fix $<
+@$(babel) $< --out-file $@ --source-maps
 endef
+
+# @$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 
 $(currentReleasePath)/%.cjs: %.cjs
 	$(runCompile)
@@ -63,25 +61,25 @@ $(currentReleasePath)/%.js: %.js
 $(currentReleasePath)/%.mjs: %.mjs
 	$(runCompile)
 
-define runIgnore
-@$(binaryPath)/shx echo Ignore .... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-endef
-
-$(currentReleasePath)/.DS_Store: .DS_Store
-	$(runIgnore)
-$(currentReleasePath)/.babelrc.json: .babelrc.json
-	$(runIgnore)
-$(currentReleasePath)/.eslintrc.json: .eslintrc.json
-	$(runIgnore)
+$(currentReleasePath)/.DS_Store: ;
+$(currentReleasePath)/.babelrc.json: ;
+$(currentReleasePath)/.eslintrc.json: ;
 
 define runCopy
-@$(binaryPath)/shx echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-@$(binaryPath)/shx mkdir -p $(patsubst %/,%,$(dir $@))
-@$(binaryPath)/shx cp -R $< $@
+@$(shx) mkdir -p $(patsubst %/,%,$(dir $@))
+@$(shx) cp -R $< $@
 endef
+
+# @$(shx) echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 
 $(currentReleasePath)/%: %
 	$(runCopy)
+
+build:
+	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-one
+
+build-one: $(releasePath)
+	@$(shx) echo -n 
 
 # - Debug ---------
 
@@ -96,18 +94,18 @@ debugPath :=	$(foreach \
 	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory debug-one
 
 debug:
-	@$(binaryPath)/shx echo
-	@$(binaryPath)/shx echo .FEATURES ............ $(.FEATURES)
-	@$(binaryPath)/shx echo projectPath .......... $(projectPath)
-	@$(binaryPath)/shx echo makefilePath ......... $(makefilePath)
-	@$(binaryPath)/shx echo
+	@$(shx) echo
+	@$(shx) echo .FEATURES ............ $(.FEATURES)
+	@$(shx) echo projectPath .......... $(projectPath)
+	@$(shx) echo makefilePath ......... $(makefilePath)
+	@$(shx) echo
 	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory debug-one
 
 debug-one: $(debugPath)
-	@$(binaryPath)/shx echo currentSourcePath .... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
-	@$(binaryPath)/shx echo currentReleasePath ... $(patsubst $(projectPath)/%/,%,$(currentReleasePath)/$*)
-	@$(binaryPath)/shx echo sourcePath ........... $(sourcePath)
-	@$(binaryPath)/shx echo
+	@$(shx) echo currentSourcePath .... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
+	@$(shx) echo currentReleasePath ... $(patsubst $(projectPath)/%/,%,$(currentReleasePath)/$*)
+	@$(shx) echo sourcePath ........... $(sourcePath)
+	@$(shx) echo
 
 # ----------
 
