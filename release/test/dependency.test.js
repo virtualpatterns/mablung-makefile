@@ -11,14 +11,9 @@ Test('dependency', async (test) => {
     '@babel/cli',
     'c8',
     'npm-check-updates',
-    'shx']
+    'shx'] });
 
-    // 'specials': [
-    //   Check.special.babel,
-    //   Check.special.bin,
-    //   Check.special.eslint
-    // ]
-  });
+
 
   test.deepEqual(unused.dependencies, []);
   test.deepEqual(unused.devDependencies, []);
