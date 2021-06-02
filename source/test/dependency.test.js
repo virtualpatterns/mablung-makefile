@@ -7,23 +7,20 @@ const Process = process
 Test('dependency', async (test) => {
 
   let unused = await Check(Process.cwd(), {
-    'ignorePatterns': [
-      '/coverage',
-      '/process',
-      '/sandbox'
+    'ignoreMatches': [
+      '@babel/cli',
+      'c8',
+      'npm-check-updates',
+      'shx'
     ]
   })
 
   test.deepEqual(unused.dependencies, [])
-  test.deepEqual(unused.devDependencies, [
-    '@babel/cli',
-    'c8',
-    'npm-check-updates',
-    'shx'
-  ])
+  test.deepEqual(unused.devDependencies, [])
 
-  test.true(Is.emptyObject(unused.missing))
   test.true(Is.emptyObject(unused.invalidDirs))
   test.true(Is.emptyObject(unused.invalidFiles))
+
+  test.true(Is.emptyObject(unused.missing))
 
 })
