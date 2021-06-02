@@ -15,7 +15,12 @@ Test('dependency', async (test) => {
 
 
   test.deepEqual(unused.dependencies, []);
-  test.deepEqual(unused.devDependencies, []);
+  test.deepEqual(unused.devDependencies, [
+  '@babel/cli',
+  'c8',
+  'npm-check-updates',
+  'shx']);
+
 
   test.true(Is.emptyObject(unused.missing));
   test.true(Is.emptyObject(unused.invalidDirs));
