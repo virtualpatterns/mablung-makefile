@@ -17,7 +17,7 @@
     "sourceType": "module"
   },
   "plugins": [
-    "babel"
+    "eslint-plugin-babel"
   ],
   "rules": {
     "arrow-parens": "error",
