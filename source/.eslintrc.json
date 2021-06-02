@@ -7,10 +7,7 @@
   "extends": [
     "eslint:recommended"
   ],
-  "globals": {
-    "__filePath": "readonly",
-    "__require": "readonly"
-  },
+  "globals": {},
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "requireConfigFile": false,
