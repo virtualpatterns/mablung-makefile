@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../source/sandbox/hello.js"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAR,CAAY,eAAZ","file":"hello.js","sourcesContent":["console.log('Hello, world!')"]}

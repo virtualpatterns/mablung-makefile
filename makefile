@@ -4,6 +4,7 @@
 default: build
 
 refresh:
+	@$(shx) echo Refreshing ...
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
@@ -72,6 +73,7 @@ $(currentReleasePath)/%: %
 # @$(shx) echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 
 build:
+	@$(shx) echo Building ...
 	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-one
 
 build-one: $(releasePath)
@@ -106,9 +108,10 @@ debug-one: $(debugPath)
 # ----------
 
 clean:
+	@$(shx) echo Cleaning ...
 	@npx shx rm -rf coverage process release
 
-node: build
+run: build
 	@node --no-warnings --unhandled-rejections=strict $(argument)
 
 test: build

@@ -25,7 +25,6 @@ Test('dependency', async (test) => {
 
   test.true(Is.emptyObject(unused.invalidDirs))
   test.true(Is.emptyObject(unused.invalidFiles))
-
   test.true(Is.emptyObject(unused.missing))
 
 })
