@@ -47,33 +47,29 @@ releasePath :=	$(foreach \
 %/.build:
 	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-one
 
-define runCompile
-@$(eslint) --fix $<
-@$(babel) $< --out-file $@ --source-maps
-endef
+$(currentReleasePath)/%.cjs: %.cjs
+	@$(eslint) --fix $<
+	@$(babel) $< --out-file $@ --source-maps
+
+$(currentReleasePath)/%.js: %.js
+	@$(eslint) --fix $<
+	@$(babel) $< --out-file $@ --source-maps
+
+$(currentReleasePath)/%.mjs: %.mjs
+	@$(eslint) --fix $<
+	@$(babel) $< --out-file $@ --source-maps
 
 # @$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-
-$(currentReleasePath)/%.cjs: %.cjs
-	$(runCompile)
-$(currentReleasePath)/%.js: %.js
-	$(runCompile)
-$(currentReleasePath)/%.mjs: %.mjs
-	$(runCompile)
 
 $(currentReleasePath)/.DS_Store: ;
 $(currentReleasePath)/.babelrc.json: ;
 $(currentReleasePath)/.eslintrc.json: ;
 
-define runCopy
-@$(shx) mkdir -p $(patsubst %/,%,$(dir $@))
-@$(shx) cp -R $< $@
-endef
+$(currentReleasePath)/%: %
+	@$(shx) mkdir -p $(patsubst %/,%,$(dir $@))
+	@$(shx) cp -R $< $@
 
 # @$(shx) echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-
-$(currentReleasePath)/%: %
-	$(runCopy)
 
 build:
 	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-one
