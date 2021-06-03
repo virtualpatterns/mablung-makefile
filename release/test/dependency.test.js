@@ -11,7 +11,12 @@ Test('dependency', async (test) => {
     '@babel/cli',
     'c8',
     'npm-check-updates',
-    'shx'] });
+    'shx'],
+
+    'parsers': {
+      '**/*.cjs': [Check.parser.es6, Check.parser.es7.default],
+      '**/*.js': [Check.parser.es6, Check.parser.es7.default],
+      '**/*.mjs': [Check.parser.es6, Check.parser.es7.default] } });
 
 
 

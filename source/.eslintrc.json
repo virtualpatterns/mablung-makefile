@@ -1,6 +1,5 @@
 {
   "env": {
-    "commonjs": true,
     "es6": true,
     "node": true
   },
@@ -10,7 +9,7 @@
   "globals": {},
   "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "requireConfigFile": false,
+    "requireConfigFile": true,
     "sourceType": "module"
   },
   "plugins": [
