@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../source/test/resource/index.cjs"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAP,GAAiB,EAAE,MAAM,IAAR,EAAjB","file":"index.cjs","sourcesContent":["module.exports = { 'OK': true }"]}
