@@ -42,9 +42,9 @@
   "type": "module",
   "version": "0.0.1-14",
   "devDependencies": {
-    "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
-    "@babel/eslint-parser": "^7.14.4",
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.5",
+    "@babel/eslint-parser": "^7.14.5",
     "@pwn/is": "^1.0.2",
     "ava": "^3.15.0",
     "c8": "^7.7.2",
@@ -58,8 +58,8 @@
     "shx": "^0.3.3"
   },
   "peerDependencies": {
-    "@babel/cli": "^7.14.3",
-    "@babel/core": "^7.14.3",
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.5",
     "ava": "^3.15.0",
     "c8": "^7.7.2",
     "eslint": "^7.28.0",
