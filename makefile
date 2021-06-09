@@ -110,8 +110,10 @@ debugPath := $(foreach \
 								path,\
 								$(sourcePath),\
 								$(if \
-									$(call contentOf,$(path)),\
-									$(path)/.debug-folder))
+									$(wildcard $(path)/makefile),,\
+									$(if \
+										$(call contentOf,$(path)),\
+										$(path)/.debug-folder)))
 
 %/.debug-folder:
 	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory debug-folder
