@@ -1,7 +1,5 @@
 
-.PHONY: default refresh upgrade build build-one debug debug-one clean node test release
-
-default: build
+.PHONY: default refresh upgrade build build-folder debug debug-folder clean run test pre-release release
 
 refresh:
 	@rm -Rf node_modules package-lock.json
@@ -14,8 +12,10 @@ upgrade:
 
 # - Build ---------
 
-export projectPath ?= $(CURDIR)
-export makefilePath ?= $(realpath $(MAKEFILE_LIST))
+ifeq ($(origin projectPath),undefined)
+export projectPath = $(CURDIR)
+export makefilePath = $(realpath $(MAKEFILE_LIST))
+endif
 
 export MAKEFILE_PATH := $(makefilePath)
 
@@ -31,21 +31,34 @@ contentOf =	$(strip \
 									$(wildcard $(1)/.*) $(wildcard $(1)/*)))))
 
 currentSourcePath := $(CURDIR)
-currentReleasePath :=	$(subst /source/,/release/,\
-												$(subst /source,/release,\
-													$(currentSourcePath)))
+currentReleasePath := $(subst /source,/release,$(currentSourcePath))
+
+# $(info --------------------)
+# $(info currentSourcePath = $(currentSourcePath))
+# $(info currentReleasePath = $(currentReleasePath))
+# $(info --------------------)
 
 sourcePath :=	$(call contentOf,.)
-releasePath :=	$(foreach \
+releasePath := $(foreach \
 									path,\
 									$(sourcePath),\
 									$(if \
-										$(call contentOf,$(path)),\
-										$(path)/.build,\
-										$(currentReleasePath)/$(path)))
+										$(wildcard $(path)/makefile),\
+										$(path)/.make-folder,\
+										$(if \
+											$(call contentOf,$(path)),\
+											$(path)/.build-folder,\
+											$(currentReleasePath)/$(path))))
 
-%/.build:
-	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-one
+%/.make-folder:
+	@$(MAKE) --directory=$* --no-print-directory
+
+# @$(shx) echo Make ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
+
+%/.build-folder:
+	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-folder
+
+# @$(shx) echo Build ..... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
 
 $(currentReleasePath)/%.cjs: %.cjs
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
@@ -71,48 +84,62 @@ $(currentReleasePath)/%: %
 	@$(shx) mkdir -p $(patsubst %/,%,$(dir $@))
 	@$(shx) cp -R $< $@
 
-build:
-	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory build-one
+build: build-all
 
-build-one: $(releasePath)
+build-all:
+	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory build-folder
+
+build-folder: $(releasePath)
+	@$(shx) echo -n 
+
+copy-folder:
+	@$(shx) echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath))
+	@$(shx) mkdir -p $(patsubst %/,%,$(dir $(currentReleasePath)))
+	@$(shx) cp -R $(currentSourcePath) $(patsubst %/,%,$(dir $(currentReleasePath)))
+	@$(shx) rm -f $(currentReleasePath)/makefile
+
+ignore-folder:
 	@$(shx) echo -n 
 
 # - Debug ---------
 
-debugPath :=	$(foreach \
+debugPath := $(foreach \
 								path,\
 								$(sourcePath),\
 								$(if \
 									$(call contentOf,$(path)),\
-									$(path)/.debug))
+									$(path)/.debug-folder))
 
-%/.debug:
-	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory debug-one
+%/.debug-folder:
+	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory debug-folder
 
-debug:
+debug: debug-all
+
+debug-all:
 	@$(shx) echo
 	@$(shx) echo .FEATURES ............ $(.FEATURES)
 	@$(shx) echo projectPath .......... $(projectPath)
 	@$(shx) echo makefilePath ......... $(makefilePath)
 	@$(shx) echo
-	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory debug-one
+	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --no-print-directory debug-folder
 
-debug-one: $(debugPath)
-	@$(shx) echo currentSourcePath .... $(patsubst $(projectPath)/%/,%,$(currentSourcePath)/$*)
-	@$(shx) echo currentReleasePath ... $(patsubst $(projectPath)/%/,%,$(currentReleasePath)/$*)
+debug-folder: $(debugPath)
+	@$(shx) echo currentSourcePath .... $(patsubst $(projectPath)/%,%,$(currentSourcePath))
+	@$(shx) echo currentReleasePath ... $(patsubst $(projectPath)/%,%,$(currentReleasePath))
 	@$(shx) echo sourcePath ........... $(sourcePath)
+	@$(shx) echo releasePath .......... $(patsubst $(currentReleasePath)/%,%,$(releasePath))
 	@$(shx) echo
 
 # ----------
 
 clean:
-	@npx shx rm -rf coverage process release
+	@npx shx rm -Rf coverage process release
 
-run: build
+run: build-all
 	@node --no-warnings --unhandled-rejections=strict $(argument)
 
-test: build
-	@npx shx rm -rf coverage process
+test: build-all
+	@npx shx rm -Rf coverage process
 	@npx c8 ava $(argument)
 
 # @git add release package-lock.json
@@ -124,3 +151,5 @@ pre-release: clean upgrade refresh test
 release: pre-release
 	@npm version prerelease
 	@git push origin master
+
+.DEFAULT_GOAL := build-all
