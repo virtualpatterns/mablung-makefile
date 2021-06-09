@@ -46,13 +46,13 @@ releasePath := $(foreach \
 									path,\
 									$(sourcePath),\
 									$(if \
-										$(wildcard $(path)/makefile),\
-										$(path)/.make-folder,\
+										$(call contentOf,$(path)),\
 										$(if \
-											$(call contentOf,$(path)),\
-											$(path)/.build-folder,\
-											$(currentReleasePath)/$(path))))
-
+											$(wildcard $(path)/makefile),\
+											$(path)/.make-folder,\
+											$(path)/.build-folder),\
+										$(currentReleasePath)/$(path)))
+	
 %/.make-folder:
 	@$(MAKE) --directory=$* --no-print-directory
 
@@ -110,9 +110,9 @@ debugPath := $(foreach \
 								path,\
 								$(sourcePath),\
 								$(if \
-									$(wildcard $(path)/makefile),,\
+									$(call contentOf,$(path)),\
 									$(if \
-										$(call contentOf,$(path)),\
+										$(wildcard $(path)/makefile),,\
 										$(path)/.debug-folder)))
 
 %/.debug-folder:
