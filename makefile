@@ -1,5 +1,5 @@
 
-.PHONY: default refresh upgrade build build-folder debug debug-folder clean run test pre-release release
+.PHONY: default refresh upgrade build build-folder copy-folder ignore-folder debug debug-folder clean run test pre-release release
 
 refresh:
 	@rm -Rf node_modules package-lock.json
