@@ -15,7 +15,9 @@
   "c8": {
     "all": true,
     "exclude": [
+      "release/sandbox",
       "release/test",
+      "source/sandbox",
       "source/test"
     ],
     "reporter": [
@@ -34,10 +36,7 @@
     "url": "https://github.com/virtualpatterns/mablung-makefile"
   },
   "scripts": {
-    "test:10": "make test",
-    "test": "run-s --silent \"test:10 argument='{@}'\" --",
-    "node:10": "make node",
-    "node": "run-s --silent \"node:10 argument='{@}'\" --"
+    "test": "make test"
   },
   "type": "module",
   "version": "0.0.1-15",
