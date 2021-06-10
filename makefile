@@ -56,35 +56,32 @@ releasePath := $(foreach \
 %/.make-folder:
 	@$(MAKE) --directory=$* --no-print-directory
 
-# @$(shx) echo Make ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
-
 %/.build-folder:
+	@$(shx) mkdir -p $(currentReleasePath)/$*
 	@$(MAKE) --directory=$* --file=$(firstword $(makefilePath)) --no-print-directory build-folder
 
+# @$(shx) echo Make ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
 # @$(shx) echo Build ..... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
 
 $(currentReleasePath)/%.cjs: eslintFlag := --fix
 $(currentReleasePath)/%.cjs: babelFlag := --source-maps
 $(currentReleasePath)/%.cjs: %.cjs
-	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) $(eslintFlag) $<
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/%.js: eslintFlag := --fix
 $(currentReleasePath)/%.js: babelFlag := --source-maps
 $(currentReleasePath)/%.js: %.js
-	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) $(eslintFlag) $<
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/%.mjs: eslintFlag := --fix
 $(currentReleasePath)/%.mjs: babelFlag := --source-maps
 $(currentReleasePath)/%.mjs: %.mjs
-	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) $(eslintFlag) $<
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/.DS_Store: ;
@@ -93,7 +90,6 @@ $(currentReleasePath)/.eslintrc.json: ;
 
 $(currentReleasePath)/%: %
 	@$(shx) echo Copy ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(shx) mkdir -p $(patsubst %/,%,$(dir $@))
 	@$(shx) cp -R $< $@
 
 build: build-all
