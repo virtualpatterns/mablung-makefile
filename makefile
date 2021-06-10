@@ -66,22 +66,25 @@ releasePath := $(foreach \
 $(currentReleasePath)/%.cjs: eslintFlag := --fix
 $(currentReleasePath)/%.cjs: babelFlag := --source-maps
 $(currentReleasePath)/%.cjs: %.cjs
-	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(eslint) $(eslintFlag) $<
+	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/%.js: eslintFlag := --fix
 $(currentReleasePath)/%.js: babelFlag := --source-maps
 $(currentReleasePath)/%.js: %.js
-	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(eslint) $(eslintFlag) $<
+	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/%.mjs: eslintFlag := --fix
 $(currentReleasePath)/%.mjs: babelFlag := --source-maps
 $(currentReleasePath)/%.mjs: %.mjs
-	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
+	@$(shx) echo Lint ...... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(eslint) $(eslintFlag) $<
+	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/.DS_Store: ;
