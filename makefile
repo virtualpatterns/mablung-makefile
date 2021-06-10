@@ -63,20 +63,26 @@ releasePath := $(foreach \
 
 # @$(shx) echo Build ..... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$*)
 
+$(currentReleasePath)/%.cjs: eslintFlag := --fix
+$(currentReleasePath)/%.cjs: babelFlag := --source-maps
 $(currentReleasePath)/%.cjs: %.cjs
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) --fix $<
-	@$(babel) $< --out-file $@ --source-maps
+	@$(eslint) $(eslintFlag) $<
+	@$(babel) $< --out-file $@ $(babelFlag)
 
+$(currentReleasePath)/%.js: eslintFlag := --fix
+$(currentReleasePath)/%.js: babelFlag := --source-maps
 $(currentReleasePath)/%.js: %.js
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) --fix $<
-	@$(babel) $< --out-file $@ --source-maps
+	@$(eslint) $(eslintFlag) $<
+	@$(babel) $< --out-file $@ $(babelFlag)
 
+$(currentReleasePath)/%.mjs: eslintFlag := --fix
+$(currentReleasePath)/%.mjs: babelFlag := --source-maps
 $(currentReleasePath)/%.mjs: %.mjs
 	@$(shx) echo Compile ... $(patsubst $(projectPath)/%,%,$(currentSourcePath)/$<)
-	@$(eslint) --fix $<
-	@$(babel) $< --out-file $@ --source-maps
+	@$(eslint) $(eslintFlag) $<
+	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(currentReleasePath)/.DS_Store: ;
 $(currentReleasePath)/.babelrc.json: ;
