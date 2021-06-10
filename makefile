@@ -13,11 +13,11 @@ upgrade:
 # - Build ---------
 
 ifeq ($(origin projectPath),undefined)
-export projectPath = $(CURDIR)
+export projectPath := $(CURDIR)
 endif
 
 ifeq ($(origin makefilePath),undefined)
-export makefilePath = $(realpath $(MAKEFILE_LIST))
+export makefilePath := $(realpath $(MAKEFILE_LIST))
 endif
 
 export MAKEFILE_PATH := $(makefilePath)
