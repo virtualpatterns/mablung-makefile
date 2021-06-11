@@ -95,6 +95,7 @@ $(currentReleasePath)/%: %
 build: build-all
 
 build-all:
+	@$(shx) mkdir -p release
 	@$(MAKE) --directory=source --file=$(firstword $(makefilePath)) --jobs --no-print-directory build-folder
 
 build-folder: $(releasePath)
