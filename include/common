@@ -1,0 +1,32 @@
+
+.PHONY: refresh upgrade clean run test pre-release release
+
+refresh:
+	@rm -Rf node_modules package-lock.json
+	@npm install
+
+upgrade:
+	@npx shx rm -f package-lock.json
+	@npx npm-check-updates --upgrade
+	@npm install
+
+clean:
+	@npx shx rm -Rf coverage process release
+
+run: build
+	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	@node --no-warnings --unhandled-rejections=strict $(argument)
+
+test: build
+	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	@npx shx rm -Rf coverage process
+	@npx c8 ava $(argument)
+
+pre-release: clean upgrade refresh test
+	@npx shx echo -n
+
+release: pre-release
+	@npm version prerelease
+	@git push origin master
+
+.DEFAULT_GOAL := build-all

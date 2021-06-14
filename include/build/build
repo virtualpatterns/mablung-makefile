@@ -1,0 +1,68 @@
+
+.PHONY: build build-folder copy-folder ignore-folder
+
+currentSourcePath := $(CURDIR)
+currentReleasePath := $(subst /source,/release,$(currentSourcePath))
+
+# $(info --------------------)
+# $(info currentSourcePath = $(currentSourcePath))
+# $(info currentReleasePath = $(currentReleasePath))
+# $(info --------------------)
+
+sourcePath :=	$(call contentOf,.)
+releasePath := $(foreach \
+									path,\
+									$(sourcePath),\
+									$(if \
+										$(call contentOf,$(path)),\
+										$(if \
+											$(wildcard $(path)/makefile),\
+											$(path)/.make-folder,\
+											$(path)/.build-folder),\
+										$(currentReleasePath)/$(path)))
+	
+%/.make-folder:
+	@$(MAKE) --directory=$* --no-print-directory
+
+%/.build-folder:
+	@$(shx) mkdir -p $(currentReleasePath)/$*
+	@$(MAKE) --directory=$* --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory build-folder
+
+$(currentReleasePath)/%.cjs: eslintFlag := --fix
+$(currentReleasePath)/%.cjs: babelFlag := --source-maps
+$(currentReleasePath)/%.cjs: %.cjs
+	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
+	@$(eslint) $< $(eslintFlag)
+	@$(babel) $< --out-file $@ $(babelFlag)
+
+$(currentReleasePath)/%.js: eslintFlag := --fix
+$(currentReleasePath)/%.js: babelFlag := --source-maps
+$(currentReleasePath)/%.js: %.js
+	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
+	@$(eslint) $< $(eslintFlag)
+	@$(babel) $< --out-file $@ $(babelFlag)
+
+%/.DS_Store: ;
+%/.babelrc.json: ;
+%/.eslintrc.json: ;
+
+$(currentReleasePath)/%: %
+	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
+	@$(shx) cp -R $< $@
+
+build: build-all
+
+build-all:
+	@$(shx) mkdir -p release
+	@$(MAKE) --directory=source --file=$(firstword $(realpath $(MAKEFILE_LIST))) --jobs --no-print-directory build-folder
+
+build-folder: $(releasePath)
+	@$(shx) echo -n 
+
+copy-folder:
+	@$(shx) mkdir -p $(patsubst %/,%,$(dir $(currentReleasePath)))
+	@$(shx) cp -R $(currentSourcePath) $(patsubst %/,%,$(dir $(currentReleasePath)))
+	@$(shx) rm -f $(currentReleasePath)/makefile
+
+ignore-folder:
+	@$(shx) echo -n 

@@ -1,0 +1,11 @@
+
+binaryPath := $(projectPath)/node_modules/.bin
+shx := $(binaryPath)/shx
+eslint := $(binaryPath)/eslint
+babel := $(binaryPath)/babel
+
+contentOf =	$(strip \
+							$(filter-out ..,\
+							$(filter-out .,\
+								$(patsubst ./%,%,\
+									$(wildcard $(1)/.*) $(wildcard $(1)/*)))))

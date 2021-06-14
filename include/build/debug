@@ -1,0 +1,32 @@
+
+.PHONY: debug debug-all debug-folder pre-debug-folder
+
+debugPath := $(foreach \
+								path,\
+								$(sourcePath),\
+								$(if \
+									$(call contentOf,$(path)),\
+									$(if \
+										$(wildcard $(path)/makefile),,\
+										$(path)/.debug-folder)))
+
+%/.debug-folder:
+	@$(MAKE) --directory=$* --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
+
+debug: debug-all
+
+debug-all:
+	@$(shx) echo
+	@$(shx) echo .FEATURES ............ $(.FEATURES)
+	@$(shx) echo projectPath .......... $(projectPath)
+	@$(shx) echo makefilePath ......... $(patsubst $(projectPath)/%,%,$(realpath $(MAKEFILE_LIST)))
+	@$(shx) echo
+	@$(MAKE) --directory=source --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
+
+debug-folder: pre-debug-folder $(debugPath);
+
+pre-debug-folder:
+	@$(shx) echo currentSourcePath .... $(patsubst $(projectPath)/%,%,$(currentSourcePath))
+	@$(shx) echo sourcePath ........... $(sourcePath)
+	@$(shx) echo releasePath .......... $(patsubst $(projectPath)/%,%,$(releasePath))
+	@$(shx) echo
