@@ -28,12 +28,16 @@ Test('.eslintrc.json', async (test) => {
   test.false(await FileSystem.pathExists(`${FolderPath}/../.eslintrc.json`));
 });
 
-Test('index.cjs', async (test) => {
-  test.true((await import('./index.cjs')).OK);
+Test('resource/index.cjs', async (test) => {
+  test.true((await import('./resource/index.cjs')).OK);
 });
 
-Test('index.js', async (test) => {
-  test.true((await import('./index.js')).OK);
+Test('resource/index.js', async (test) => {
+  test.true((await import('./resource/index.js')).OK);
+});
+
+Test('resource/index.json', async (test) => {
+  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/index.json'), { 'encoding': 'utf-8' })).OK);
 });
 
 Test('resource/copy/makefile', async (test) => {
@@ -42,6 +46,10 @@ Test('resource/copy/makefile', async (test) => {
 
 Test('resource/copy/index.json', async (test) => {
   test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK);
+});
+
+Test('resource/empty', async (test) => {
+  test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`));
 });
 
 Test('resource/ignore/makefile', async (test) => {

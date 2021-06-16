@@ -1,68 +1,84 @@
 
-.PHONY: build build-folder copy-folder ignore-folder
-
-currentSourcePath := $(CURDIR)
-currentReleasePath := $(subst /source,/release,$(currentSourcePath))
-
-# $(info --------------------)
-# $(info currentSourcePath = $(currentSourcePath))
-# $(info currentReleasePath = $(currentReleasePath))
-# $(info --------------------)
-
-sourcePath :=	$(call contentOf,.)
-releasePath := $(foreach \
-									path,\
-									$(sourcePath),\
-									$(if \
-										$(call contentOf,$(path)),\
-										$(if \
-											$(wildcard $(path)/makefile),\
-											$(path)/.make-folder,\
-											$(path)/.build-folder),\
-										$(currentReleasePath)/$(path)))
-	
-%/.make-folder:
-	@$(MAKE) --directory=$* --no-print-directory
-
-%/.build-folder:
-	@$(shx) mkdir -p $(currentReleasePath)/$*
-	@$(MAKE) --directory=$* --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory build-folder
-
-$(currentReleasePath)/%.cjs: eslintFlag := --fix
-$(currentReleasePath)/%.cjs: babelFlag := --source-maps
-$(currentReleasePath)/%.cjs: %.cjs
-	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
-	@$(eslint) $< $(eslintFlag)
-	@$(babel) $< --out-file $@ $(babelFlag)
-
-$(currentReleasePath)/%.js: eslintFlag := --fix
-$(currentReleasePath)/%.js: babelFlag := --source-maps
-$(currentReleasePath)/%.js: %.js
-	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
-	@$(eslint) $< $(eslintFlag)
-	@$(babel) $< --out-file $@ $(babelFlag)
-
-%/.DS_Store: ;
-%/.babelrc.json: ;
-%/.eslintrc.json: ;
-
-$(currentReleasePath)/%: %
-	@$(shx) echo $(patsubst $(projectPath)/%,%,$@) ...
-	@$(shx) cp -R $< $@
-
 build: build-all
 
 build-all:
 	@$(shx) mkdir -p release
 	@$(MAKE) --directory=source --file=$(firstword $(realpath $(MAKEFILE_LIST))) --jobs --no-print-directory build-folder
 
-build-folder: $(releasePath)
+ifneq ($(CURDIR),$(projectPath))
+
+sourcePath := $(CURDIR)
+sourceContent := $(call contentOf,$(sourcePath))
+
+ifndef filterReleaseContent
+filterReleaseContent = $(1)
+endif
+
+releaseContent := $(call $\
+										filterReleaseContent,$\
+										$(foreach $\
+											path,$\
+											$(sourceContent),$\
+											$(subst $\
+												/source/,$\
+												/release/,$\
+												$(if $\
+													$(call contentOf,$(path)),$\
+													$(if $\
+														$(wildcard $(path)/makefile),$\
+														$(path)/.make-folder,$\
+														$(path)/.build-folder),$\
+													$(path)))))
+
+# $(info --------------------)
+# $(info sourceContent = $(patsubst $(projectPath)/%,%,$(sourceContent)))
+# $(info releaseContent = $(patsubst $(projectPath)/%,%,$(releaseContent)))
+# $(info --------------------)
+
+$(projectPath)/release/%/.make-folder: $(projectPath)/source/%
+	@$(MAKE) --directory=$< --no-print-directory
+
+# @$(shx) echo make ...... $(patsubst $(projectPath)/%,%,$(patsubst %/.make-folder,%,$@))
+
+$(projectPath)/release/%/.build-folder: $(projectPath)/source/%
+	@$(shx) mkdir -p $(patsubst %/.build-folder,%,$@)
+	@$(MAKE) --directory=$< --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory build-folder
+
+# @$(shx) echo build ..... $(patsubst $(projectPath)/%,%,$(patsubst %/.build-folder,%,$@))
+
+$(projectPath)/release/%.cjs: eslintFlag := --fix
+$(projectPath)/release/%.cjs: babelFlag := --source-maps
+$(projectPath)/release/%.cjs: $(projectPath)/source/%.cjs
+	@$(shx) echo compile ... $(patsubst $(projectPath)/%,%,$@)
+	@$(eslint) $< $(eslintFlag)
+	@$(babel) $< --out-file $@ $(babelFlag)
+
+$(projectPath)/release/%.js: eslintFlag := --fix
+$(projectPath)/release/%.js: babelFlag := --source-maps
+$(projectPath)/release/%.js: $(projectPath)/source/%.js
+	@$(shx) echo compile ... $(patsubst $(projectPath)/%,%,$@)
+	@$(eslint) $< $(eslintFlag)
+	@$(babel) $< --out-file $@ $(babelFlag)
+
+%.DS_Store: ;
+%.babelrc.json: ;
+%.eslintrc.json: ;
+
+$(projectPath)/release/%: $(projectPath)/source/%
+	@$(shx) echo copy ...... $(patsubst $(projectPath)/%,%,$@)
+	@$(shx) cp -R $< $@
+
+build-folder: $(releaseContent)
 	@$(shx) echo -n 
 
+copy-folder: releasePath := $(subst /source/,/release/,$(sourcePath))
 copy-folder:
-	@$(shx) mkdir -p $(patsubst %/,%,$(dir $(currentReleasePath)))
-	@$(shx) cp -R $(currentSourcePath) $(patsubst %/,%,$(dir $(currentReleasePath)))
-	@$(shx) rm -f $(currentReleasePath)/makefile
+	@$(shx) echo copy ...... $(patsubst $(projectPath)/%,%,$(releasePath))
+	@$(shx) cp -R $(sourcePath) $(patsubst %/,%,$(dir $(releasePath)))
+	@$(shx) rm -f $(releasePath)/makefile
 
 ignore-folder:
+	@$(shx) echo ignore .... $(patsubst $(projectPath)/%,%,$(sourcePath))
 	@$(shx) echo -n 
+
+endif

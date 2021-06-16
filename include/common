@@ -1,6 +1,4 @@
 
-.PHONY: refresh upgrade clean run test pre-release release
-
 refresh:
 	@rm -Rf node_modules package-lock.json
 	@npm install

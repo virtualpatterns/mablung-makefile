@@ -5,7 +5,7 @@ eslint := $(binaryPath)/eslint
 babel := $(binaryPath)/babel
 
 contentOf =	$(strip \
-							$(filter-out ..,\
-							$(filter-out .,\
+							$(filter-out $(1)/.,\
+							$(filter-out $(1)/..,\
 								$(patsubst ./%,%,\
 									$(wildcard $(1)/.*) $(wildcard $(1)/*)))))
