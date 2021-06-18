@@ -1,13 +1,34 @@
 
-haji := 123
-export HAJI
+# haji := 123
+# export HAJI
 
-$(info before default)
+# $(info before default)
 
-default:
-	$(eval HAJI := $(haji))
-	@echo $$HAJI
+# default:
+# 	$(eval HAJI := $(haji))
+# 	@echo $$HAJI
 
-$(info after default)
+# $(info after default)
 
-haji := 456
+# haji := 456
+
+clean:
+	rm -Rf one two
+
+# one: 
+# 	touch one
+
+# two: 
+# 	touch two
+
+%.der::
+	@echo stem = $*
+	@echo preq = $<
+	@echo trgt = $@
+
+%.der:: one
+
+%l.der::
+	@echo stem = $*
+	@echo preq = $<
+	@echo trgt = $@

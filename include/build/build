@@ -2,8 +2,7 @@
 build: build-all
 
 build-all:
-	@$(shx) mkdir -p release
-	@$(MAKE) --directory=source --file=$(firstword $(realpath $(MAKEFILE_LIST))) --jobs --no-print-directory build-folder
+	@$(MAKE) --directory=source --makefile=$(firstword $(realpath $(MAKEFILE_LIST))) --jobs --no-print-directory build-folder
 
 ifneq ($(CURDIR),$(projectPath))
 
@@ -26,59 +25,74 @@ releaseContent := $(call $\
 													$(call contentOf,$(path)),$\
 													$(if $\
 														$(wildcard $(path)/makefile),$\
-														$(path)/.make-folder,$\
-														$(path)/.build-folder),$\
+														$(path).make-folder,$\
+														$(path).build-folder),$\
 													$(path)))))
 
 # $(info --------------------)
+# $(info sourcePath = $(patsubst $(projectPath)/%,%,$(sourcePath)))
 # $(info sourceContent = $(patsubst $(projectPath)/%,%,$(sourceContent)))
 # $(info releaseContent = $(patsubst $(projectPath)/%,%,$(releaseContent)))
 # $(info --------------------)
 
-$(projectPath)/release/%/.make-folder: $(projectPath)/source/%
+$(projectPath)/release/%.make-folder: $(projectPath)/source/%
 	@$(MAKE) --directory=$< --no-print-directory
 
-# @$(shx) echo make ...... $(patsubst $(projectPath)/%,%,$(patsubst %/.make-folder,%,$@))
+# @$(shx) echo make ..... $(patsubst $(projectPath)/%,%,$<)
 
-$(projectPath)/release/%/.build-folder: $(projectPath)/source/%
-	@$(shx) mkdir -p $(patsubst %/.build-folder,%,$@)
-	@$(MAKE) --directory=$< --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory build-folder
+$(projectPath)/release/%.build-folder: $(projectPath)/source/%
+	@$(MAKE) --directory=$< --makefile=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory build-folder
 
-# @$(shx) echo build ..... $(patsubst $(projectPath)/%,%,$(patsubst %/.build-folder,%,$@))
+# @$(shx) echo build .... $(patsubst $(projectPath)/%,%,$<)
 
 $(projectPath)/release/%.cjs: eslintFlag := --fix
 $(projectPath)/release/%.cjs: babelFlag := --source-maps
 $(projectPath)/release/%.cjs: $(projectPath)/source/%.cjs
-	@$(shx) echo compile ... $(patsubst $(projectPath)/%,%,$@)
+	@$(shx) echo create ... $(patsubst $(projectPath)/%,%,$@)
 	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(projectPath)/release/%.js: eslintFlag := --fix
 $(projectPath)/release/%.js: babelFlag := --source-maps
 $(projectPath)/release/%.js: $(projectPath)/source/%.js
-	@$(shx) echo compile ... $(patsubst $(projectPath)/%,%,$@)
+	@$(shx) echo create ... $(patsubst $(projectPath)/%,%,$@)
 	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
-%.DS_Store: ;
-%.babelrc.json: ;
-%.eslintrc.json: ;
+$(projectPath)/release/.DS_Store: ;
+$(projectPath)/release/%/.DS_Store: ;
+
+$(projectPath)/release/.babelrc.json: ;
+$(projectPath)/release/%/.babelrc.json: ;
+
+$(projectPath)/release/.eslintrc.json: ;
+$(projectPath)/release/%/.eslintrc.json: ;
 
 $(projectPath)/release/%: $(projectPath)/source/%
-	@$(shx) echo copy ...... $(patsubst $(projectPath)/%,%,$@)
-	@$(shx) cp -R $< $@
+	@$(shx) echo copy ..... $(patsubst $(projectPath)/%,%,$<)
+	@$(shx) cp -R $< $(patsubst %/,%,$(dir $@))
 
-build-folder: $(releaseContent)
+build-folder: pre-build-folder $(releaseContent)
 	@$(shx) echo -n 
 
-copy-folder: releasePath := $(subst /source/,/release/,$(sourcePath))
-copy-folder:
-	@$(shx) echo copy ...... $(patsubst $(projectPath)/%,%,$(releasePath))
-	@$(shx) cp -R $(sourcePath) $(patsubst %/,%,$(dir $(releasePath)))
-	@$(shx) rm -f $(releasePath)/makefile
+pre-build-folder:: releasePath := $(subst /source,/release,$(sourcePath))
+pre-build-folder::
+	@$(shx) mkdir -p $(firstword $(releasePath))
 
-ignore-folder:
-	@$(shx) echo ignore .... $(patsubst $(projectPath)/%,%,$(sourcePath))
+# $(info IN mablung-makefile/include/build/build)
+# @$(shx) echo create ... $(patsubst $(projectPath)/%,%,$(firstword $(releasePath)))
+
+copy-folder:: releasePath := $(subst /source/,/release/,$(sourcePath))
+copy-folder::
+	@$(shx) echo copy ..... $(patsubst $(projectPath)/%,%,$(subst /release/,/source/,$(firstword $(releasePath))))
+	@$(shx) cp -R $(sourcePath) $(patsubst %/,%,$(dir $(firstword $(releasePath))))
+	@$(shx) rm -f $(firstword $(releasePath))/makefile
+
+# @$(shx) echo delete ... $(patsubst $(projectPath)/%,%,$(firstword $(releasePath))/makefile)
+
+ignore-folder::
 	@$(shx) echo -n 
+
+# @$(shx) echo ignore ... $(patsubst $(projectPath)/%,%,$(sourcePath))
 
 endif
