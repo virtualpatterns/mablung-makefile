@@ -52,12 +52,8 @@ Test('resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`));
 });
 
-Test('resource/ignore/makefile', async (test) => {
-  test.false(await FileSystem.pathExists(`${FolderPath}/resource/ignore/makefile`));
-});
-
-Test('resource/ignore/index.json', async (test) => {
-  test.false(await FileSystem.pathExists(`${FolderPath}/resource/ignore/index.json`));
+Test('resource/ignore', async (test) => {
+  test.false(await FileSystem.pathExists(`${FolderPath}/resource/ignore`));
 });
 
 //# sourceMappingURL=index.test.js.map
