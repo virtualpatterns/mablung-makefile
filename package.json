@@ -52,7 +52,7 @@
     "eslint-plugin-babel": "^5.3.1",
     "fs-extra": "^10.0.0",
     "json5": "^2.2.0",
-    "npm-check-updates": "^11.6.0",
+    "npm-check-updates": "^11.7.1",
     "shx": "^0.3.3"
   },
   "peerDependencies": {
@@ -61,7 +61,7 @@
     "ava": "^3.15.0",
     "c8": "^7.7.3",
     "eslint": "^7.28.0",
-    "npm-check-updates": "^11.6.0",
+    "npm-check-updates": "^11.7.1",
     "shx": "^0.3.3"
   },
   "dependencies": {}
