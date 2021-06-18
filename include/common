@@ -23,7 +23,7 @@ test: build
 pre-release: clean upgrade refresh test
 	@npx shx echo -n
 
-release: pre-release
+release: clean refresh test
 	@npm version prerelease
 	@git push origin master
 
