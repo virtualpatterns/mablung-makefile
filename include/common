@@ -1,4 +1,7 @@
 
+mablung-makefile-include-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+$(info mablung-makefile-include-path := $(mablung-makefile-include-path))
+
 refresh:
 	@rm -Rf node_modules package-lock.json
 	@npm install
@@ -26,5 +29,3 @@ pre-release: clean upgrade refresh test
 release: clean refresh test
 	@npm version prerelease
 	@git push origin master
-
-.DEFAULT_GOAL := build-all
