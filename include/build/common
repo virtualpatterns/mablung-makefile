@@ -2,7 +2,7 @@
 mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
-binaryPath := $(mablung-makefile-include-build-path)/../../node_modules/.bin
+binaryPath := $(projectPath)/node_modules/.bin
 
 shx := $(binaryPath)/shx
 eslint := $(binaryPath)/eslint
