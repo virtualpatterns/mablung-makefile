@@ -1,9 +1,0 @@
-
-ifeq ($(origin projectPath),undefined)
-export projectPath := $(CURDIR)
-endif
-
-include $(projectPath)/makefile
-
-$(currentReleasePath)/%.cjs: babelFlag += --env-name commonjs --keep-file-extension
-$(currentReleasePath)/%.js: babelFlag += --env-name esmodule --keep-file-extension

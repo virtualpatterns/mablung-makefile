@@ -1,34 +1,102 @@
+# a/b/c:
+# 	@echo a/b/c
+# a/b/c:
+# 	@echo a/b/c
+# sandbox/makefile:4: warning: overriding commands for target `a/b/c'
+# sandbox/makefile:2: warning: ignoring old commands for target `a/b/c'
 
-# haji := 123
-# export HAJI
+# a/b/c::
+# 	@echo a/b/c
+# a/b/c::
+# 	@echo a/b/c
+# a/b/c
+# a/b/c
 
-# $(info before default)
+# a/%/c:
+# 	@echo first a/b/c
+# a/%/c:
+# 	@echo second a/b/c
+# < a/b/c
+# > second a/b/c
 
-# default:
-# 	$(eval HAJI := $(haji))
-# 	@echo $$HAJI
+# a/b%/c:
+# 	@echo first a/b/c
+# a/%/c:
+# 	@echo second a/b/c
+# < a/ba/c
+# > first a/b/c
 
-# $(info after default)
+# a/%/c:
+# 	@echo second a/b/c
+# a/b%/c:
+# 	@echo first a/b/c
+# < a/ba/c
+# > second a/b/c ... make uses whichever is defined first
 
-# haji := 456
+# a/b/ba:
+# 	@echo a/b/ba
+# a/b/a:
+# 	@echo a/b/a
+# a/%/c: a/b/%
+# 	@echo second a/b/c
+# a/b%/c: a/b/%
+# 	@echo first a/b/c
+# < a/ba/c
+# > a/b/ba
+# > second a/b/c
 
-clean:
-	rm -Rf one two
+# a/b/ba:
+# 	@echo a/b/ba
+# a/b/a:
+# 	@echo a/b/a
+# a/b%/c: a/b/%
+# 	@echo first a/b/c
+# a/%/c: a/b/%
+# 	@echo second a/b/c
+# < a/ba/c
+# > a/b/a
+# > first a/b/c ... make uses whichever is defined first
 
-# one: 
-# 	touch one
+# a/b/ba/c:
+# 	@echo a/b/ba/c
+# a/b/c:
+# 	@echo a/b/c
+# a/ba/%: a/b/%
+# 	@echo second a/b/c
+# a/%: a/b/%
+# 	@echo first a/b/c
+# < a/ba/c
+# > a/b/c
+# > second a/b/c ... again, make uses whichever is defined first
 
-# two: 
-# 	touch two
+# a/ba/%:
+# 	@echo first a/ba/%
+# a/ba/cd/%:
+# 	@echo second a/ba/cd/%
+# < a/ba/c
+# > first a/b/c
+# < a/ba/cd/d
+# > first a/b/c
 
-%.der::
-	@echo stem = $*
-	@echo preq = $<
-	@echo trgt = $@
+# a/ba/%::
+# 	@echo first a/ba/%
+# a/ba/c%::
+# 	@echo second a/ba/c%
+# < a/ba/cded
+# first a/ba/%
 
-%.der:: one
+# a/ba/dd/cded:
+# 	@echo a/ba/dd/cded
+# a/ba/d/ded:
+# 	@echo a/ba/d/ded
+# a/ba/%: a/ba/dd/%
+# 	@echo first a/ba/%
+# a/ba/c%: a/ba/d/%
+# 	@echo second a/ba/c%
+# < a/ba/cded
+# first a/ba/%
 
-%l.der::
-	@echo stem = $*
-	@echo preq = $<
-	@echo trgt = $@
+a/b/%:
+	@echo first
+a/b/%:
+	@echo second

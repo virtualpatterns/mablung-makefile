@@ -1,13 +1,17 @@
 
 debug: debug-all
 
-debug-all:
+debug-all: pre-debug-all $(projectPath)/source.debug-folder;
+
+pre-debug-all:
 	@$(shx) echo
 	@$(shx) echo .FEATURES ........ $(.FEATURES)
 	@$(shx) echo projectPath ...... $(projectPath)
 	@$(shx) echo makefilePath ..... $(patsubst $(projectPath)/%,%,$(realpath $(MAKEFILE_LIST)))
 	@$(shx) echo
-	@$(MAKE) --directory=source --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
+
+$(projectPath)/source.debug-folder:
+	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
 
 ifneq ($(CURDIR),$(projectPath))
 
@@ -18,14 +22,15 @@ debugContent := $(foreach $\
 										$(call contentOf,$(path)),$\
 										$(if $\
 											$(wildcard $(path)/makefile),,$\
-											$(path)/.debug-folder)))
+											$(path).debug-folder)))
 
-$(projectPath)/source/%/.debug-folder:
-	@$(MAKE) --directory=$(patsubst %/.debug-folder,%,$@) --file=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
+$(projectPath)/source/%.debug-folder:
+	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(firstword $(realpath $(MAKEFILE_LIST))) --no-print-directory debug-folder
 
 debug-folder: pre-debug-folder $(debugContent);
 
 pre-debug-folder:
+	@$(shx) echo sourcePath ....... $(patsubst $(projectPath)/%,%,$(sourcePath))
 	@$(shx) echo sourceContent .... $(patsubst $(projectPath)/%,%,$(sourceContent))
 	@$(shx) echo releaseContent ... $(patsubst $(projectPath)/%,%,$(releaseContent))
 	@$(shx) echo
