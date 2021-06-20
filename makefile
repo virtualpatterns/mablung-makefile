@@ -1,5 +1,5 @@
 
-.PHONY: refresh upgrade clean run test pre-release release build build-all build-folder copy-folder ignore-folder debug debug-all debug-folder pre-debug-folder
+.PHONY: refresh upgrade clean run test pre-release release build build-all build-folder copy-folder ignore-folder debug debug-all pre-debug-all debug-folder pre-debug-folder
 
 ifeq ($(origin projectPath),undefined)
 export projectPath := $(CURDIR)
