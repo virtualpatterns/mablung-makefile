@@ -1,14 +1,13 @@
 
-mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+# mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
 build: build-all
 
 build-all: $(projectPath)/release.build-folder;
 
-$(projectPath)/release.build-folder: makefilePath := $(mablung-makefile-include-build-path)/../../makefile
 $(projectPath)/release.build-folder: $(projectPath)/release.create-folder
-	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --jobs --makefile=$(makefilePath) --no-print-directory build-folder
+	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --jobs --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory build-folder
 
 # @npx shx echo build .... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.build-folder,%,$@)))
 
@@ -53,9 +52,8 @@ $(projectPath)/release/%.make-folder:
 
 # @$(shx) echo make ..... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.make-folder,%,$@)))
 
-$(projectPath)/release/%.build-folder: makefilePath := $(mablung-makefile-include-build-path)/../../makefile
 $(projectPath)/release/%.build-folder: $(projectPath)/release/%.create-folder
-	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --makefile=$(makefilePath) --no-print-directory build-folder
+	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory build-folder
 
 # $(info $$(projectPath)/release/%.build-folder:: in mablung-makefile/include/build/build)
 # @$(shx) echo build .... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.build-folder,%,$@)))

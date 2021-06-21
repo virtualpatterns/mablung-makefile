@@ -1,6 +1,6 @@
 
-mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
-# $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
+# mablung-makefile-include-build-debug-path := $(realpath $(lastword $(MAKEFILE_LIST)))
+# $(info mablung-makefile-include-build-debug-path := $(mablung-makefile-include-build-debug-path))
 
 debug: debug-all
 
@@ -11,12 +11,10 @@ pre-debug-all:
 	@$(shx) echo .FEATURES ....... $(.FEATURES)
 	@$(shx) echo MAKEFILE_LIST ... $(patsubst $(projectPath)/%,%,$(realpath $(MAKEFILE_LIST)))
 	@$(shx) echo projectPath ..... $(projectPath)
-	@$(shx) echo \(this file\) ..... $(patsubst $(projectPath)/%,%,$(mablung-makefile-include-build-path))/debug
 	@$(shx) echo
 
-$(projectPath)/source.debug-folder: makefilePath := $(mablung-makefile-include-build-path)/../../makefile
 $(projectPath)/source.debug-folder:
-	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(makefilePath) --no-print-directory debug-folder
+	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory debug-folder
 
 ifneq ($(CURDIR),$(projectPath))
 
@@ -29,9 +27,8 @@ debugContent := $(foreach $\
 											$(wildcard $(path)/makefile),,$\
 											$(path).debug-folder)))
 
-$(projectPath)/source/%.debug-folder: makefilePath := $(mablung-makefile-include-build-path)/../../makefile
 $(projectPath)/source/%.debug-folder:
-	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(makefilePath) --no-print-directory debug-folder
+	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory debug-folder
 
 debug-folder: pre-debug-folder $(debugContent);
 

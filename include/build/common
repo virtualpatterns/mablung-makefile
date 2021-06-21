@@ -1,5 +1,5 @@
 
-mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+# mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
 binaryPath := $(projectPath)/node_modules/.bin

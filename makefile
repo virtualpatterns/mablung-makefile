@@ -1,5 +1,5 @@
 
-mablung-makefile-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+mablung-makefile-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-path := $(mablung-makefile-path))
 
 ifeq ($(origin projectPath),undefined)
