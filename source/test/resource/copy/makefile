@@ -1,3 +1,3 @@
 include $(projectPath)/makefile
 
-.DEFAULT_GOAL := copy-folder
+.DEFAULT_GOAL := copy

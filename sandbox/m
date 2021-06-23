@@ -1,3 +1,0 @@
-default:
-	@echo $(CURDIR)
-	@echo $(firstword $(realpath $(MAKEFILE_LIST)))

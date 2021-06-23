@@ -96,7 +96,20 @@
 # < a/ba/cded
 # first a/ba/%
 
-a/b/%:
-	@echo first
-a/b/%:
-	@echo second
+# a/b/%:
+# 	@echo first
+# a/b/%:
+# 	@echo second
+
+build1: sandbox
+	@echo build1
+
+build2: makefile
+	@echo build2
+
+makefile: sandbox/def
+	@echo $@ ...
+
+sandbox/def:
+	@echo $@ ...
+	@mkdir -p $@

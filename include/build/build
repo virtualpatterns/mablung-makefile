@@ -1,109 +1,115 @@
 
-# mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+# mablung-makefile-include-build-path := $(call trimFolderPath,$lastword $(realpath $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
-build: build-all
+ifeq ($(CURDIR),$(projectPath))
 
-build-all: $(projectPath)/release.build-folder;
+build: $(projectPath)/release.create
+	@$(shx) echo build ..... source
+	@$(MAKE) --directory=$(projectPath)/source --jobs=1 --makefile=$(makefilePath) --no-print-directory build
 
-$(projectPath)/release.build-folder: $(projectPath)/release.create-folder
-	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --jobs --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory build-folder
+$(projectPath)/release.create:
+	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
+	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
-# @npx shx echo build .... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.build-folder,%,$@)))
+else
 
-$(projectPath)/release.create-folder:
-	@npx shx mkdir -p $(patsubst %.create-folder,%,$@)
+ifndef filterBuildContent
+filterBuildContent = $(1)
+endif
 
-# @npx shx echo create ... $(patsubst $(projectPath)/%,%,$(patsubst %.create-folder,%,$@))
-
-ifneq ($(CURDIR),$(projectPath))
-
-sourcePath := $(CURDIR)
-sourceContent := $(call contentOf,$(sourcePath))
+buildContent := $(call $\
+									filterBuildContent,$\
+									$(foreach $\
+										path,$\
+										$(call contentOf,$(CURDIR)),$\
+										$(if $\
+											$(call contentOf,$(path)),$\
+											$(if $\
+												$(wildcard $(path)/makefile),$\
+												$(path).make,$\
+												$(path).build),)))
 
 ifndef filterReleaseContent
 filterReleaseContent = $(1)
 endif
 
 releaseContent := $(call $\
-										filterReleaseContent,$\
-										$(foreach $\
-											path,$\
-											$(sourceContent),$\
-											$(subst $\
-												/source/,$\
-												/release/,$\
-												$(if $\
-													$(call contentOf,$(path)),$\
-													$(if $\
-														$(wildcard $(path)/makefile),$\
-														$(path).make-folder,$\
-														$(path).build-folder),$\
-													$(path)))))
+									filterReleaseContent,$\
+									$(foreach $\
+										path,$\
+										$(call contentOf,$(CURDIR)),$\
+										$(subst $\
+											/source/,$\
+											/release/,$\
+											$(if $\
+												$(call contentOf,$(path)),,$\
+												$(path)))))
 
 # $(info --------------------)
-# $(info sourcePath = $(patsubst $(projectPath)/%,%,$(sourcePath)))
-# $(info sourceContent = $(patsubst $(projectPath)/%,%,$(sourceContent)))
-# $(info releaseContent = $(patsubst $(projectPath)/%,%,$(releaseContent)))
+# $(info buildContent = $(call trimProject,$(buildContent)))
+# $(info releaseContent = $(call trimProject,$(releaseContent)))
 # $(info --------------------)
 
-$(projectPath)/release/%.make-folder:
-	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.make-folder,%,$@)) --no-print-directory
+build: $(buildContent) $(releaseContent)
+	@$(shx) echo -n
 
-# @$(shx) echo make ..... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.make-folder,%,$@)))
+$(projectPath)/source/%.make:
+	@$(shx) echo make ...... $(call trimProject,$(patsubst %.make,%,$@))
+	@$(MAKE) --directory=$(patsubst %.make,%,$@) --no-print-directory
 
-$(projectPath)/release/%.build-folder: $(projectPath)/release/%.create-folder
-	@$(MAKE) --directory=$(subst /release,/source,$(patsubst %.build-folder,%,$@)) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory build-folder
+$(projectPath)/source/%.build: $(projectPath)/release/%.create
+	@$(shx) echo build ..... $(call trimProject,$(patsubst %.build,%,$@))
+	@$(MAKE) --directory=$(patsubst %.build,%,$@) --makefile=$(makefilePath) --no-print-directory build
 
-# $(info $$(projectPath)/release/%.build-folder:: in mablung-makefile/include/build/build)
-# @$(shx) echo build .... $(patsubst $(projectPath)/%,%,$(subst /release,/source,$(patsubst %.build-folder,%,$@)))
+$(projectPath)/release/%.create:
+	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
+	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
-$(projectPath)/release/%.create-folder:
-	@$(shx) mkdir -p $(patsubst %.create-folder,%,$@)
-
-# $(info $$(projectPath)/release/%.create-folder: in mablung-makefile/include/build/build)
-# @$(shx) echo create ... $(patsubst $(projectPath)/%,%,$(patsubst %.create-folder,%,$@))
+$(projectPath)/release%DS_Store: $(projectPath)/source%DS_Store
+	@$(shx) echo ignore .... $(call trimProject,$<)
+$(projectPath)/release%babelrc.json: $(projectPath)/source%babelrc.json
+	@$(shx) echo ignore .... $(call trimProject,$<)
+$(projectPath)/release%eslintrc.json: $(projectPath)/source%eslintrc.json
+	@$(shx) echo ignore .... $(call trimProject,$<)
 
 $(projectPath)/release/%.cjs: eslintFlag := --fix
 $(projectPath)/release/%.cjs: babelFlag := --source-maps
 $(projectPath)/release/%.cjs: $(projectPath)/source/%.cjs
-	@$(shx) echo create ... $(patsubst $(projectPath)/%,%,$@)
+	@$(shx) echo compile ... $(call trimProject,$<) to $(call trimProject,$@)
 	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
 $(projectPath)/release/%.js: eslintFlag := --fix
 $(projectPath)/release/%.js: babelFlag := --source-maps
 $(projectPath)/release/%.js: $(projectPath)/source/%.js
-	@$(shx) echo create ... $(patsubst $(projectPath)/%,%,$@)
+	@$(shx) echo compile ... $(call trimProject,$<) to $(call trimProject,$@)
 	@$(eslint) $< $(eslintFlag)
 	@$(babel) $< --out-file $@ $(babelFlag)
 
-$(projectPath)/release/.DS_Store: ;
-$(projectPath)/release/%/.DS_Store: ;
-
-$(projectPath)/release/.babelrc.json: ;
-$(projectPath)/release/%/.babelrc.json: ;
-
-$(projectPath)/release/.eslintrc.json: ;
-$(projectPath)/release/%/.eslintrc.json: ;
-
 $(projectPath)/release/%: $(projectPath)/source/%
-	@$(shx) echo copy ..... $(patsubst $(projectPath)/%,%,$<)
-	@$(shx) cp -R $< $(patsubst %/,%,$(dir $@))
+	@$(shx) echo copy ...... $(call trimProject,$<) to $(call trimProject,$(call trimFolderPath,$@))
+	@$(shx) cp -R $< $(call trimFolderPath,$@)
 
-build-folder: $(releaseContent)
-	@$(shx) echo -n 
+# $(projectPath)/release/%: $(projectPath)/source/%
+# 	$(if $\
+# 		$(call contentOf,$<),$\
+# 		@$(shx) echo create .... $(call trimProject,$@),$\
+# 		@$(shx) echo copy ...... $(call trimProject,$<) to $(call trimProject,$(call trimFolderPath,$@)))
+# 	$(if $\
+# 		$(call contentOf,$<),$\
+# 		@$(shx) mkdir -p $@,$\
+# 		@$(shx) cp -R $< $(call trimFolderPath,$@))
 
-copy-folder::
-	@$(shx) echo copy ..... $(patsubst $(projectPath)/%,%,$(sourcePath))
-	@$(shx) cp -R $(sourcePath) $(patsubst %/,%,$(dir $(subst /source/,/release/,$(sourcePath))))
-	@$(shx) rm -f $(subst /source/,/release/,$(sourcePath))/makefile
+copy::
+	@$(shx) echo copy ...... $(call trimProject,$(CURDIR)) to $(call trimProject,$(call trimFolderPath,$(subst /source/,/release/,$(CURDIR))))
+	@$(shx) cp -R $(CURDIR) $(call trimFolderPath,$(subst /source/,/release/,$(CURDIR)))
+	@$(shx) echo delete .... $(call trimProject,$(subst /source/,/release/,$(CURDIR))/makefile)
+	@$(shx) rm -f $(subst /source/,/release/,$(CURDIR))/makefile
 
-# @$(shx) echo delete ... $(patsubst $(projectPath)/%,%,$(subst /source/,/release/,$(sourcePath))/makefile)
+ignore::
+	@$(shx) echo ignore .... $(call trimProject,$(CURDIR))
 
-ignore-folder::
-	@$(shx) echo ignore ... $(patsubst $(projectPath)/%,%,$(sourcePath))
-
-# @$(shx) echo -n 
+# # @$(shx) echo -n 
 
 endif

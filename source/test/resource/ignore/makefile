@@ -1,3 +1,3 @@
 include $(projectPath)/makefile
 
-.DEFAULT_GOAL := ignore-folder
+.DEFAULT_GOAL := ignore

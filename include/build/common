@@ -2,14 +2,32 @@
 # mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
+makefilePath := $(realpath $(firstword $(MAKEFILE_LIST)))
 binaryPath := $(projectPath)/node_modules/.bin
 
 shx := $(binaryPath)/shx
 eslint := $(binaryPath)/eslint
 babel := $(binaryPath)/babel
 
-contentOf =	$(strip \
-							$(filter-out $(1)/.,\
-							$(filter-out $(1)/..,\
-								$(patsubst ./%,%,\
-									$(wildcard $(1)/.*) $(wildcard $(1)/*)))))
+contentOf =	$(strip $\
+							$(filter-out $\
+								$(1)/. $\
+								$(1)/..,$\
+								$(patsubst $\
+									./%,$\
+									%,$\
+									$(wildcard $(1)/.*) $\
+									$(wildcard $(1)/*))))
+
+# $(info $(call contentOf,source))
+
+trimProject = $(patsubst $\
+								$(projectPath)/%,$\
+								%,$\
+								$(1))
+
+trimFolderPath = $(patsubst $\
+										%/,$\
+										%,$\
+										$(dir $\
+											$(1)))
