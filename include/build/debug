@@ -2,40 +2,40 @@
 # mablung-makefile-include-build-debug-path := $(realpath $(lastword $(MAKEFILE_LIST)))
 # $(info mablung-makefile-include-build-debug-path := $(mablung-makefile-include-build-debug-path))
 
-debug: debug-all
+ifeq ($(CURDIR),$(projectPath))
 
-debug-all: pre-debug-all $(projectPath)/source.debug-folder;
-
-pre-debug-all:
+debug:
 	@$(shx) echo
-	@$(shx) echo .FEATURES ....... $(.FEATURES)
-	@$(shx) echo MAKEFILE_LIST ... $(patsubst $(projectPath)/%,%,$(realpath $(MAKEFILE_LIST)))
-	@$(shx) echo projectPath ..... $(projectPath)
+	@$(shx) echo .FEATURES ........ $(.FEATURES)
+	@$(shx) echo MAKEFILE_LIST .... $(call trimProject,$(realpath $(MAKEFILE_LIST)))
+	@$(shx) echo projectPath ...... $(projectPath)
 	@$(shx) echo
+	@$(MAKE) --directory=$(projectPath)/source --makefile=$(makefilePath) --no-print-directory debug
 
-$(projectPath)/source.debug-folder:
-	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory debug-folder
-
-ifneq ($(CURDIR),$(projectPath))
+else
 
 debugContent := $(foreach $\
 									path,$\
-									$(sourceContent),$\
+									$(call contentOf,$(CURDIR)),$\
 									$(if $\
 										$(call contentOf,$(path)),$\
 										$(if $\
 											$(wildcard $(path)/makefile),,$\
-											$(path).debug-folder)))
+											$(path).debug)))
 
-$(projectPath)/source/%.debug-folder:
-	@$(MAKE) --directory=$(patsubst %.debug-folder,%,$@) --makefile=$(realpath $(firstword $(MAKEFILE_LIST))) --no-print-directory debug-folder
+# $(info --------------------)
+# $(info debugContent = $(call trimProject,$(debugContent)))
+# $(info --------------------)
 
-debug-folder: pre-debug-folder $(debugContent);
+$(projectPath)/source/%.debug:
+	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefilePath) --no-print-directory debug
 
-pre-debug-folder:
-	@$(shx) echo sourcePath ....... $(patsubst $(projectPath)/%,%,$(sourcePath))
-	@$(shx) echo sourceContent .... $(patsubst $(projectPath)/%,%,$(sourceContent))
-	@$(shx) echo releaseContent ... $(patsubst $(projectPath)/%,%,$(releaseContent))
+debug: pre-debug $(debugContent);
+
+pre-debug:
+	@$(shx) echo CURDIR ........... $(call trimProject,$(CURDIR))
+	@$(shx) echo buildContent ..... $(call trimProject,$(buildContent))
+	@$(shx) echo releaseContent ... $(call trimProject,$(releaseContent))
 	@$(shx) echo
 
 endif
