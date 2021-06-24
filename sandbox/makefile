@@ -101,15 +101,8 @@
 # a/b/%:
 # 	@echo second
 
-build1: sandbox
-	@echo build1
+v = a
+v = $(v) b
+v = $(v) c
 
-build2: makefile
-	@echo build2
-
-makefile: sandbox/def
-	@echo $@ ...
-
-sandbox/def:
-	@echo $@ ...
-	@mkdir -p $@
+$(info v = $(v))

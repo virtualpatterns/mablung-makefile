@@ -1,5 +1,5 @@
 
-# mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(lastword $(realpath $(MAKEFILE_LIST)))))
+# mablung-makefile-include-build-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
 makefilePath := $(realpath $(firstword $(MAKEFILE_LIST)))

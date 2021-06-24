@@ -6,7 +6,7 @@ ifeq ($(origin projectPath),undefined)
 export projectPath := $(CURDIR)
 endif
 
-.PHONY: refresh upgrade clean run test pre-release release build build-all build-folder copy-folder ignore-folder debug debug-all pre-debug-all debug-folder pre-debug-folder
+.PHONY: refresh upgrade clean run test pre-release release build copy ignore debug debug pre-debug
 
 include $(mablung-makefile-path)/include/common
 include $(mablung-makefile-path)/include/build/common

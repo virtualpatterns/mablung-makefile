@@ -1,5 +1,5 @@
 
-# mablung-makefile-include-build-path := $(call trimFolderPath,$lastword $(realpath $(MAKEFILE_LIST)))))
+mablung-makefile-include-build-path := $(call trimFolderPath,$(realpath $(lastword $(MAKEFILE_LIST))))
 # $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
 
 ifeq ($(CURDIR),$(projectPath))
@@ -8,7 +8,7 @@ build: $(projectPath)/release.create
 	@$(shx) echo build ..... source
 	@$(MAKE) --directory=$(projectPath)/source --jobs=1 --makefile=$(makefilePath) --no-print-directory build
 
-$(projectPath)/release.create:
+$(projectPath)/release.create::
 	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
@@ -62,16 +62,17 @@ $(projectPath)/source/%.build: $(projectPath)/release/%.create
 	@$(shx) echo build ..... $(call trimProject,$(patsubst %.build,%,$@))
 	@$(MAKE) --directory=$(patsubst %.build,%,$@) --makefile=$(makefilePath) --no-print-directory build
 
+# $(info -- $$(projectPath)/release/%.create: in $(call trimProject,$(mablung-makefile-include-build-path)/build))
 $(projectPath)/release/%.create:
 	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
 $(projectPath)/release%DS_Store: $(projectPath)/source%DS_Store
-	@$(shx) echo ignore .... $(call trimProject,$<)
+	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
 $(projectPath)/release%babelrc.json: $(projectPath)/source%babelrc.json
-	@$(shx) echo ignore .... $(call trimProject,$<)
+	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
 $(projectPath)/release%eslintrc.json: $(projectPath)/source%eslintrc.json
-	@$(shx) echo ignore .... $(call trimProject,$<)
+	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
 
 $(projectPath)/release/%.cjs: eslintFlag := --fix
 $(projectPath)/release/%.cjs: babelFlag := --source-maps
