@@ -6,7 +6,7 @@ ifeq ($(CURDIR),$(projectPath))
 
 build: $(projectPath)/release.create
 	@$(shx) echo build ..... source
-	@$(MAKE) --directory=$(projectPath)/source --jobs=1 --makefile=$(makefilePath) --no-print-directory build
+	@$(MAKE) --directory=$(projectPath)/source --jobs --makefile=$(makefilePath) --no-print-directory build
 
 $(projectPath)/release.create::
 	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
