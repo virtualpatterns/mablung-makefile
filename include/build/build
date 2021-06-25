@@ -6,12 +6,12 @@ ifeq ($(CURDIR),$(projectPath))
 
 .PHONY: build
 
+# @$(shx) echo build ..... source
 build: $(projectPath)/release.create
-	@$(shx) echo build ..... source
 	@$(MAKE) --directory=$(projectPath)/source --jobs --makefile=$(makefilePath) --no-print-directory build
 
+# @$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 $(projectPath)/release.create:
-	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
 else
@@ -58,25 +58,25 @@ releaseContent := $(call $\
 build: $(buildContent) $(releaseContent)
 	@$(shx) echo -n
 
+# @$(shx) echo make ...... $(call trimProject,$(patsubst %.make,%,$@))
 $(projectPath)/source/%.make:
-	@$(shx) echo make ...... $(call trimProject,$(patsubst %.make,%,$@))
 	@$(MAKE) --directory=$(patsubst %.make,%,$@) --no-print-directory
 
+# @$(shx) echo build ..... $(call trimProject,$(patsubst %.build,%,$@))
 $(projectPath)/source/%.build: $(projectPath)/release/%.create
-	@$(shx) echo build ..... $(call trimProject,$(patsubst %.build,%,$@))
 	@$(MAKE) --directory=$(patsubst %.build,%,$@) --makefile=$(makefilePath) --no-print-directory build
 
 # $(info -- $$(projectPath)/release/%.create: in $(call trimProject,$(mablung-makefile-include-build-path)/build))
+# @$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 $(projectPath)/release/%.create:
-	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
-$(projectPath)/release%DS_Store: $(projectPath)/source%DS_Store
-	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
-$(projectPath)/release%babelrc.json: $(projectPath)/source%babelrc.json
-	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
-$(projectPath)/release%eslintrc.json: $(projectPath)/source%eslintrc.json
-	@$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
+# @$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
+$(projectPath)/release%DS_Store: $(projectPath)/source%DS_Store;
+# @$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
+$(projectPath)/release%babelrc.json: $(projectPath)/source%babelrc.json;
+# @$(shx) echo ignore .... $(call trimProject,$<) to $(call trimProject,$@)
+$(projectPath)/release%eslintrc.json: $(projectPath)/source%eslintrc.json;
 
 $(projectPath)/release/%.cjs: eslintFlag := --fix
 $(projectPath)/release/%.cjs: babelFlag := --source-maps
@@ -106,15 +106,14 @@ $(projectPath)/release/%: $(projectPath)/source/%
 # 		@$(shx) mkdir -p $@,$\
 # 		@$(shx) cp -R $< $(call trimFolderPath,$@))
 
+# @$(shx) echo copy ...... $(call trimProject,$(CURDIR)) to $(call trimProject,$(call trimFolderPath,$(subst /source/,/release/,$(CURDIR))))
+# @$(shx) echo delete .... $(call trimProject,$(subst /source/,/release/,$(CURDIR))/makefile)
 copy::
-	@$(shx) echo copy ...... $(call trimProject,$(CURDIR)) to $(call trimProject,$(call trimFolderPath,$(subst /source/,/release/,$(CURDIR))))
 	@$(shx) cp -R $(CURDIR) $(call trimFolderPath,$(subst /source/,/release/,$(CURDIR)))
-	@$(shx) echo delete .... $(call trimProject,$(subst /source/,/release/,$(CURDIR))/makefile)
 	@$(shx) rm -f $(subst /source/,/release/,$(CURDIR))/makefile
 
+# @$(shx) echo ignore .... $(call trimProject,$(CURDIR))
 ignore::
-	@$(shx) echo ignore .... $(call trimProject,$(CURDIR))
-
-# # @$(shx) echo -n 
+	@$(shx) echo -n 
 
 endif
