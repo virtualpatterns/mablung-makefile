@@ -27,10 +27,10 @@ test: build
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(argument)
 
-pre-release: clean upgrade refresh test
+pre-release: upgrade refresh clean test
 	@npx shx echo -n
 
-release: clean refresh test
+release: clean test
 	@npm version prerelease
 	@git push origin master
 
