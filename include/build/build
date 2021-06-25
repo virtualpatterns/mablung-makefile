@@ -4,11 +4,13 @@ mablung-makefile-include-build-path := $(call trimFolderPath,$(realpath $(lastwo
 
 ifeq ($(CURDIR),$(projectPath))
 
+.PHONY: build
+
 build: $(projectPath)/release.create
 	@$(shx) echo build ..... source
 	@$(MAKE) --directory=$(projectPath)/source --jobs --makefile=$(makefilePath) --no-print-directory build
 
-$(projectPath)/release.create::
+$(projectPath)/release.create:
 	@$(shx) echo create .... $(call trimProject,$(patsubst %.create,%,$@))
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
@@ -45,6 +47,8 @@ releaseContent := $(call $\
 											$(if $\
 												$(call contentOf,$(path)),,$\
 												$(path)))))
+
+.PHONY: build copy ignore
 
 # $(info --------------------)
 # $(info buildContent = $(call trimProject,$(buildContent)))

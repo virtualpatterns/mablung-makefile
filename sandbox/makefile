@@ -101,8 +101,18 @@
 # a/b/%:
 # 	@echo second
 
-v = a
-v = $(v) b
-v = $(v) c
+# .PHONY: acd def;
 
-$(info v = $(v))
+acd:
+	@echo $@
+
+def:
+	@echo $@
+
+# .PHONY: brain;
+
+brain: acd
+brain: def
+
+brain:
+	@echo $@

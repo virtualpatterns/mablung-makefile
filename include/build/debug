@@ -4,6 +4,8 @@
 
 ifeq ($(CURDIR),$(projectPath))
 
+.PHONY: debug
+
 debug:
 	@$(shx) echo
 	@$(shx) echo .FEATURES ........ $(.FEATURES)
@@ -23,12 +25,11 @@ debugContent := $(foreach $\
 											$(wildcard $(path)/makefile),,$\
 											$(path).debug)))
 
+.PHONY: debug pre-debug
+
 # $(info --------------------)
 # $(info debugContent = $(call trimProject,$(debugContent)))
 # $(info --------------------)
-
-$(projectPath)/source/%.debug:
-	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefilePath) --no-print-directory debug
 
 debug: pre-debug $(debugContent);
 
@@ -37,5 +38,8 @@ pre-debug:
 	@$(shx) echo buildContent ..... $(call trimProject,$(buildContent))
 	@$(shx) echo releaseContent ... $(call trimProject,$(releaseContent))
 	@$(shx) echo
+
+$(projectPath)/source/%.debug:
+	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefilePath) --no-print-directory debug
 
 endif

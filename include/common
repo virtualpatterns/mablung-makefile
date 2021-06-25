@@ -4,6 +4,8 @@ mablung-makefile-include-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(M
 
 ifeq ($(CURDIR),$(projectPath))
 
+.PHONY: refresh upgrade clean run test pre-release release
+
 refresh:
 	@rm -Rf node_modules package-lock.json
 	@npm install
