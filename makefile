@@ -2,8 +2,8 @@
 mablung-makefile-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-path := $(mablung-makefile-path))
 
-ifeq ($(origin projectPath),undefined)
-export projectPath := $(CURDIR)
+ifeq ($(origin project-path),undefined)
+export project-path := $(CURDIR)
 endif
 
 include $(mablung-makefile-path)/include/common

@@ -2,25 +2,25 @@
 # mablung-makefile-include-build-debug-path := $(realpath $(lastword $(MAKEFILE_LIST)))
 # $(info mablung-makefile-include-build-debug-path := $(mablung-makefile-include-build-debug-path))
 
-ifeq ($(CURDIR),$(projectPath))
+ifeq ($(CURDIR),$(project-path))
 
 .PHONY: debug
 
 debug:
 	@$(shx) echo
-	@$(shx) echo .FEATURES ........ $(.FEATURES)
-	@$(shx) echo MAKEFILE_LIST .... $(call trimProject,$(realpath $(MAKEFILE_LIST)))
-	@$(shx) echo projectPath ...... $(projectPath)
+	@$(shx) echo .FEATURES ......... $(.FEATURES)
+	@$(shx) echo MAKEFILE_LIST ..... $(call trim-project,$(realpath $(MAKEFILE_LIST)))
+	@$(shx) echo project-path ...... $(project-path)
 	@$(shx) echo
-	@$(MAKE) --directory=$(projectPath)/source --makefile=$(makefilePath) --no-print-directory debug
+	@$(MAKE) --directory=$(project-path)/source --makefile=$(makefile-path) --no-print-directory debug
 
 else
 
-debugContent := $(foreach $\
+debug-content := $(foreach $\
 									path,$\
-									$(call contentOf,$(CURDIR)),$\
+									$(call content-of,$(CURDIR)),$\
 									$(if $\
-										$(call contentOf,$(path)),$\
+										$(call content-of,$(path)),$\
 										$(if $\
 											$(wildcard $(path)/makefile),,$\
 											$(path).debug)))
@@ -28,18 +28,18 @@ debugContent := $(foreach $\
 .PHONY: debug pre-debug
 
 # $(info --------------------)
-# $(info debugContent = $(call trimProject,$(debugContent)))
+# $(info debug-content = $(call trim-project,$(debug-content)))
 # $(info --------------------)
 
-debug: pre-debug $(debugContent);
+debug: pre-debug $(debug-content);
 
 pre-debug:
-	@$(shx) echo CURDIR ........... $(call trimProject,$(CURDIR))
-	@$(shx) echo buildContent ..... $(call trimProject,$(buildContent))
-	@$(shx) echo releaseContent ... $(call trimProject,$(releaseContent))
+	@$(shx) echo CURDIR ............ $(call trim-project,$(CURDIR))
+	@$(shx) echo build-content ..... $(call trim-project,$(build-content))
+	@$(shx) echo release-content ... $(call trim-project,$(release-content))
 	@$(shx) echo
 
-$(projectPath)/source/%.debug:
-	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefilePath) --no-print-directory debug
+$(project-path)/source/%.debug:
+	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefile-path) --no-print-directory debug
 
 endif

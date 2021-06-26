@@ -2,7 +2,7 @@
 mablung-makefile-include-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 # $(info mablung-makefile-include-path := $(mablung-makefile-include-path))
 
-ifeq ($(CURDIR),$(projectPath))
+ifeq ($(CURDIR),$(project-path))
 
 .PHONY: refresh upgrade clean run test pre-release release
 
@@ -20,12 +20,12 @@ clean:
 
 run: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	@node --no-warnings --unhandled-rejections=strict $(argument)
+	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
 test: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
-	@npx c8 ava $(argument)
+	@npx c8 ava $(or $(argument),$(arg),$(a))
 
 pre-release: upgrade refresh clean test
 	@npx shx echo -n
