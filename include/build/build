@@ -1,6 +1,6 @@
 
-mablung-makefile-include-build-path := $(call trim-folder-path,$(realpath $(lastword $(MAKEFILE_LIST))))
-# $(info mablung-makefile-include-build-path := $(mablung-makefile-include-build-path))
+# --mablung-makefile-include-build-path := $(call trim-folder-path,$(realpath $(lastword $(MAKEFILE_LIST))))
+# $(info --mablung-makefile-include-build-path := $(--mablung-makefile-include-build-path))
 
 ifeq ($(CURDIR),$(project-path))
 
@@ -66,7 +66,7 @@ $(project-path)/source/%.make:
 $(project-path)/source/%.build: $(project-path)/release/%.create
 	@$(MAKE) --directory=$(patsubst %.build,%,$@) --makefile=$(makefile-path) --no-print-directory build
 
-# $(info -- $$(project-path)/release/%.create: in $(call trim-project,$(mablung-makefile-include-build-path)/build))
+# $(info -- $$(project-path)/release/%.create: in $(call trim-project,$(--mablung-makefile-include-build-path)/build))
 # @$(shx) echo create .... $(call trim-project,$(patsubst %.create,%,$@))
 $(project-path)/release/%.create:
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)

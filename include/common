@@ -1,6 +1,6 @@
 
-mablung-makefile-include-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
-# $(info mablung-makefile-include-path := $(mablung-makefile-include-path))
+# --mablung-makefile-include-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
+# $(info --mablung-makefile-include-path := $(--mablung-makefile-include-path))
 
 ifeq ($(CURDIR),$(project-path))
 
