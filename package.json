@@ -42,7 +42,7 @@
     "test": "make test"
   },
   "type": "module",
-  "version": "0.0.1-36",
+  "version": "0.0.1-37",
   "dependencies": {
     "commander": "^8.0.0",
     "json5": "^2.2.0"
