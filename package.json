@@ -55,7 +55,7 @@
     "@virtualpatterns/mablung-worker": "virtualpatterns/mablung-worker.git",
     "ava": "^3.15.0",
     "c8": "^7.7.3",
-    "depcheck": "^1.4.1",
+    "depcheck": "^1.4.2",
     "eslint": "^7.29.0",
     "eslint-plugin-babel": "^5.3.1",
     "fs-extra": "^10.0.0",
