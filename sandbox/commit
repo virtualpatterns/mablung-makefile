@@ -1,0 +1,9 @@
+
+dirty = $(strip $\
+					$(filter $\
+						package-lock.json $\
+						package.json,$\
+						$(shell git status --porcelain)))
+			
+
+$(info dirty = $(call dirty))

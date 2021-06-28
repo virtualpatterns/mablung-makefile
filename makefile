@@ -7,8 +7,8 @@ export project-path := $(CURDIR)
 endif
 
 include $(--mablung-makefile-path)/include/common
-include $(--mablung-makefile-path)/include/build/common
-include $(--mablung-makefile-path)/include/build/build
-include $(--mablung-makefile-path)/include/build/debug
+include $(--mablung-makefile-path)/include/commit
+include $(--mablung-makefile-path)/include/build
+include $(--mablung-makefile-path)/include/debug
 
 .DEFAULT_GOAL := build

@@ -2,6 +2,34 @@
 # --mablung-makefile-include-path := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 # $(info --mablung-makefile-include-path := $(--mablung-makefile-include-path))
 
+makefile-path := $(realpath $(firstword $(MAKEFILE_LIST)))
+binary-path := $(project-path)/node_modules/.bin
+
+shx := $(binary-path)/shx
+eslint := $(binary-path)/eslint
+babel := $(binary-path)/babel
+
+content-of = $(strip $\
+							$(filter-out $\
+								$(1)/. $\
+								$(1)/..,$\
+								$(patsubst $\
+									./%,$\
+									%,$\
+									$(wildcard $(1)/.*) $\
+									$(wildcard $(1)/*))))
+
+trim-project = $(patsubst $\
+								$(project-path)/%,$\
+								%,$\
+								$(1))
+
+trim-folder-path = $(patsubst $\
+										%/,$\
+										%,$\
+										$(dir $\
+											$(1)))
+											
 ifeq ($(CURDIR),$(project-path))
 
 .PHONY: refresh upgrade clean run test pre-release release
@@ -9,11 +37,13 @@ ifeq ($(CURDIR),$(project-path))
 refresh:
 	@rm -Rf node_modules package-lock.json
 	@npm install
+	@$(MAKE) --no-print-directory commit message=post-refresh
 
 upgrade:
 	@npx shx rm -f package-lock.json
 	@npx npm-check-updates --upgrade
 	@npm install
+	@$(MAKE) --no-print-directory commit message=post-upgrade
 
 clean:
 	@npx shx rm -Rf coverage process release

@@ -1,0 +1,28 @@
+
+ifeq ($(CURDIR),$(project-path))
+
+add-content = $(patsubst $\
+								%,$\
+								%.add,$\
+								$(strip $\
+									$(filter $\
+										package-lock.json $\
+										package.json,$\
+										$(shell git status --porcelain))))
+
+.PHONY: commit
+
+# $(info --------------------)
+# $(info add-content = $(add-content))
+# $(info --------------------)
+
+commit: $(add-content)
+	$(if $\
+		$(add-content),$\
+		@git commit --message=$(or $(message),$(mesg),$(m),commit),$\
+		@$(shx) echo -n)
+
+%.add:
+	@git add $*
+
+endif

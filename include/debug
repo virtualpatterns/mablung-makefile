@@ -1,7 +1,4 @@
 
-# --mablung-makefile-include-build-debug-path := $(realpath $(lastword $(MAKEFILE_LIST)))
-# $(info --mablung-makefile-include-build-debug-path := $(--mablung-makefile-include-build-debug-path))
-
 ifeq ($(CURDIR),$(project-path))
 
 .PHONY: debug
