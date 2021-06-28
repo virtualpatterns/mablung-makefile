@@ -103,16 +103,27 @@
 
 # .PHONY: acd def;
 
-acd:
-	@echo $@
+# acd:
+# 	@echo $@
 
-def:
-	@echo $@
+# def:
+# 	@echo $@
 
-# .PHONY: brain;
+# # .PHONY: brain;
 
-brain: acd
-brain: def
+# brain: acd
+# brain: def
 
-brain:
-	@echo $@
+# brain:
+# 	@echo $@
+
+
+track/package-lock.json: package-lock.json
+	@touch $@
+
+track/refresh: track/package-lock.json
+	@touch $@
+
+refresh:
+	@touch package-lock.json
+	@$(MAKE) track/refresh
