@@ -62,6 +62,7 @@ pre-release: upgrade refresh clean test
 
 release: clean test
 	@npm version prerelease
+	@npm publish --access public --dry-run
 	@git push origin master
 
 endif

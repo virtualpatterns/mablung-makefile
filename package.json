@@ -32,6 +32,17 @@
     ".": "./release/index.js",
     "./package.json": "./package.json"
   },
+  "files": [
+    "/include",
+    "/release/command",
+    "/release/library",
+    "/release/index.js",
+    "/release/index.js.map",
+    "/source/command",
+    "/source/library",
+    "/source/index.js",
+    "makefile"
+  ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",
   "repository": {
