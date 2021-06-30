@@ -8,5 +8,3 @@ const Require = CreateRequire(import.meta.url);
 Test('Path', (test) => {
   test.is(Path, Require.resolve('../../../makefile'));
 });
-
-//# sourceMappingURL=path.test.js.map

@@ -26,5 +26,3 @@ action(() => {
 });
 
 Command.parse(Process.argv);
-
-//# sourceMappingURL=mablung-makefile-path.js.map

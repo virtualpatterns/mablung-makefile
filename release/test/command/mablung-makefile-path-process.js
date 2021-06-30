@@ -39,5 +39,3 @@ class MablungMakefilePathProcess extends ForkedProcess {
 
 
 export { MablungMakefilePathProcess };
-
-//# sourceMappingURL=mablung-makefile-path-process.js.map

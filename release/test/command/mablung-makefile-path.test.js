@@ -6,5 +6,3 @@ Test('mablung-makefile-path', async (test) => {
   let process = new MablungMakefilePathProcess();
   test.is(await process.whenExit(), 0);
 });
-
-//# sourceMappingURL=mablung-makefile-path.test.js.map

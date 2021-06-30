@@ -55,5 +55,3 @@ Test('resource/empty', async (test) => {
 Test('resource/ignore', async (test) => {
   test.false(await FileSystem.pathExists(`${FolderPath}/resource/ignore`));
 });
-
-//# sourceMappingURL=index.test.js.map
