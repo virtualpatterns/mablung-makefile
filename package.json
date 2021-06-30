@@ -50,7 +50,7 @@
     "test": "make test"
   },
   "type": "module",
-  "version": "0.0.1-45",
+  "version": "0.0.1-46",
   "dependencies": {
     "commander": "^8.0.0",
     "fs-extra": "^10.0.0",
