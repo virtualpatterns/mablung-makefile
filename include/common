@@ -35,7 +35,9 @@ ifeq ($(CURDIR),$(project-path))
 .PHONY: refresh upgrade clean run test pre-release release
 
 refresh:
+	@echo -n delete .... /node_modules and package-lock.json ..
 	@rm -Rf node_modules package-lock.json
+	@echo . done
 	@npm install
 	@$(MAKE) --no-print-directory commit message=post-refresh
 
@@ -46,7 +48,9 @@ upgrade:
 	@$(MAKE) --no-print-directory commit message=post-upgrade
 
 clean:
+	@npx shx echo -n delete .... /coverage, /process and /release ..
 	@npx shx rm -Rf coverage process release
+	@npx shx echo . done
 
 run: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
@@ -57,13 +61,15 @@ test: build
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 
+pre-release: export source-map := false
 pre-release: upgrade refresh clean test
-	@npx shx echo -n
+	@$(MAKE) --no-print-directory commit clean message=post-pre-release
 
 release: export source-map := false
 release: clean test
 	@npm version prerelease
 	@npm publish --access public --dry-run
 	@git push origin master
+	@$(MAKE) --no-print-directory clean
 
 endif
