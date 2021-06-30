@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../source/test/resource/index.js"],"names":[],"mappings":"AAAA,OAAO,MAAM,EAAE,GAAG,IAAX","file":"index.js","sourcesContent":["export const OK = true\n"]}
