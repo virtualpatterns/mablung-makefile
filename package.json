@@ -70,7 +70,6 @@
     "depcheck": "^1.4.2",
     "eslint": "^7.29.0",
     "eslint-plugin-babel": "^5.3.1",
-    "json5": "^2.2.0",
     "npm-check-updates": "^11.7.1",
     "shx": "^0.3.3"
   },
