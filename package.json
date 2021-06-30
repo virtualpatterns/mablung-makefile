@@ -38,9 +38,6 @@
     "/release/library",
     "/release/index.js",
     "/release/index.js.map",
-    "/source/command",
-    "/source/library",
-    "/source/index.js",
     "makefile"
   ],
   "license": "GPL-3.0+",

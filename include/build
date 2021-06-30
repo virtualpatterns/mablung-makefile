@@ -75,17 +75,19 @@ $(project-path)/release%babelrc.json: $(project-path)/source%babelrc.json;
 $(project-path)/release%eslintrc.json: $(project-path)/source%eslintrc.json;
 
 $(project-path)/release/%.cjs: eslint-flag := --fix
-$(project-path)/release/%.cjs: babel-flag := --source-maps
+$(project-path)/release/%.cjs: babel-flag := --source-maps $(or $(source-map),true)
 $(project-path)/release/%.cjs: $(project-path)/source/%.cjs
 	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@)
 	@$(eslint) $< $(eslint-flag)
+	$(info babel-flag = $(babel-flag))
 	@$(babel) $< --out-file $@ $(babel-flag)
 
 $(project-path)/release/%.js: eslint-flag := --fix
-$(project-path)/release/%.js: babel-flag := --source-maps
+$(project-path)/release/%.js: babel-flag := --source-maps $(or $(source-map),true)
 $(project-path)/release/%.js: $(project-path)/source/%.js
 	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@)
 	@$(eslint) $< $(eslint-flag)
+	$(info babel-flag = $(babel-flag))
 	@$(babel) $< --out-file $@ $(babel-flag)
 
 $(project-path)/release/%: $(project-path)/source/%
