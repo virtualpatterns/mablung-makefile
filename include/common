@@ -32,6 +32,7 @@ test: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
+	@echo
 
 pre-release: export source-map := false
 pre-release: upgrade refresh clean test
@@ -39,7 +40,6 @@ pre-release: upgrade refresh clean test
 
 release: export source-map := false
 release: clean test
-	@echo
 	@npm version prerelease
 	@echo
 	@npm publish --access public
