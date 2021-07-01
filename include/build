@@ -1,4 +1,32 @@
 
+makefile-path := $(realpath $(firstword $(MAKEFILE_LIST)))
+binary-path := $(project-path)/node_modules/.bin
+
+shx := $(binary-path)/shx
+eslint := $(binary-path)/eslint
+babel := $(binary-path)/babel
+
+content-of = $(strip $\
+							$(filter-out $\
+								$(1)/. $\
+								$(1)/..,$\
+								$(patsubst $\
+									./%,$\
+									%,$\
+									$(wildcard $(1)/.*) $\
+									$(wildcard $(1)/*))))
+
+trim-project = $(patsubst $\
+								$(project-path)/%,$\
+								%,$\
+								$(1))
+
+trim-folder-path = $(patsubst $\
+										%/,$\
+										%,$\
+										$(dir $\
+											$(1)))
+
 ifeq ($(CURDIR),$(project-path))
 
 .PHONY: build
