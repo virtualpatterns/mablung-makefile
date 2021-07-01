@@ -7,22 +7,22 @@ ifeq ($(CURDIR),$(project-path))
 .PHONY: refresh upgrade clean run test pre-release release
 
 refresh:
-	@echo -n delete .... /node_modules and package-lock.json ..
+	@echo Deleting /node_modules and package-lock.json ...
 	@rm -Rf node_modules package-lock.json
-	@echo . done
+	@echo
 	@npm install
 	@$(MAKE) --no-print-directory commit message=post-refresh
 
 upgrade:
 	@npx shx rm -f package-lock.json
 	@npx npm-check-updates --upgrade
+	@echo
 	@npm install
 	@$(MAKE) --no-print-directory commit message=post-upgrade
 
 clean:
-	@npx shx echo -n delete .... /coverage, /process and /release ..
+	@npx shx echo delete .... /coverage /process /release
 	@npx shx rm -Rf coverage process release
-	@npx shx echo . done
 
 run: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
