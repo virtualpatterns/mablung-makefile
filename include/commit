@@ -8,7 +8,6 @@ add-content = $(patsubst $\
 									$(filter $\
 										package-lock.json $\
 										package.json,$\
-										release,$\
 										$(shell git status --porcelain))))
 
 .PHONY: commit
