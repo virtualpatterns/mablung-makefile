@@ -39,8 +39,11 @@ pre-release: upgrade refresh clean test
 
 release: export source-map := false
 release: clean test
+	@echo
 	@npm version prerelease
+	@echo
 	@npm publish --access public
+	@echo
 	@git push origin master
 
 endif
