@@ -22,11 +22,18 @@ refresh:
 	@npm install
 	@$(MAKE) commit message=post-refresh
 
+upgrade: stop-upgrade :=
 upgrade:
 	@$(MAKE) commit message=pre-upgrade
 	@npx npm-check-updates --upgrade
 	@$(MAKE) do-upgrade
 	@$(MAKE) commit message=post-upgrade
+	$(if $\
+		$(stop-upgrade),$\
+		@npx shx echo make: \*\*\* \[upgrade\] make must be restarted)
+	$(if $\
+		$(stop-upgrade),$\
+		@npx shx false)
 
 # @npx shx echo upgrade-content = $(upgrade-content)
 # $(if $\
