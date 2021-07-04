@@ -1,28 +1,31 @@
 
 ifeq ($(CURDIR),$(project-path))
 
-add-content = $(patsubst $\
-								%,$\
-								%.add,$\
-								$(strip $\
-									$(filter $\
-										package-lock.json $\
-										package.json,$\
-										$(shell git status --porcelain))))
+commit-content = $(patsubst $\
+										%,$\
+										%.commit,$\
+										$(strip $\
+											$(filter $\
+												package-lock.json $\
+												package.json,$\
+												$(shell git status --porcelain))))
 
 .PHONY: commit
 
 # $(info --------------------)
-# $(info add-content = $(add-content))
+# $(info commit-content = $(commit-content))
 # $(info --------------------)
 
-commit: $(add-content)
+commit: $(commit-content)
 	$(if $\
-		$(add-content),$\
+		$(commit-content),$\
 		@git commit --message=$(or $(message),$(mesg),$(m),commit),$\
 		@$(shx) echo -n)
 
-%.add:
-	@git add $*
+package-lock.json.commit:
+	@git add package-lock.json
+
+package.json.commit:
+	@git add package.json
 
 endif

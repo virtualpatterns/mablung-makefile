@@ -40,7 +40,8 @@ upgrade:
 # 	$(stop-upgrade),$\
 # 	@npx shx false)
 
-do-upgrade: $(upgrade-content);
+do-upgrade: $(upgrade-content)
+	@$(shx) echo -n
 
 package.json.upgrade:
 	@npx shx rm -Rf package-lock.json
