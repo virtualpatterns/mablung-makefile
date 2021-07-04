@@ -4,10 +4,13 @@
 											
 ifeq ($(CURDIR),$(project-path))
 
-upgrade-content = $(strip $\
-										$(filter $\
-											package.json,$\
-											$(shell git status --porcelain)))
+upgrade-content = $(patsubst $\
+										%,$\
+										%.upgrade,$\
+										$(strip $\
+											$(filter $\
+												package.json,$\
+												$(shell git status --porcelain))))
 
 .PHONY: install refresh upgrade do-upgrade clean run test pre-release release
 
@@ -22,19 +25,24 @@ refresh:
 upgrade:
 	@$(MAKE) commit message=pre-upgrade
 	@npx npm-check-updates --upgrade
-	@npx shx echo upgrade-content = $(upgrade-content)
-	$(if $\
-		$(upgrade-content),$\
-		@$(MAKE) do-upgrade)
+	@$(MAKE) do-upgrade
 	@$(MAKE) commit message=post-upgrade
-	$(if $\
-		$(stop-upgrade),$\
-		@npx shx echo make: \*\*\* \[upgrade\] make must be restarted)
-	$(if $\
-		$(stop-upgrade),$\
-		@npx shx false)
 
-do-upgrade:
+# @npx shx echo upgrade-content = $(upgrade-content)
+# $(if $\
+# 	$(upgrade-content),$\
+# 	@$(MAKE) do-upgrade)
+# @$(MAKE) commit message=post-upgrade
+# $(if $\
+# 	$(stop-upgrade),$\
+# 	@npx shx echo make: \*\*\* \[upgrade\] make must be restarted)
+# $(if $\
+# 	$(stop-upgrade),$\
+# 	@npx shx false)
+
+do-upgrade: $(upgrade-content);
+
+package.json.upgrade:
 	@npx shx rm -Rf package-lock.json
 	@npm install
 
