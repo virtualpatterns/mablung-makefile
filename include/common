@@ -29,10 +29,10 @@ upgrade:
 	@$(MAKE) do-upgrade
 	@$(MAKE) commit message=post-upgrade
 	$(if $\
-		$(stop-upgrade),$\
+		$(strip $(stop-upgrade)),$\
 		@npx shx echo make: \*\*\* \[upgrade\] make must be restarted)
 	$(if $\
-		$(stop-upgrade),$\
+		$(strip $(stop-upgrade)),$\
 		@npx shx false)
 
 # @npx shx echo upgrade-content = $(upgrade-content)
