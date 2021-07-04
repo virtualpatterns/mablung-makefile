@@ -4,22 +4,38 @@
 											
 ifeq ($(CURDIR),$(project-path))
 
-.PHONY: refresh upgrade clean run test pre-release release
+upgrade-content = $(strip $\
+										$(filter $\
+											package.json,$\
+											$(shell git status --porcelain)))
+
+.PHONY: install refresh upgrade do-upgrade clean run test pre-release release
+
+install:
+	@npm install
 
 refresh:
-	@echo Deleting /node_modules and package-lock.json ...
 	@rm -Rf node_modules package-lock.json
-	@echo
 	@npm install
-	@$(MAKE) --no-print-directory commit message=post-refresh
+	@$(MAKE) commit message=post-refresh
 
-# upgrade: filter-package := @virtualpatterns/mablung-makefile
 upgrade:
-	@npx shx rm -f package-lock.json
+	@$(MAKE) commit message=pre-upgrade
 	@npx npm-check-updates --upgrade
-	@echo
+	$(if $\
+		$(upgrade-content),$\
+		@$(MAKE) do-upgrade)
+	@$(MAKE) commit message=post-upgrade
+	$(if $\
+		$(stop-upgrade),$\
+		@npx shx echo make: \*\*\* \[upgrade\] make must be restarted)
+	$(if $\
+		$(stop-upgrade),$\
+		@npx shx false)
+
+do-upgrade:
+	@npx shx rm -Rf package-lock.json
 	@npm install
-	@$(MAKE) --no-print-directory commit message=post-upgrade
 
 clean:
 	@npx shx echo delete .... /coverage /process /release
@@ -33,18 +49,15 @@ test: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
-	@echo
 
 pre-release: export source-map := false
 pre-release: upgrade refresh clean test
-	@$(MAKE) --no-print-directory commit message=post-pre-release
+	@$(MAKE) commit message=post-pre-release
 
 release: export source-map := false
 release: clean test
 	@npm version prerelease
-	@echo
 	@npm publish --access public
-	@echo
 	@git push origin master
 
 endif
