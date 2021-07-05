@@ -22,7 +22,7 @@ reinstall:
 update: stop-update :=
 update:
 	@$(MAKE) commit message=pre-update
-	@npx npm-check-updates --update
+	@npx npm-check-updates --upgrade
 	@$(MAKE) do-update
 	@$(MAKE) commit message=post-update
 	$(if $\
