@@ -29,14 +29,11 @@
   },
   "description": "TBD",
   "exports": {
-    ".": "./release/index.js",
     "./package.json": "./package.json"
   },
   "files": [
     "/include",
     "/release/command",
-    "/release/library",
-    "/release/index.js",
     "makefile"
   ],
   "license": "GPL-3.0+",
