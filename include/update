@@ -1,0 +1,42 @@
+											
+ifeq ($(CURDIR),$(project-path))
+
+update-content = $(patsubst $\
+									%,$\
+									%.update,$\
+									$(strip $\
+										$(filter $\
+											package.json,$\
+											$(shell git status --porcelain))))
+
+.PHONY: install reinstall update do-update
+
+install:
+	@npm install
+
+reinstall:
+	@rm -Rf node_modules package-lock.json
+	@npm install
+	@$(MAKE) commit message=post-reinstall
+
+update: stop-update :=
+update:
+	@$(MAKE) commit message=pre-update
+	@npx npm-check-updates --update
+	@$(MAKE) do-update
+	@$(MAKE) commit message=post-update
+	$(if $\
+		$(strip $(stop-update)),$\
+		@npx shx echo make: \*\*\* \[update\] make must be restarted)
+	$(if $\
+		$(strip $(stop-update)),$\
+		@npx shx false)
+
+do-update: $(update-content)
+	@$(shx) echo -n
+
+package.json.update:
+	@npx shx rm -Rf package-lock.json
+	@npm install
+
+endif
