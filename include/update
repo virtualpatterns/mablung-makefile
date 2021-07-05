@@ -9,17 +9,11 @@ update-content = $(patsubst $\
 											package.json,$\
 											$(shell git status --porcelain))))
 
-.PHONY: install reinstall update do-update
+.PHONY: update do-update
 
-install:
-	@npm install
-
-reinstall:
-	@rm -Rf node_modules package-lock.json
-	@npm install
-	@$(MAKE) commit message=post-reinstall
-
-update: stop-update :=
+update: stop-update := $(if $\
+												$(shell npx shx which mablung-makefile),$\
+												$(shell npx mablung-makefile get-upgrade))
 update:
 	@$(MAKE) commit message=pre-update
 	@npx npm-check-updates --upgrade
