@@ -12,4 +12,8 @@ include $(--mablung-makefile-path)/include/commit
 include $(--mablung-makefile-path)/include/build
 include $(--mablung-makefile-path)/include/debug
 
+test::
+	@npx shx rm -Rf ../Shared/mablung-makefile/coverage
+	@npx shx cp -R coverage ../Shared/mablung-makefile
+
 .DEFAULT_GOAL := build
