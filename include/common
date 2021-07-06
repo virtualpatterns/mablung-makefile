@@ -6,33 +6,32 @@ ifeq ($(CURDIR),$(project-path))
 
 .PHONY: install reinstall clean run test pre-release release
 
-install:
+install::
 	@npm install
 
-reinstall:
+reinstall::
 	@rm -Rf node_modules package-lock.json
 	@npm install
 	@$(MAKE) commit message=post-reinstall
 
-clean:
-	@npx shx echo delete .... /coverage /process /release
+clean::
 	@npx shx rm -Rf coverage process release
 
-run: build
+run:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
-test: build
+test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 
-pre-release: export source-map := false
-pre-release: update reinstall clean test
+pre-release:: export source-map := false
+pre-release:: update reinstall clean test
 	@$(MAKE) commit message=post-pre-release
 
-release: export source-map := false
-release: clean test
+release:: export source-map := false
+release:: clean test
 	@npm version prerelease
 	@npm publish --access public
 	@git push origin master

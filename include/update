@@ -11,10 +11,10 @@ update-content = $(patsubst $\
 
 .PHONY: update do-update
 
-update: stop-update := $(if $\
+update:: stop-update := $(if $\
 												$(shell npx shx which mablung-makefile),$\
 												$(shell npx mablung-makefile get-upgrade))
-update:
+update::
 	@$(MAKE) commit message=pre-update
 	@npx npm-check-updates --upgrade
 	@$(MAKE) do-update
@@ -26,7 +26,7 @@ update:
 		$(strip $(stop-update)),$\
 		@npx shx false)
 
-do-update: $(update-content)
+do-update:: $(update-content)
 	@$(shx) echo -n
 
 package.json.update:
