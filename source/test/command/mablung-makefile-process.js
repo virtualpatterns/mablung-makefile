@@ -1,6 +1,6 @@
 import { createRequire as CreateRequire } from 'module'
-import FileSystem from 'fs-extra'
 import { ForkedProcess } from '@virtualpatterns/mablung-worker'
+import FileSystem from 'fs-extra'
 import Path from 'path'
 
 const Require = CreateRequire(import.meta.url)
