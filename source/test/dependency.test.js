@@ -9,6 +9,7 @@ Test('dependency', async (test) => {
   let unused = await Check(Process.cwd(), {
     'ignoreMatches': [
       '@babel/cli',
+      'babel-plugin-add-header-comment',
       'c8',
       'npm-check-updates',
       'shx'

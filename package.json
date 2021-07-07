@@ -58,6 +58,7 @@
     "@pwn/is": "^1.0.2",
     "@virtualpatterns/mablung-worker": "0.0.2-35",
     "ava": "^3.15.0",
+    "babel-plugin-add-header-comment": "^1.0.3",
     "c8": "^7.7.3",
     "depcheck": "^1.4.2",
     "eslint": "^7.30.0",
