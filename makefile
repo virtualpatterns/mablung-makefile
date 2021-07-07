@@ -13,6 +13,7 @@ include $(--mablung-makefile-path)/include/build
 include $(--mablung-makefile-path)/include/debug
 
 test::
+	@npx mkdir -p ../Shared/mablung-makefile
 	@npx shx rm -Rf ../Shared/mablung-makefile/coverage
 	@npx shx cp -R coverage ../Shared/mablung-makefile
 
