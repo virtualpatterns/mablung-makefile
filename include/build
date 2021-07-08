@@ -102,19 +102,25 @@ $(project-path)/release%babelrc.json: $(project-path)/source%babelrc.json;
 # @$(shx) echo ignore .... $(call trim-project,$<) to $(call trim-project,$@)
 $(project-path)/release%eslintrc.json: $(project-path)/source%eslintrc.json;
 
-$(project-path)/release/%.cjs: eslint-flag := --fix
-$(project-path)/release/%.cjs: babel-flag := --source-maps $(or $(source-map),true)
 $(project-path)/release/%.cjs: $(project-path)/source/%.cjs
-	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@)
-	@$(eslint) $< $(eslint-flag)
-	@$(babel) $< --out-file $@ $(babel-flag)
+	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
+	@$(eslint) $< $(eslint-parameter)
+	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-$(project-path)/release/%.js: eslint-flag := --fix
-$(project-path)/release/%.js: babel-flag := --source-maps $(or $(source-map),true)
+# @echo vv1 = $(or $(vv1),blank)
+#  --source-maps $(source-map)
+# @echo source-map = $(source-map)
+
 $(project-path)/release/%.js: $(project-path)/source/%.js
-	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@)
-	@$(eslint) $< $(eslint-flag)
-	@$(babel) $< --out-file $@ $(babel-flag)
+	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
+	@$(eslint) $< $(eslint-parameter)
+	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+
+# @echo vv1 = $(or $(vv1),blank)
+#  --source-maps $(source-map)
+# @echo source-map = $(source-map)
 
 $(project-path)/release/%: $(project-path)/source/%
 	@$(shx) echo copy ...... $(call trim-project,$<) to $(call trim-project,$(call trim-folder-path,$@))

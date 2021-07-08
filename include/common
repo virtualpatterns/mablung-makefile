@@ -26,12 +26,11 @@ test:: build
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 
-pre-release:: export source-map := false
 pre-release:: update reinstall clean test
 	@$(MAKE) commit message=post-pre-release
 
 release:: export source-map := false
-release:: clean test
+release:: clean build
 	@npm version prerelease
 	@npm publish --access public
 	@git push origin master
