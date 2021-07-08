@@ -117,13 +117,17 @@
 # brain:
 # 	@echo $@
 
+# track/package-lock.json: package-lock.json
+# 	@touch $@
 
-track/package-lock.json: package-lock.json
-	@touch $@
+# track/refresh: track/package-lock.json
+# 	@touch $@
 
-track/refresh: track/package-lock.json
-	@touch $@
+# refresh:
+# 	@touch package-lock.json
+# 	@$(MAKE) track/refresh
 
-refresh:
-	@touch package-lock.json
-	@$(MAKE) track/refresh
+# bobo: var := $(shell ls > sandbox/ls.out)
+bobo:
+	$(eval var := $(shell ls > sandbox/ls.out))
+	@echo $(var)
