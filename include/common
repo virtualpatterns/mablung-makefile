@@ -30,7 +30,7 @@ pre-release:: update reinstall clean test
 	@$(MAKE) commit message=post-pre-release
 
 release:: export source-map := false
-release:: clean build
+release:: clean test
 	@npm version prerelease
 	@npm publish --access public
 	@git push origin master
