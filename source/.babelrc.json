@@ -3,10 +3,10 @@
     [
       "babel-plugin-add-header-comment",
       {
-        "commentStart": "*************\n",
+        "commentStart": "*********\n",
         "commentLineStart": "\t",
-        "commentEnd": "\n*************",
-        "header": [ "FOR RELEASE" ]
+        "commentEnd": "\n*********",
+        "header": [ "RELEASE" ]
       }
     ]  
   ],
