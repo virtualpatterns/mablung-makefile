@@ -18,8 +18,7 @@
   "c8": {
     "all": true,
     "exclude": [
-      "release/sandbox",
-      "release/test"
+      "release/sandbox"
     ],
     "reporter": [
       "html"
