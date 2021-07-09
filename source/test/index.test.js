@@ -10,6 +10,10 @@ const FolderPath = Path.dirname(FilePath)
 const Process = process
 const Require = CreateRequire(import.meta.url)
 
+Test('nil', async (test) => {
+  test.true((await import('../index.js')).nil === null)
+})
+
 Test('MAKEFILE_PATH', (test) => {
   test.deepEqual(Process.env['MAKEFILE_PATH'].split(' '), [
     Require.resolve('../../makefile'),
