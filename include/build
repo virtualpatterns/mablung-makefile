@@ -108,33 +108,15 @@ $(project-path)/release/%.cjs: $(project-path)/source/%.cjs
 	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-# @echo vv1 = $(or $(vv1),blank)
-#  --source-maps $(source-map)
-# @echo source-map = $(source-map)
-
 $(project-path)/release/%.js: $(project-path)/source/%.js
 	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
 	@$(eslint) $< $(eslint-parameter)
 	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-# @echo vv1 = $(or $(vv1),blank)
-#  --source-maps $(source-map)
-# @echo source-map = $(source-map)
-
 $(project-path)/release/%: $(project-path)/source/%
 	@$(shx) echo copy ...... $(call trim-project,$<) to $(call trim-project,$(call trim-folder-path,$@))
 	@$(shx) cp -R $< $(call trim-folder-path,$@)
-
-# $(project-path)/release/%: $(project-path)/source/%
-# 	$(if $\
-# 		$(call content-of,$<),$\
-# 		@$(shx) echo create .... $(call trim-project,$@),$\
-# 		@$(shx) echo copy ...... $(call trim-project,$<) to $(call trim-project,$(call trim-folder-path,$@)))
-# 	$(if $\
-# 		$(call content-of,$<),$\
-# 		@$(shx) mkdir -p $@,$\
-# 		@$(shx) cp -R $< $(call trim-folder-path,$@))
 
 # @$(shx) echo copy ...... $(call trim-project,$(CURDIR)) to $(call trim-project,$(call trim-folder-path,$(subst /source/,/release/,$(CURDIR))))
 # @$(shx) echo delete .... $(call trim-project,$(subst /source/,/release/,$(CURDIR))/makefile)

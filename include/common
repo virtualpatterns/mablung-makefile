@@ -24,18 +24,13 @@ run:: build
 test:: project-name := $(notdir $(project-path))
 test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	$(eval export exists-source-map := $(if $\
-																			$(findstring $\
-																				false,$\
-																				$(source-map)),,$\
-																			true))
+	$(eval exists-source-map := $(if $\
+																$(findstring $\
+																	false,$\
+																	$(source-map)),,$\
+																true))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
-	@npx shx echo
-	$(if $\
-		$(exists-source-map),$\
-		@$(shx) echo copy ...... coverage to ../Shared/$(project-name),$\
-		@$(shx) echo skip ...... coverage to ../Shared/$(project-name))
 	$(if $\
 		$(exists-source-map),$\
 		@npx shx mkdir -p ../Shared/$(project-name))
@@ -45,7 +40,11 @@ test:: build
 	$(if $\
 		$(exists-source-map),$\
 		@npx shx cp -R coverage ../Shared/$(project-name))
-	@npx shx echo
+
+# $(if $\
+# 	$(exists-source-map),$\
+# 	@$(shx) echo copy ...... coverage to ../Shared/$(project-name),$\
+# 	@$(shx) echo skip ...... coverage to ../Shared/$(project-name))
 
 pre-release:: update reinstall clean test
 	@$(MAKE) commit message=post-pre-release
