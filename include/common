@@ -29,6 +29,11 @@ test:: exists-source-map := $(if $\
 															true)
 test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	$(eval export exists-source-map := $(if $\
+																			$(findstring $\
+																				false,$\
+																				$(source-map)),,$\
+																			true))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 	@npx shx echo
