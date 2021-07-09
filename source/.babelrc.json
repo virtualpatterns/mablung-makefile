@@ -1,16 +1,4 @@
 {
-  "plugins": [
-    [
-      "babel-plugin-add-header-comment",
-      {
-        "commentStart": "*********\n",
-        "commentLineStart": "\t",
-        "commentEnd": "\n*********",
-        "header": [ "RELEASE" ]
-      }
-    ]  
-  ],
-  "presets": [],
-  "retainLines": false,
-  "sourceType": "module"
+  "plugins": [],
+  "presets": []
 }
