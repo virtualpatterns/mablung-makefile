@@ -1,2 +1,2 @@
-const nil = null
-export { nil }
+const OK = true
+export { OK }
