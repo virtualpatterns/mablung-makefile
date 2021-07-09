@@ -22,11 +22,6 @@ run:: build
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
 test:: project-name := $(notdir $(project-path))
-test:: exists-source-map := $(if $\
-															$(findstring $\
-																false,$\
-																$(source-map)),,$\
-															true)
 test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	$(eval export exists-source-map := $(if $\
