@@ -8,10 +8,6 @@
   ],
   "globals": {},
   "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "requireConfigFile": true,
-    "sourceType": "module"
-  },
   "plugins": [
     "eslint-plugin-babel"
   ],
