@@ -13,7 +13,7 @@ update-content = $(patsubst $\
 
 update:: stop-update := $(if $\
 													$(shell npx shx which mablung-makefile),$\
-													$(shell npx mablung-makefile get-upgrade))
+													$(shell npx mablung-makefile get-update))
 update::
 	@$(MAKE) commit message=pre-update
 	@npx npm-check-updates --upgrade

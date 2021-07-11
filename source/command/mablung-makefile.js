@@ -31,8 +31,8 @@ Command
   })
 
 Command
-  .command('get-upgrade')
-  .description('Return the version of the available upgrade or nothing if none is available.')
+  .command('get-update')
+  .description('Return the version of the available update or nothing if none is available.')
   .action(async () => {
 
     process.exitCode = 0
