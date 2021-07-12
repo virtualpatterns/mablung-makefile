@@ -9,7 +9,7 @@ ifeq ($(CURDIR),$(project-path))
 install::
 	@npm install
 
-reinstall::
+re-install::
 	@rm -Rf node_modules package-lock.json
 	@npm install
 	@$(MAKE) commit message=post-reinstall
