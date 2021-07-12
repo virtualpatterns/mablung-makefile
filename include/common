@@ -4,7 +4,7 @@
 											
 ifeq ($(CURDIR),$(project-path))
 
-.PHONY: install reinstall clean run test pre-release release
+.PHONY: install re-install clean run test pre-release release
 
 install::
 	@npm install
@@ -12,7 +12,7 @@ install::
 re-install::
 	@rm -Rf node_modules package-lock.json
 	@npm install
-	@$(MAKE) commit message=post-reinstall
+	@$(MAKE) commit message=post-re-install
 
 clean::
 	@npx shx rm -Rf coverage process release
@@ -46,7 +46,7 @@ test:: build
 # 	@$(shx) echo copy ...... coverage to ../Shared/$(project-name),$\
 # 	@$(shx) echo skip ...... coverage to ../Shared/$(project-name))
 
-pre-release:: update reinstall clean test
+pre-release:: update re-install clean test
 	@$(MAKE) commit message=post-pre-release
 
 release:: export source-map := false
