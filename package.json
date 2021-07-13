@@ -55,7 +55,7 @@
     "@babel/core": "^7.14.6",
     "@babel/eslint-parser": "^7.14.7",
     "@pwn/is": "^1.0.2",
-    "@virtualpatterns/mablung-worker": "0.0.2-35",
+    "@virtualpatterns/mablung-worker": "0.0.2-37",
     "ava": "^3.15.0",
     "c8": "^7.7.3",
     "depcheck": "^1.4.2",
