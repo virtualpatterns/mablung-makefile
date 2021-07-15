@@ -95,12 +95,15 @@ $(project-path)/source/%.build: $(project-path)/release/%.create
 $(project-path)/release/%.create:
 	@$(shx) mkdir -p $(patsubst %.create,%,$@)
 
-# @$(shx) echo ignore .... $(call trim-project,$<) to $(call trim-project,$@)
-$(project-path)/release%DS_Store: $(project-path)/source%DS_Store;
-# @$(shx) echo ignore .... $(call trim-project,$<) to $(call trim-project,$@)
-$(project-path)/release%babelrc.json: $(project-path)/source%babelrc.json;
-# @$(shx) echo ignore .... $(call trim-project,$<) to $(call trim-project,$@)
-$(project-path)/release%eslintrc.json: $(project-path)/source%eslintrc.json;
+# @$(shx) echo ignore .... $(call trim-project,$<) for $(call trim-project,$(call trim-folder-path,$@))
+$(project-path)/release/.DS_Store: $(project-path)/source/.DS_Store;
+$(project-path)/release/%/.DS_Store: $(project-path)/source/%/.DS_Store;
+
+$(project-path)/release/.babelrc.json: $(project-path)/source/.babelrc.json;
+$(project-path)/release/%/.babelrc.json: $(project-path)/source/%/.babelrc.json;
+
+$(project-path)/release/.eslintrc.json: $(project-path)/source/.eslintrc.json;
+$(project-path)/release/%/.eslintrc.json: $(project-path)/source/%/.eslintrc.json;
 
 $(project-path)/release/%.cjs: $(project-path)/source/%.cjs
 	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
