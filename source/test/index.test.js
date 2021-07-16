@@ -33,6 +33,18 @@ Test('.eslintrc.json', async (test) => {
   test.false(await FileSystem.pathExists(`${FolderPath}/../.eslintrc.json`))
 })
 
+Test('sample.babelrc.json', async (test) => {
+  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('../sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
+})
+
+Test('sample.DS_Store', async (test) => {
+  test.true(await FileSystem.pathExists(Require.resolve('../sample.DS_Store')))
+})
+
+Test('sample.eslintrc.json', async (test) => {
+  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('../sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
+})
+
 Test('resource/index.cjs', async (test) => {
   test.true((await import('./resource/index.cjs')).OK)
 })
@@ -43,6 +55,18 @@ Test('resource/index.js', async (test) => {
 
 Test('resource/index.json', async (test) => {
   test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/index.json'), { 'encoding': 'utf-8' })).OK)
+})
+
+Test('resource/sample.babelrc.json', async (test) => {
+  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
+})
+
+Test('resource/sample.DS_Store', async (test) => {
+  test.true(await FileSystem.pathExists(Require.resolve('./resource/sample.DS_Store')))
+})
+
+Test('resource/sample.eslintrc.json', async (test) => {
+  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/copy/makefile', async (test) => {
