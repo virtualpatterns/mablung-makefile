@@ -4,7 +4,7 @@ import { createRequire as CreateRequire } from 'module'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
 import JSON5 from 'json5'
-import Upgrade from 'npm-check-updates'
+import Update from 'npm-check-updates'
 
 const Process = process
 const Require = CreateRequire(import.meta.url)
@@ -39,13 +39,13 @@ Command
 
     try {
 
-      let upgrade = await Upgrade.run({
+      let update = await Update.run({
         'filter': Package.name,
         'packageFile': `${Process.cwd()}/package.json`
       })
 
-      if (upgrade[Package.name]) {
-        console.log(upgrade[Package.name])
+      if (update[Package.name]) {
+        console.log(update[Package.name])
       }
       
     } catch (error) {
