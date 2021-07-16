@@ -105,20 +105,23 @@ $(project-path)/release/%/.babelrc.json: $(project-path)/source/%/.babelrc.json;
 $(project-path)/release/.eslintrc.json: $(project-path)/source/.eslintrc.json;
 $(project-path)/release/%/.eslintrc.json: $(project-path)/source/%/.eslintrc.json;
 
+# @$(shx) echo check ........ $(call trim-project,$<) $(eslint-parameter)
+# @$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 $(project-path)/release/%.cjs: $(project-path)/source/%.cjs
-	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
+	@$(shx) echo compile ... $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(eslint) $< $(eslint-parameter)
-	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
+# @$(shx) echo check ........ $(call trim-project,$<) $(eslint-parameter)
+# @$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 $(project-path)/release/%.js: $(project-path)/source/%.js
-	@$(shx) echo check ..... $(call trim-project,$<) $(eslint-parameter)
+	@$(shx) echo compile ... $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(eslint) $< $(eslint-parameter)
-	@$(shx) echo compile ... $(call trim-project,$<) to $(call trim-project,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
 	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
+# @$(shx) echo copy ...... $(call trim-project,$<) to $(call trim-project,$(call trim-folder-path,$@))
 $(project-path)/release/%: $(project-path)/source/%
-	@$(shx) echo copy ...... $(call trim-project,$<) to $(call trim-project,$(call trim-folder-path,$@))
+	@$(shx) echo copy ...... $(call trim-project,$@)
 	@$(shx) cp -R $< $(call trim-folder-path,$@)
 
 # @$(shx) echo copy ...... $(call trim-project,$(CURDIR)) to $(call trim-project,$(call trim-folder-path,$(subst /source/,/release/,$(CURDIR))))
