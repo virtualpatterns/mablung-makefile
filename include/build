@@ -1,4 +1,20 @@
 
+ifeq ($(CURDIR),$(project-path))
+
+makefile-path := $(realpath $(firstword $(MAKEFILE_LIST)))
+
+.PHONY: build
+
+# @$(shx) echo build ..... source
+build: $(project-path)/release.create
+	@$(MAKE) --directory=$(project-path)/source --jobs=4 --makefile=$(makefile-path) --no-print-directory build
+
+# @$(shx) echo create .... $(call trim-project,$(patsubst %.create,%,$@))
+$(project-path)/release.create:
+	@npx shx mkdir -p $(patsubst %.create,%,$@)
+
+else
+
 makefile-path := $(realpath $(firstword $(MAKEFILE_LIST)))
 binary-path := $(project-path)/node_modules/.bin
 
@@ -26,20 +42,6 @@ trim-folder-path = $(patsubst $\
 										%,$\
 										$(dir $\
 											$(1)))
-
-ifeq ($(CURDIR),$(project-path))
-
-.PHONY: build
-
-# @$(shx) echo build ..... source
-build: $(project-path)/release.create
-	@$(MAKE) --directory=$(project-path)/source --jobs --makefile=$(makefile-path) --no-print-directory build
-
-# @$(shx) echo create .... $(call trim-project,$(patsubst %.create,%,$@))
-$(project-path)/release.create:
-	@$(shx) mkdir -p $(patsubst %.create,%,$@)
-
-else
 
 ifndef filter-build-content
 filter-build-content = $(1)
