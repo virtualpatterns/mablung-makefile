@@ -4,7 +4,7 @@ import { createRequire as CreateRequire } from 'module'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
 import JSON5 from 'json5'
-import Update from 'npm-check-updates'
+// import Update from 'npm-check-updates'
 
 const Process = process
 const Require = CreateRequire(import.meta.url)
