@@ -30,30 +30,30 @@ Command
 
   })
 
-Command
-  .command('get-update')
-  .description('Return the version of the available update or nothing if none is available.')
-  .action(async () => {
+// Command
+//   .command('get-update')
+//   .description('Return the version of the available update or nothing if none is available.')
+//   .action(async () => {
 
-    process.exitCode = 0
+//     process.exitCode = 0
 
-    try {
+//     try {
 
-      let update = await Update.run({
-        'filter': Package.name,
-        'packageFile': `${Process.cwd()}/package.json`
-      })
+//       let update = await Update.run({
+//         'filter': Package.name,
+//         'packageFile': `${Process.cwd()}/package.json`
+//       })
 
-      if (update[Package.name]) {
-        console.log(update[Package.name])
-      }
+//       if (update[Package.name]) {
+//         console.log(update[Package.name])
+//       }
       
-    } catch (error) {
-      console.error(error)
-      process.exitCode = 1
-    }
+//     } catch (error) {
+//       console.error(error)
+//       process.exitCode = 1
+//     }
 
-  })
+//   })
 
 Command
   .parse(Process.argv)

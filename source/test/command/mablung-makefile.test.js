@@ -7,7 +7,7 @@ Test('mablung-makefile get-path', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
-Test('mablung-makefile get-update', async (test) => {
-  let process = new MablungMakefileProcess({ 'get-update': true })
-  test.is(await process.whenExit(), 0)
-})
+// Test('mablung-makefile get-update', async (test) => {
+//   let process = new MablungMakefileProcess({ 'get-update': true })
+//   test.is(await process.whenExit(), 0)
+// })
