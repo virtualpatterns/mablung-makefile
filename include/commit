@@ -1,28 +1,34 @@
 
 ifeq ($(CURDIR),$(project-path))
 
-add-content = $(patsubst $\
-								%,$\
-								%.add,$\
-								$(strip $\
-									$(filter $\
-										package-lock.json $\
-										package.json,$\
-										$(shell git status --porcelain))))
+add-file := $(patsubst $\
+							%,$\
+							%.add,$\
+							$(strip $\
+								$(filter $\
+									package-lock.json $\
+									package.json,$\
+									$(shell git status --porcelain | awk '{print $$2}'))))
 
 .PHONY: commit
 
 # $(info --------------------)
-# $(info add-content = $(add-content))
+# $(info add-file = $(add-file))
 # $(info --------------------)
 
-commit: $(add-content)
-	$(if $\
-		$(add-content),$\
-		@git commit --message=$(or $(message),$(mesg),$(m),commit),$\
-		@$(shx) echo -n)
+ifdef add-file
+
+commit: $(add-file)
+	@git commit --message=$(or $(message),$(mesg),$(m),unknown)
 
 %.add:
 	@git add $(patsubst %.add,%,$@)
+
+else
+
+commit:
+	@$(shx) echo -n
+	
+endif
 
 endif

@@ -9,7 +9,6 @@ install::
 re-install::
 	@rm -Rf node_modules package-lock.json
 	@npm install
-	@$(MAKE) commit message=post-re-install
 
 clean::
 	@npx shx rm -Rf coverage process release
