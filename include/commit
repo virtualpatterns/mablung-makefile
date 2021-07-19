@@ -18,7 +18,7 @@ add-file := $(patsubst $\
 
 ifdef add-file
 
-commit: $(add-file)
+commit:: $(add-file)
 	@git commit --message=$(or $(message),$(mesg),$(m),unknown)
 
 %.add:
@@ -26,7 +26,7 @@ commit: $(add-file)
 
 else
 
-commit:
+commit::
 	@$(shx) echo -n
 	
 endif

@@ -19,11 +19,20 @@ update-0::
 	@$(MAKE) update-1
 	@$(MAKE) commit message=post-update
 
+ifdef update-file
+
 update-1:: $(update-file)
 	@npx shx echo -n
 
 package.json.update:
 	@rm -Rf node_modules package-lock.json
 	@npm install
+
+else
+
+update-1::
+	@$(shx) echo -n
+	
+endif
 
 endif

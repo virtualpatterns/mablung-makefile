@@ -3,12 +3,12 @@ ifeq ($(CURDIR),$(project-path))
 
 .PHONY: debug
 
-debug:
+debug::
 	@$(shx) echo
-	@$(shx) echo .FEATURES ......... $(.FEATURES)
-	@$(shx) echo MAKEFILE_LIST ..... $(call trim-project,$(realpath $(MAKEFILE_LIST)))
-	@$(shx) echo project-path ...... $(project-path)
-	@$(shx) echo project-name ...... $(project-name)
+	@$(shx) echo .FEATURES ....... $(.FEATURES)
+	@$(shx) echo MAKEFILE_LIST ... $(call trim-project-path,$(realpath $(MAKEFILE_LIST)))
+	@$(shx) echo project-path .... $(project-path)
+	@$(shx) echo project-name .... $(project-name)
 	@$(shx) echo
 	@$(MAKE) --directory=$(project-path)/source --makefile=$(makefile-path) --no-print-directory debug
 
@@ -16,9 +16,9 @@ else
 
 debug-folder := $(foreach $\
 									path,$\
-									$(call content-of,$(CURDIR)),$\
+									$(call get-content,$(CURDIR)),$\
 									$(if $\
-										$(call content-of,$(path)),$\
+										$(call get-content,$(path)),$\
 										$(if $\
 											$(wildcard $(path)/makefile),,$\
 											$(path).debug)))
@@ -26,17 +26,18 @@ debug-folder := $(foreach $\
 .PHONY: debug pre-debug
 
 # $(info --------------------)
-# $(info debug-folder = $(call trim-project,$(debug-folder)))
+# $(info debug-folder = $(call trim-project-path,$(debug-folder)))
 # $(info --------------------)
 
-debug: pre-debug $(debug-folder);
+debug:: pre-debug $(debug-folder)
+	@$(shx) echo -n
 
 pre-debug:
-	@$(shx) echo CURDIR ............ $(call trim-project,$(CURDIR))
-	@$(shx) echo make-folder ..... $(call trim-project,$(patsubst %.make,%,$(make-folder)))
-	@$(shx) echo build-folder ..... $(call trim-project,$(patsubst %.build,%,$(build-folder)))
-	@$(shx) echo build-file ... $(call trim-project,$(build-file))
-	@$(shx) echo
+	@$(shx)  echo CURDIR .......... $(call trim-project-path,$(CURDIR))
+	@$(shx)  echo make-folder ..... $(call trim-project-path,$(patsubst %.make,%,$(make-folder)))
+	@$(shx)  echo build-folder .... $(call trim-project-path,$(patsubst %.build,%,$(build-folder)))
+	@$(shx)  echo build-file ...... $(call trim-project-path,$(build-file))
+	@$(shx)  echo
 
 $(project-path)/source/%.debug:
 	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefile-path) --no-print-directory debug
