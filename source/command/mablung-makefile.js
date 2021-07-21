@@ -22,9 +22,9 @@ Command
     process.exitCode = 0
 
     try {
-      console.log(Require.resolve('../../makefile'))
+      console.log(Require.resolve('../../makefile')) // eslint-disable-line no-console
     } catch (error) {
-      console.error(error)
+      console.error(error) // eslint-disable-line no-console
       process.exitCode = 1
     }
 
@@ -45,11 +45,11 @@ Command
 //       })
 
 //       if (update[Package.name]) {
-//         console.log(update[Package.name])
+//         console.log(update[Package.name]) // eslint-disable-line no-console
 //       }
       
 //     } catch (error) {
-//       console.error(error)
+//       console.error(error) // eslint-disable-line no-console
 //       process.exitCode = 1
 //     }
 

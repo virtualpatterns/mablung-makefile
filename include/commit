@@ -27,7 +27,7 @@ commit:: $(add-file)
 else
 
 commit::
-	@$(shx) echo -n
+	@npx shx echo -n
 	
 endif
 

@@ -31,7 +31,7 @@ package.json.update:
 else
 
 update-1::
-	@$(shx) echo -n
+	@npx shx echo -n
 	
 endif
 
