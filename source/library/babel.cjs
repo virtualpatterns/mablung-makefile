@@ -1,1 +1,1 @@
-module.exports = require('../../package.json').babel
+module.exports = function () { return require('../../package.json').babel }
