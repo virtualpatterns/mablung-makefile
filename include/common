@@ -53,7 +53,7 @@ cover:: build
 	@npx shx cp -R coverage ../Shared/$(project-name)
 
 pre-release:: export source-map := true
-pre-release:: clean cover
+pre-release:: update clean cover
 	@npx shx echo -n
 
 release:: export source-map := false
