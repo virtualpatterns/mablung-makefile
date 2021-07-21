@@ -12,6 +12,7 @@
     "require": [],
     "verbose": true
   },
+  "babel": {},
   "bin": {
     "mablung-makefile": "./release/command/mablung-makefile.js"
   },
