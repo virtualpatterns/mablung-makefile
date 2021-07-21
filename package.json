@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@pwn/is": "^1.0.2",
-    "@virtualpatterns/eslint-config-mablung": "0.0.1-2",
+    "@virtualpatterns/eslint-config-mablung": "0.0.1-3",
     "@virtualpatterns/mablung-worker": "0.0.2-40",
     "depcheck": "^1.4.2"
   }
