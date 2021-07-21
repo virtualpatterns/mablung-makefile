@@ -52,7 +52,7 @@
     "test": "make test"
   },
   "type": "module",
-  "version": "0.0.1-84",
+  "version": "0.0.1-85",
   "dependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
