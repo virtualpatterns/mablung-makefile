@@ -48,9 +48,6 @@
     "type": "git",
     "url": "https://github.com/virtualpatterns/mablung-makefile"
   },
-  "scripts": {
-    "test": "make test"
-  },
   "type": "module",
   "version": "0.0.1-86",
   "dependencies": {
