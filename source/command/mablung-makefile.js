@@ -23,6 +23,7 @@ Command
 
     try {
       console.log(Require.resolve('../../makefile'))
+    /* c8 ignore next 4 */
     } catch (error) {
       console.error(error)
       process.exitCode = 1
