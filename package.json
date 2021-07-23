@@ -28,12 +28,50 @@
   },
   "description": "TBD",
   "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true
+    },
     "extends": [
-      "@virtualpatterns/eslint-config-mablung"
-    ]
+      "eslint:recommended"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "requireConfigFile": false
+    },
+    "rules": {
+      "arrow-parens": "error",
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "no-debugger": "warn",
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "no-console": "warn",
+      "no-unused-vars": "warn",
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
   },
   "exports": {
     "./babel": "./release/library/babel.cjs",
+    "./eslint": "./release/library/eslint.cjs",
     "./package.json": "./package.json"
   },
   "files": [
@@ -65,7 +103,6 @@
   },
   "devDependencies": {
     "@pwn/is": "^1.0.2",
-    "@virtualpatterns/eslint-config-mablung": "0.0.1-6",
     "@virtualpatterns/mablung-worker": "0.0.2-40",
     "depcheck": "^1.4.2"
   }
