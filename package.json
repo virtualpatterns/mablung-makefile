@@ -39,6 +39,9 @@
     "parserOptions": {
       "requireConfigFile": false
     },
+    "plugins": [
+      "eslint-plugin-babel"
+    ],
     "rules": {
       "arrow-parens": "error",
       "comma-dangle": [
@@ -91,6 +94,7 @@
   "dependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.14.8",
+    "@babel/eslint-parser": "^7.14.7",
     "ava": "^3.15.0",
     "c8": "^7.7.3",
     "commander": "^8.0.0",
