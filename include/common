@@ -1,5 +1,5 @@
 											
-ifeq ($(CURDIR),$(project-path))
+ifndef current-folder
 
 .PHONY: install re-install clean run cover test pre-release release
 
@@ -17,37 +17,16 @@ run:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
-# $(eval project-name := $(notdir $(project-path)))
-# $(eval exists-source-map := $(if $\
-# 															$(findstring $\
-# 																false,$\
-# 																$(source-map)),,$\
-# 															true))
-
 test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
-# $(if $\
-# 	$(exists-source-map),$\
-# 	@npx shx mkdir -p ../Shared/$(project-name))
-# $(if $\
-# 	$(exists-source-map),$\
-# 	@npx shx rm -Rf ../Shared/$(project-name)/coverage)
-# $(if $\
-# 	$(exists-source-map),$\
-# 	@npx shx cp -R coverage ../Shared/$(project-name))
-
-# $(if $\
-# 	$(exists-source-map),$\
-# 	@$(shx) echo copy ...... coverage to ../Shared/$(project-name),$\
-# 	@$(shx) echo skip ...... coverage to ../Shared/$(project-name))
-
 cover:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	$(eval export project-name := $(notdir $(CURDIR)))
 	@npx shx rm -Rf coverage process
-	@npx c8 ava
+	@npx c8 ava $(or $(argument),$(arg),$(a))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx cp -R coverage ../Shared/$(project-name)

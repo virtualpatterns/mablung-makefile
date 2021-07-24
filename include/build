@@ -1,11 +1,4 @@
 
-makefile-path := $(realpath $(firstword $(MAKEFILE_LIST)))
-binary-path := $(project-path)/node_modules/.bin
-
-shx := $(binary-path)/shx
-eslint := $(binary-path)/eslint
-babel := $(binary-path)/babel
-
 get-content = $(strip $\
 								$(filter-out $\
 									$(1)/. $\
@@ -16,26 +9,22 @@ get-content = $(strip $\
 										$(wildcard $(1)/.*) $\
 										$(wildcard $(1)/*))))
 
-trim-project-path = $(patsubst $\
-											$(project-path)/%,$\
-											%,$\
-											$(1))
-
 trim-folder-path = $(patsubst $\
 										%/,$\
 										%,$\
 										$(dir $\
 											$(1)))
 
-ifeq ($(CURDIR),$(project-path))
+ifndef current-folder
 
 .PHONY: build
 
-# @$(shx) echo build ..... source
-build: $(project-path)/release.create
-	@$(MAKE) --directory=$(project-path)/source --jobs --makefile=$(makefile-path) --no-print-directory build
+build:: release.create
+	@npx shx echo build ..... source
+	@$(MAKE) --jobs build current-folder=source
 
-$(project-path)/release.create:
+release.create:
+	@npx shx echo create .... $(patsubst %.create,%,$@)
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 else
@@ -46,14 +35,15 @@ endif
 
 make-folder := $(call $\
 								filter-make-folder,$\
-								$(foreach $\
-									path,$\
-									$(call get-content,$(CURDIR)),$\
-									$(if $\
-										$(call get-content,$(path)),$\
+								$(strip $\
+									$(foreach $\
+										item,$\
+										$(call get-content,$(current-folder)),$\
 										$(if $\
-											$(wildcard $(path)/makefile),$\
-											$(path).make))))
+											$(call get-content,$(item)),$\
+											$(if $\
+												$(wildcard $(item)/makefile),$\
+												$(item).make)))))
 
 ifndef filter-build-folder
 filter-build-folder = $(1)
@@ -61,14 +51,15 @@ endif
 
 build-folder := $(call $\
 									filter-build-folder,$\
-									$(foreach $\
-										path,$\
-										$(call get-content,$(CURDIR)),$\
-										$(if $\
-											$(call get-content,$(path)),$\
+									$(strip $\
+										$(foreach $\
+											item,$\
+											$(call get-content,$(current-folder)),$\
 											$(if $\
-												$(wildcard $(path)/makefile),,$\
-												$(path).build),)))
+												$(call get-content,$(item)),$\
+												$(if $\
+													$(wildcard $(item)/makefile),,$\
+													$(item).build)))))
 
 ifndef filter-build-file
 filter-build-file = $(1)
@@ -76,76 +67,72 @@ endif
 
 build-file := $(call $\
 								filter-build-file,$\
-								$(foreach $\
-									path,$\
-									$(call get-content,$(CURDIR)),$\
-									$(subst $\
-										/source/,$\
-										/release/,$\
-										$(if $\
-											$(call get-content,$(path)),,$\
-											$(path)))))
+								$(strip $\
+									$(foreach $\
+										item,$\
+										$(call get-content,$(current-folder)),$\
+										$(patsubst $\
+											source/%,$\
+											release/%,$\
+											$(if $\
+												$(call get-content,$(item)),,$\
+												$(item))))))
 
 .PHONY: build copy ignore
 
 # $(info --------------------)
-# $(info make-folder = $(call trim-project-path,$(make-folder)))
-# $(info build-folder = $(call trim-project-path,$(build-folder)))
-# $(info build-file = $(call trim-project-path,$(build-file)))
+# $(info current-folder ... $(current-folder))
+# $(info make-folder ...... $(make-folder))
+# $(info build-folder ..... $(build-folder))
+# $(info build-file ....... $(build-file))
 # $(info --------------------)
 
-build: $(make-folder) $(build-folder) $(build-file)
-	@$(shx) echo -n
+build:: $(make-folder) $(build-folder) $(build-file)
+	@npx shx echo -n
 
-# @$(shx) echo make ...... $(call trim-project-path,$(patsubst %.make,%,$@))
-$(project-path)/source/%.make:
-	@$(MAKE) --directory=$(patsubst %.make,%,$@) --no-print-directory
+source/%.make:
+	@npx shx echo make ...... $(patsubst %.make,%,$@)
+	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-folder=$(patsubst %.make,%,$@)
 
-# @$(shx) echo build ..... $(call trim-project-path,$(patsubst %.build,%,$@))
-$(project-path)/source/%.build: $(project-path)/release/%.create
-	@$(MAKE) --directory=$(patsubst %.build,%,$@) --makefile=$(makefile-path) --no-print-directory build
+source/%.build: release/%.create
+	@npx shx echo build ..... $(patsubst %.build,%,$@)
+	@$(MAKE) build current-folder=$(patsubst %.build,%,$@) 
 
-# @$(shx) echo create .... $(call trim-project-path,$(patsubst %.create,%,$@))
-$(project-path)/release/%.create:
-	@$(shx) mkdir -p $(patsubst %.create,%,$@)
+release/%.create:
+	@npx shx echo create .... $(patsubst %.create,%,$@)
+	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
-# @$(shx) echo ignore .... $(call trim-project-path,$<) for $(call trim-project-path,$(call trim-folder-path,$@))
-$(project-path)/release/.DS_Store: $(project-path)/source/.DS_Store;
-$(project-path)/release/%/.DS_Store: $(project-path)/source/%/.DS_Store;
+release/.DS_Store: source/.DS_Store;
+release/%/.DS_Store: source/%/.DS_Store;
+release/.babelrc.json: source/.babelrc.json;
+release/%/.babelrc.json: source/%/.babelrc.json;
+release/.eslintrc.json: source/.eslintrc.json;
+release/%/.eslintrc.json: source/%/.eslintrc.json;
 
-$(project-path)/release/.babelrc.json: $(project-path)/source/.babelrc.json;
-$(project-path)/release/%/.babelrc.json: $(project-path)/source/%/.babelrc.json;
+release/%.cjs: source/%.cjs
+	@npx shx echo check ..... $< $(eslint-parameter)
+	@npx eslint $< $(eslint-parameter)
+	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-$(project-path)/release/.eslintrc.json: $(project-path)/source/.eslintrc.json;
-$(project-path)/release/%/.eslintrc.json: $(project-path)/source/%/.eslintrc.json;
+release/%.js: source/%.js
+	@npx shx echo check ..... $< $(eslint-parameter)
+	@npx eslint $< $(eslint-parameter)
+	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-# @$(shx) echo check ........ $(call trim-project-path,$<) $(eslint-parameter)
-# @$(shx) echo compile ... $(call trim-project-path,$<) to $(call trim-project-path,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
-$(project-path)/release/%.cjs: $(project-path)/source/%.cjs
-	@$(shx) echo compile ... $(call trim-project-path,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
-	@$(eslint) $< $(eslint-parameter)
-	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+release/%: source/%
+	@npx shx echo copy ...... $@
+	@npx shx cp -R $< $(call trim-folder-path,$@)
 
-# @$(shx) echo check ........ $(call trim-project-path,$<) $(eslint-parameter)
-# @$(shx) echo compile ... $(call trim-project-path,$<) to $(call trim-project-path,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
-$(project-path)/release/%.js: $(project-path)/source/%.js
-	@$(shx) echo compile ... $(call trim-project-path,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
-	@$(eslint) $< $(eslint-parameter)
-	@$(babel) $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
-
-# @$(shx) echo copy ...... $(call trim-project-path,$<) to $(call trim-project-path,$(call trim-folder-path,$@))
-$(project-path)/release/%: $(project-path)/source/%
-	@$(shx) echo copy ...... $(call trim-project-path,$@)
-	@$(shx) cp -R $< $(call trim-folder-path,$@)
-
-# @$(shx) echo copy ...... $(call trim-project-path,$(CURDIR)) to $(call trim-project-path,$(call trim-folder-path,$(subst /source/,/release/,$(CURDIR))))
-# @$(shx) echo delete .... $(call trim-project-path,$(subst /source/,/release/,$(CURDIR))/makefile)
 copy::
-	@$(shx) cp -R $(CURDIR) $(call trim-folder-path,$(subst /source/,/release/,$(CURDIR)))
-	@$(shx) rm -f $(subst /source/,/release/,$(CURDIR))/makefile
+	@npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
+	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
+	@npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile
+	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
 
-# @$(shx) echo ignore .... $(call trim-project-path,$(CURDIR))
 ignore::
-	@$(shx) echo -n 
+	@npx shx echo ignore .... $(current-folder)
+	@npx shx echo -n 
 
 endif

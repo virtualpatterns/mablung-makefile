@@ -1,45 +1,44 @@
 
-ifeq ($(CURDIR),$(project-path))
+ifndef current-folder
 
 .PHONY: debug
 
 debug::
-	@$(shx) echo
-	@$(shx) echo .FEATURES ....... $(.FEATURES)
-	@$(shx) echo MAKEFILE_LIST ... $(call trim-project-path,$(realpath $(MAKEFILE_LIST)))
-	@$(shx) echo project-path .... $(project-path)
-	@$(shx) echo project-name .... $(project-name)
-	@$(shx) echo
-	@$(MAKE) --directory=$(project-path)/source --makefile=$(makefile-path) --no-print-directory debug
+	@npx shx echo
+	@npx shx echo .FEATURES ........ $(.FEATURES)
+	@npx shx echo MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST)))
+	@npx shx echo
+	@$(MAKE) debug current-folder=source
 
 else
 
-debug-folder := $(foreach $\
-									path,$\
-									$(call get-content,$(CURDIR)),$\
-									$(if $\
-										$(call get-content,$(path)),$\
+debug-folder := $(strip $\
+									$(foreach $\
+										item,$\
+										$(call get-content,$(current-folder)),$\
 										$(if $\
-											$(wildcard $(path)/makefile),,$\
-											$(path).debug)))
+											$(call get-content,$(item)),$\
+											$(if $\
+												$(wildcard $(item)/makefile),,$\
+												$(item).debug))))
 
 .PHONY: debug pre-debug
 
 # $(info --------------------)
-# $(info debug-folder = $(call trim-project-path,$(debug-folder)))
+# $(info debug-folder = $(debug-folder))
 # $(info --------------------)
 
 debug:: pre-debug $(debug-folder)
-	@$(shx) echo -n
+	@npx shx echo -n
 
 pre-debug:
-	@$(shx)  echo CURDIR .......... $(call trim-project-path,$(CURDIR))
-	@$(shx)  echo make-folder ..... $(call trim-project-path,$(patsubst %.make,%,$(make-folder)))
-	@$(shx)  echo build-folder .... $(call trim-project-path,$(patsubst %.build,%,$(build-folder)))
-	@$(shx)  echo build-file ...... $(call trim-project-path,$(build-file))
-	@$(shx)  echo
+	@npx shx  echo current-folder ... $(current-folder)
+	@npx shx  echo make-folder ...... $(patsubst $(current-folder)/%,%,$(patsubst %.make,%,$(make-folder)))
+	@npx shx  echo build-folder ..... $(patsubst $(current-folder)/%,%,$(patsubst %.build,%,$(build-folder)))
+	@npx shx  echo build-file ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-file)))
+	@npx shx  echo
 
-$(project-path)/source/%.debug:
-	@$(MAKE) --directory=$(patsubst %.debug,%,$@) --makefile=$(makefile-path) --no-print-directory debug
+source/%.debug:
+	@$(MAKE) debug current-folder=$(patsubst %.debug,%,$@) 
 
 endif

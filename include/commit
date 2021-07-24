@@ -1,5 +1,5 @@
 
-ifeq ($(CURDIR),$(project-path))
+ifndef current-folder
 
 add-file := $(patsubst $\
 							%,$\

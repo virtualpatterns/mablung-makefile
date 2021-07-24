@@ -1,5 +1,5 @@
 											
-ifeq ($(CURDIR),$(project-path))
+ifndef current-folder
 
 update-file := $(patsubst $\
 									%,$\
@@ -9,7 +9,11 @@ update-file := $(patsubst $\
 											package.json,$\
 											$(shell git status --porcelain | awk '{print $$2}'))))
 
-.PHONY: update do-update
+.PHONY: update update-0 update-1
+
+# $(info --------------------)
+# $(info update-file = $(update-file))
+# $(info --------------------)
 
 update:: update-0;
 

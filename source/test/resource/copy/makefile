@@ -1,3 +1,3 @@
-include $(project-path)/makefile
+include makefile
 
 .DEFAULT_GOAL := copy
