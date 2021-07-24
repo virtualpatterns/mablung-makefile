@@ -21,7 +21,7 @@ ifndef current-folder
 
 build:: release.create
 	@npx shx echo build ..... source
-	@$(MAKE) --jobs build current-folder=source
+	@$(MAKE) --jobs=$(or $(jobs),$(j),4) build current-folder=source
 
 release.create:
 	@npx shx echo create .... $(patsubst %.create,%,$@)
