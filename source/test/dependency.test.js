@@ -9,6 +9,7 @@ Test('dependency', async (test) => {
     'ignoreMatches': [
       '@babel/cli',
       '@babel/core',
+      '@babel/preset-env',
       'c8',
       'npm-check-updates',
       'shx'
