@@ -1,4 +1,4 @@
-import Package from './package.js'
+import { Package } from './package.cjs'
 
 export default Package.eslintConfig
 

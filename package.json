@@ -107,7 +107,6 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.14.8",
-    "@pwn/is": "^1.0.2",
     "@virtualpatterns/mablung-worker": "0.0.2-40",
     "depcheck": "^1.4.2"
   }
