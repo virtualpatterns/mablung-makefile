@@ -73,14 +73,11 @@
     }
   },
   "exports": {
-    "./babel": "./release/library/babel.cjs",
-    "./eslint": "./release/library/eslint.cjs",
     "./package.json": "./package.json"
   },
   "files": [
     "/include",
     "/release/command",
-    "/release/library",
     "makefile"
   ],
   "license": "GPL-3.0+",

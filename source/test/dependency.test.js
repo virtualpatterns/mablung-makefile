@@ -22,9 +22,10 @@ Test('dependency', async (test) => {
 
   test.deepEqual(unused.dependencies, [])
   test.deepEqual(unused.devDependencies, [])
+  
+  test.deepEqual(unused.missing, {})
 
   test.deepEqual(unused.invalidDirs, {})
   test.deepEqual(unused.invalidFiles, {})
-  test.deepEqual(unused.missing, {})
 
 })
