@@ -7,12 +7,25 @@
     ],
     "nodeArguments": [
       "--no-warnings",
-      "--unhandled-rejections=strict"
+      "--unhandled-rejections=strict",
+      "--experimental-json-modules"
     ],
     "require": [],
     "verbose": true
   },
-  "babel": {},
+  "babel": {
+    "exclude": "./source/header/**/*",
+    "plugins": [
+      [
+        "babel-plugin-add-header-comment",
+        {
+          "header": [
+            "!node release/header/index.js"
+          ]
+        }
+      ]
+    ]
+  },
   "bin": {
     "mablung-makefile": "./release/command/mablung-makefile.js"
   },
@@ -26,7 +39,7 @@
     ],
     "src": "release"
   },
-  "description": "TBD",
+  "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "eslintConfig": {
     "env": {
       "es6": true,
@@ -73,11 +86,14 @@
     }
   },
   "exports": {
+    "./header": "./release/header/index.js",
+    "./package": "./release/header/package.js",
     "./package.json": "./package.json"
   },
   "files": [
     "/include",
     "/release/command",
+    "/release/header",
     "makefile"
   ],
   "license": "GPL-3.0+",
@@ -93,6 +109,7 @@
     "@babel/core": "^7.14.8",
     "@babel/eslint-parser": "^7.14.7",
     "ava": "^3.15.0",
+    "babel-plugin-add-header-comment": "^1.0.3",
     "c8": "^7.7.3",
     "commander": "^8.0.0",
     "eslint": "^7.31.0",

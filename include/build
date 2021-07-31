@@ -19,13 +19,13 @@ ifndef current-folder
 
 .PHONY: build
 
-build:: release.create
-	@npx shx echo build ..... source
-	@$(MAKE) --jobs=$(or $(jobs),$(j),4) build current-folder=source
-
-release.create:
-	@npx shx echo create .... $(patsubst %.create,%,$@)
-	@npx shx mkdir -p $(patsubst %.create,%,$@)
+# @npx shx echo build ..... source/header
+# @npx shx echo build ..... source
+build::
+	@npx shx mkdir -p release/header
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header
+	@npx shx mkdir -p release
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source
 
 else
 
@@ -90,16 +90,16 @@ build-file := $(call $\
 build:: $(make-folder) $(build-folder) $(build-file)
 	@npx shx echo -n
 
+# @npx shx echo make ...... $(patsubst %.make,%,$@)
 source/%.make:
-	@npx shx echo make ...... $(patsubst %.make,%,$@)
 	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-folder=$(patsubst %.make,%,$@)
 
+# @npx shx echo build ..... $(patsubst %.build,%,$@)
 source/%.build: release/%.create
-	@npx shx echo build ..... $(patsubst %.build,%,$@)
 	@$(MAKE) build current-folder=$(patsubst %.build,%,$@) 
 
+# @npx shx echo create .... $(patsubst %.create,%,$@)
 release/%.create:
-	@npx shx echo create .... $(patsubst %.create,%,$@)
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 release/.DS_Store: source/.DS_Store;
@@ -109,30 +109,34 @@ release/%/.babelrc.json: source/%/.babelrc.json;
 release/.eslintrc.json: source/.eslintrc.json;
 release/%/.eslintrc.json: source/%/.eslintrc.json;
 
+# @npx shx echo check ..... $< $(eslint-parameter)
 release/%.cjs: source/%.cjs
-	@npx shx echo check ..... $< $(eslint-parameter)
-	@npx eslint $< $(eslint-parameter)
+	$(eval export SOURCE_PATH := $<)
+	$(eval export RELEASE_PATH := $@)
 	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx eslint $< $(eslint-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
+# @npx shx echo check ..... $< $(eslint-parameter)
 release/%.js: source/%.js
-	@npx shx echo check ..... $< $(eslint-parameter)
-	@npx eslint $< $(eslint-parameter)
+	$(eval export SOURCE_PATH := $<)
+	$(eval export RELEASE_PATH := $@)
 	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx eslint $< $(eslint-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%: source/%
 	@npx shx echo copy ...... $@
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
+# @npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
+# @npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile
 copy::
-	@npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
 	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
-	@npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile
 	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
 
+# @npx shx echo ignore .... $(current-folder)
 ignore::
-	@npx shx echo ignore .... $(current-folder)
 	@npx shx echo -n 
 
 endif

@@ -4,7 +4,6 @@ import { createRequire as CreateRequire } from 'module'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
 import JSON5 from 'json5'
-// import Update from 'npm-check-updates'
 
 const Process = process
 const Require = CreateRequire(import.meta.url)
@@ -31,30 +30,22 @@ Command
 
   })
 
-// Command
-//   .command('get-update')
-//   .description('Return the version of the available update or nothing if none is available.')
-//   .action(async () => {
+Command
+  .command('get-version')
+  .description('Return the name and version of the package.')
+  .action(() => {
 
-//     process.exitCode = 0
+    process.exitCode = 0
 
-//     try {
+    try {
+      console.log(`${Package.name}@${Package.version}`)
+    /* c8 ignore next 4 */
+    } catch (error) {
+      console.error(error)
+      process.exitCode = 1
+    }
 
-//       let update = await Update.run({
-//         'filter': Package.name,
-//         'packageFile': `${Process.cwd()}/package.json`
-//       })
-
-//       if (update[Package.name]) {
-//         console.log(update[Package.name])
-//       }
-      
-//     } catch (error) {
-//       console.error(error)
-//       process.exitCode = 1
-//     }
-
-//   })
+  })
 
 Command
   .parse(Process.argv)

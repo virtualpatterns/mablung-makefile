@@ -3,7 +3,7 @@ import Test from 'ava'
 
 const Process = process
 
-Test('dependency', async (test) => {
+Test('(default)', async (test) => {
 
   let unused = await Check(Process.cwd(), {
     'ignoreMatches': [

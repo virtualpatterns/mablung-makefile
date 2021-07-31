@@ -1,7 +1,13 @@
 											
 ifndef current-folder
 
-.PHONY: install re-install clean run cover test pre-release release
+.PHONY: version install re-install clean run cover test pre-release set-version release
+
+version::
+	$(if $\
+		$(shell npx shx which mablung-makefile),$\
+		@npx mablung-makefile get-version,$\
+		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
 
 install::
 	@npm install
@@ -15,12 +21,7 @@ clean::
 
 run:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
-
-test:: build
-	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf process
-	@npx ava $(or $(argument),$(arg),$(a))
+	@node --no-warnings --unhandled-rejections=strict --experimental-json-modules $(or $(argument),$(arg),$(a))
 
 cover:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
@@ -31,13 +32,20 @@ cover:: build
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx cp -R coverage ../Shared/$(project-name)
 
+test:: build
+	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	@npx shx rm -Rf process
+	@npx ava $(or $(argument),$(arg),$(a))
+
 pre-release:: export source-map := true
 pre-release:: update clean cover
 	@npx shx echo -n
 
-release:: export source-map := false
-release:: clean test
+set-version::
 	@npm version prerelease
+
+release:: export source-map := false
+release:: clean set-version test
 	@npm publish --access public
 	@git push origin master
 
