@@ -2,7 +2,7 @@ import Test from 'ava'
 
 import { MablungMakefileProcess } from './mablung-makefile-process.js'
 
-Test('(no command)', async (test) => {
+Test('(default)', async (test) => {
   let process = new MablungMakefileProcess()
   test.is(await process.whenExit(), 1)
 })
