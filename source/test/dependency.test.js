@@ -10,6 +10,7 @@ Test('(default)', async (test) => {
       '@babel/cli',
       '@babel/core',
       '@babel/preset-env',
+      'babel-plugin-add-header-comment',
       'c8',
       'npm-check-updates',
       'shx'
