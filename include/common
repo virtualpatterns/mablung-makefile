@@ -21,7 +21,7 @@ clean::
 
 run:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	@node --no-warnings --unhandled-rejections=strict --experimental-json-modules $(or $(argument),$(arg),$(a))
+	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
 cover:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
@@ -42,7 +42,7 @@ pre-release:: update clean cover
 	@npx shx echo -n
 
 set-version::
-	@npm version prerelease
+	@npm version $(or $(version),prerelease)
 
 release:: export source-map := false
 release:: clean set-version test
