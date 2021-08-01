@@ -33,7 +33,7 @@ ifndef filter-make-folder
 filter-make-folder = $(1)
 endif
 
-make-folder := $(call $\
+make-folder = $(call $\
 								filter-make-folder,$\
 								$(strip $\
 									$(foreach $\
@@ -49,34 +49,34 @@ ifndef filter-build-folder
 filter-build-folder = $(1)
 endif
 
-build-folder := $(call $\
-									filter-build-folder,$\
-									$(strip $\
-										$(foreach $\
-											item,$\
-											$(call get-content,$(current-folder)),$\
+build-folder = $(call $\
+								filter-build-folder,$\
+								$(strip $\
+									$(foreach $\
+										item,$\
+										$(call get-content,$(current-folder)),$\
+										$(if $\
+											$(call get-content,$(item)),$\
 											$(if $\
-												$(call get-content,$(item)),$\
-												$(if $\
-													$(wildcard $(item)/makefile),,$\
-													$(item).build)))))
+												$(wildcard $(item)/makefile),,$\
+												$(item).build)))))
 
 ifndef filter-build-file
 filter-build-file = $(1)
 endif
 
-build-file := $(call $\
-								filter-build-file,$\
-								$(strip $\
-									$(foreach $\
-										item,$\
-										$(call get-content,$(current-folder)),$\
-										$(patsubst $\
-											source/%,$\
-											release/%,$\
-											$(if $\
-												$(call get-content,$(item)),,$\
-												$(item))))))
+build-file = $(call $\
+							filter-build-file,$\
+							$(strip $\
+								$(foreach $\
+									item,$\
+									$(call get-content,$(current-folder)),$\
+									$(patsubst $\
+										source/%,$\
+										release/%,$\
+										$(if $\
+											$(call get-content,$(item)),,$\
+											$(item))))))
 
 .PHONY: build copy ignore
 

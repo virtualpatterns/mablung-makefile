@@ -1,42 +1,32 @@
 											
 ifndef current-folder
 
-update-file := $(patsubst $\
+update-package = $(patsubst $\
 									%,$\
 									%.update,$\
-									$(strip $\
-										$(filter $\
-											package.json,$\
-											$(shell git status --porcelain | awk '{print $$2}'))))
+									$(filter $\
+										package.json,$\
+										$(dirty-item)))
 
 .PHONY: update update-0 update-1
 
 # $(info --------------------)
-# $(info update-file = $(update-file))
+# $(info update-package = $(update-package))
 # $(info --------------------)
 
 update:: update-0;
 
-update-0::
-	@$(MAKE) commit message=pre-update
+update-0:
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
-	@$(MAKE) commit message=post-update
 
-ifdef update-file
-
-update-1:: $(update-file)
-	@npx shx echo -n
-
-package.json.update:
-	@rm -Rf node_modules package-lock.json
-	@npm install
-
-else
-
-update-1::
-	@npx shx echo -n
-	
-endif
+update-1:
+	$(if $\
+		$(update-package),$\
+		@rm -Rf node_modules package-lock.json,$\
+		@npx shx echo -n)
+	$(if $\
+		$(update-package),$\
+		@npm install)
 
 endif

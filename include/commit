@@ -1,31 +1,27 @@
 
+dirty-item = $(strip $\
+							$(shell git status --porcelain | awk '{print $$2}'))
+
 ifndef current-folder
 
-add-file := $(patsubst $\
-							%,$\
-							%.add,$\
-							$(strip $\
-								$(shell git status --porcelain | awk '{print $$2}')))
+add-item = $(patsubst $\
+						%,$\
+						%.add,$\
+						$(dirty-item))
 
 .PHONY: commit
 
 # $(info --------------------)
-# $(info add-file = $(add-file))
+# $(info add-item = $(add-item))
 # $(info --------------------)
 
-ifdef add-file
-
-commit:: $(add-file)
-	@git commit --message=$(or $(message),unknown)
+commit:: $(add-item)
+	$(if $\
+		$(add-item),$\
+		@git commit --message=$(or $(message),unknown),$\
+		@npx shx echo -n)
 
 %.add:
 	@git add $(patsubst %.add,%,$@)
-
-else
-
-commit::
-	@npx shx echo -n
-	
-endif
 
 endif
