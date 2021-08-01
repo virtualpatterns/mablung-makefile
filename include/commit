@@ -5,10 +5,7 @@ add-file := $(patsubst $\
 							%,$\
 							%.add,$\
 							$(strip $\
-								$(filter $\
-									package-lock.json $\
-									package.json,$\
-									$(shell git status --porcelain | awk '{print $$2}'))))
+								$(shell git status --porcelain | awk '{print $$2}')))
 
 .PHONY: commit
 
@@ -19,7 +16,7 @@ add-file := $(patsubst $\
 ifdef add-file
 
 commit:: $(add-file)
-	@git commit --message=$(or $(message),$(mesg),$(m),unknown)
+	@git commit --message=$(or $(message),unknown)
 
 %.add:
 	@git add $(patsubst %.add,%,$@)
