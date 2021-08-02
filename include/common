@@ -33,7 +33,7 @@ cover:: build
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-	@npx shx cp -R coverage ../Shared/$(project-name)
+	@npx shx mv coverage ../Shared/$(project-name)
 
 test:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
