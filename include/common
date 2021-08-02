@@ -43,24 +43,24 @@ test:: build
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
-ifdef dirty-item
-pre-release::
-	$(error Git working directory not clean.)
-else
+ifeq ($(dirty-item),)
 pre-release::
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+else
+pre-release::
+	$(error Git working directory not clean.)
 endif
 
-ifdef dirty-item
-release::
-	$(error Git working directory not clean.)
-else
+ifeq ($(dirty-item),)
 release::
 	@npm version $(or $(version),patch)
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
+else
+release::
+	$(error Git working directory not clean.)
 endif
 
 endif

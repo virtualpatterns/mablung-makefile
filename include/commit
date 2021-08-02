@@ -8,9 +8,9 @@ add-item = $(patsubst $\
 
 .PHONY: commit
 
-$(info --------------------)
-$(info add-item = >$(add-item)<)
-$(info --------------------)
+# $(info --------------------)
+# $(info add-item = >$(add-item)<)
+# $(info --------------------)
 
 ifdef add-item
 commit:: $(add-item)
