@@ -1,7 +1,4 @@
 
-dirty-item = $(strip $\
-							$(shell git status --porcelain | awk '{print $$2}'))
-
 ifndef current-folder
 
 add-item = $(patsubst $\

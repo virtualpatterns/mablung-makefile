@@ -1,12 +1,9 @@
 											
 ifndef current-folder
 
-update-package = $(patsubst $\
-									%,$\
-									%.update,$\
-									$(filter $\
-										package.json,$\
-										$(dirty-item)))
+update-package = $(filter $\
+									package.json,$\
+									$(dirty-item))
 
 .PHONY: update update-0 update-1
 
@@ -17,6 +14,7 @@ update-package = $(patsubst $\
 update:: update-0;
 
 update-0:
+	@npm version prerelease
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
 

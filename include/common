@@ -1,4 +1,7 @@
-											
+		
+dirty-item = $(strip $\
+							$(shell git status --porcelain | awk '{print $$2}'))
+									
 ifndef current-folder
 
 .PHONY: version install re-install clean run cover test pre-release set-version release
@@ -38,7 +41,7 @@ test:: build
 	@npx ava $(or $(argument),$(arg),$(a))
 
 pre-release:: update clean cover
-	@npm version $(or $(version),prerelease)
+	@npm version prerelease
 	@$(MAKE) build source-map=true
 
 release:: clean test
