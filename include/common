@@ -1,6 +1,9 @@
 		
 dirty-item = $(strip $\
-							$(shell git status --porcelain | awk '{print $$2}'))
+							$(patsubst $\
+								%/,$\
+								%,$\
+								$(shell git status --porcelain | awk '{print $$2}')))				
 									
 ifndef current-folder
 
@@ -26,9 +29,9 @@ run:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
+cover:: project-name := $(notdir $(CURDIR))
 cover:: build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	$(eval export project-name := $(notdir $(CURDIR)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 	@npx shx mkdir -p ../Shared/$(project-name)
@@ -40,14 +43,24 @@ test:: build
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
+ifdef dirty-item
+pre-release::
+	$(error Git working directory not clean.)
+else
 pre-release::
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+endif
 
+ifdef dirty-item
+release::
+	$(error Git working directory not clean.)
+else
 release::
 	@npm version $(or $(version),patch)
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
+endif
 
 endif

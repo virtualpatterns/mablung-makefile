@@ -61,12 +61,12 @@ build-folder = $(call $\
 												$(wildcard $(item)/makefile),,$\
 												$(item).build)))))
 
-ifndef filter-build-file
-filter-build-file = $(1)
+ifndef filter-build-item
+filter-build-item = $(1)
 endif
 
-build-file = $(call $\
-							filter-build-file,$\
+build-item = $(call $\
+							filter-build-item,$\
 							$(strip $\
 								$(foreach $\
 									item,$\
@@ -84,10 +84,10 @@ build-file = $(call $\
 # $(info current-folder ... $(current-folder))
 # $(info make-folder ...... $(make-folder))
 # $(info build-folder ..... $(build-folder))
-# $(info build-file ....... $(build-file))
+# $(info build-item ....... $(build-item))
 # $(info --------------------)
 
-build:: $(make-folder) $(build-folder) $(build-file)
+build:: $(make-folder) $(build-folder) $(build-item)
 	@npx shx echo -n
 
 # @npx shx echo make ...... $(patsubst %.make,%,$@)

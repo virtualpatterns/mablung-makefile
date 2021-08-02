@@ -12,13 +12,14 @@ add-item = $(patsubst $\
 # $(info add-item = $(add-item))
 # $(info --------------------)
 
+ifdef add-item
 commit:: $(add-item)
-	$(if $\
-		$(add-item),$\
-		@git commit --message=$(or $(message),unknown),$\
-		@npx shx echo -n)
-
+	@git commit --message=$(or $(message),$(msg),$(m),updates)
 %.add:
 	@git add $(patsubst %.add,%,$@)
+else
+commit::
+	@npx shx echo -n
+endif
 
 endif

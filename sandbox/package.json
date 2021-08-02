@@ -1,0 +1,77 @@
+{
+  "babel": {
+    "overrides": [
+      {
+        "include": "source/**/*.cjs",
+        "presets": [
+          [
+            "@babel/preset-env",
+            {
+              "targets": {
+                "node": "current"
+              }
+            }
+          ]
+        ]
+      },
+      {
+        "exclude": "source/header/**/*",
+        "plugins": [
+          [
+            "babel-plugin-add-header-comment",
+            {
+              "header": [
+                "!node release/header/index.js"
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "requireConfigFile": false
+    },
+    "plugins": [
+      "eslint-plugin-babel"
+    ],
+    "rules": {
+      "arrow-parens": "error",
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "no-debugger": "warn",
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "linebreak-style": [
+        "error",
+        "unix"
+      ],
+      "no-console": "warn",
+      "no-unused-vars": "warn",
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
+  }
+}

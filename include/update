@@ -13,20 +13,21 @@ update-package = $(filter $\
 
 update:: update-0;
 
+ifdef dirty-item
 update-0:
-	$(if $\
-		$(dirty-item),$\
-		$(error Git working directory not clean.))
+	$(error Git working directory not clean.)
+else
+update-0:
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
+endif
 
+ifdef update-package
 update-1:
-	$(if $\
-		$(update-package),$\
-		@rm -Rf node_modules package-lock.json,$\
-		@npx shx echo -n)
-	$(if $\
-		$(update-package),$\
-		@npm install)
+	@$(MAKE) re-install
+else
+update-1:
+		@npx shx echo -n
+endif
 
 endif
