@@ -40,13 +40,13 @@ test:: build
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
-pre-release:: update clean cover
+pre-release::
 	@npm version prerelease
-	@$(MAKE) build source-map=true
+	@$(MAKE) clean cover source-map=true
 
-release:: clean test
+release::
 	@npm version $(or $(version),patch)
-	@$(MAKE) build source-map=false
+	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
 
