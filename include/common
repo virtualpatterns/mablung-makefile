@@ -1,15 +1,14 @@
-		
+ifndef current-folder
+
 dirty-item = $(strip $\
 							$(patsubst $\
 								%/,$\
 								%,$\
-								$(shell git status --porcelain | awk '{print $$2}')))				
+								$(shell git status --porcelain | awk '{print $$2}')))
 
 $(info --------------------)
 $(info dirty-item = >$(dirty-item)<)
 $(info --------------------)
-
-ifndef current-folder
 
 .PHONY: version install re-install clean run cover test pre-release set-version release
 
@@ -47,7 +46,7 @@ test:: build
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
-ifeq ($(dirty-item),)
+ifndef dirty-item
 pre-release::
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
@@ -56,7 +55,7 @@ pre-release::
 	$(error Git working directory not clean.)
 endif
 
-ifeq ($(dirty-item),)
+ifndef dirty-item
 release::
 	@npm version $(or $(version),patch)
 	@$(MAKE) clean test source-map=false

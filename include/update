@@ -9,7 +9,7 @@ ifndef current-folder
 
 update:: update-0;
 
-ifeq ($(dirty-item),)
+ifndef dirty-item
 update-0:
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
@@ -18,7 +18,7 @@ update-0:
 	$(error Git working directory not clean.)
 endif
 
-ifneq ($(dirty-item),)
+ifdef dirty-item
 update-1:
 	@$(MAKE) re-install
 else
