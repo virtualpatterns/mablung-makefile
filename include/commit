@@ -14,7 +14,7 @@ add-item = $(patsubst $\
 
 ifneq ($(dirty-item),)
 commit:: $(add-item)
-	@git commit --message=$(or $(message),$(msg),$(m),updates)
+	@git commit --message="$(or $(message),$(msg),$(m),updates)"
 %.add:
 	@git add $(patsubst %.add,%,$@)
 else

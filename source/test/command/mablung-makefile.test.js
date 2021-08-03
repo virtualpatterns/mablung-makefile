@@ -10,22 +10,27 @@ import { MablungMakefileProcess } from './mablung-makefile-process.js'
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
 
-Test.skip('(default)', async (test) => {
+Test('(default)', async (test) => {
   let process = new MablungMakefileProcess()
   test.is(await process.whenExit(), 1)
 })
 
-Test.skip('get-version', async (test) => {
+Test('get-version', async (test) => {
   let process = new MablungMakefileProcess({ 'get-version': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.skip('get-path', async (test) => {
+Test('get-path', async (test) => {
   let process = new MablungMakefileProcess({ 'get-path': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.only('update-package [path]', async (test) => {
+Test('update-package', async (test) => {
+  let process = new MablungMakefileProcess({ 'update-package': true })
+  test.is(await process.whenExit(), 1)
+})
+
+Test('update-package [path]', async (test) => {
 
   let _path = `${FolderPath}/resource/package.json`
 
