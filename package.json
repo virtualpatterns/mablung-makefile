@@ -110,6 +110,7 @@
     "/include",
     "/release/command",
     "/release/header",
+    "/release/library",
     "makefile"
   ],
   "license": "GPL-3.0+",
