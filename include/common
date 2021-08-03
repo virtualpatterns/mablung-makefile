@@ -6,9 +6,9 @@ dirty-item = $(strip $\
 								%,$\
 								$(shell git status --porcelain | awk '{print $$2}')))
 
-$(info --------------------)
-$(info dirty-item = >$(dirty-item)<)
-$(info --------------------)
+# $(info --------------------)
+# $(info dirty-item = $(dirty-item))
+# $(info --------------------)
 
 .PHONY: version install re-install clean run cover test pre-release set-version release
 
