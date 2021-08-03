@@ -46,7 +46,7 @@ test:: build
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
-ifndef dirty-item
+ifeq ($(dirty-item),)
 pre-release::
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
@@ -55,7 +55,7 @@ pre-release::
 	$(error Git working directory not clean.)
 endif
 
-ifndef dirty-item
+ifeq ($(dirty-item),)
 release::
 	@npm version $(or $(version),patch)
 	@$(MAKE) clean test source-map=false

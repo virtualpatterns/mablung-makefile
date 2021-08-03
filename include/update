@@ -18,7 +18,7 @@ update-0:
 	$(error Git working directory not clean.)
 endif
 
-ifdef dirty-item
+ifneq ($(dirty-item),)
 update-1:
 	@$(MAKE) re-install
 else

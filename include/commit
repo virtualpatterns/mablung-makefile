@@ -12,14 +12,14 @@ add-item = $(patsubst $\
 # $(info add-item = >$(add-item)<)
 # $(info --------------------)
 
-ifdef add-item
+ifneq ($(dirty-item),)
 commit:: $(add-item)
 	@git commit --message=$(or $(message),$(msg),$(m),updates)
 %.add:
 	@git add $(patsubst %.add,%,$@)
 else
 commit::
-	@npx shx echo -n
+	$(warn Git working directory clean.)
 endif
 
 endif
