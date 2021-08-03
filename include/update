@@ -9,7 +9,7 @@ ifndef current-folder
 
 update:: update-0;
 
-ifndef dirty-item
+ifeq ($(dirty-item),)
 update-0:
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
