@@ -20,6 +20,7 @@ commit:: $(add-item)
 else
 commit::
 	$(warn Git working directory clean.)
+	@npx shx echo -n
 endif
 
 endif
