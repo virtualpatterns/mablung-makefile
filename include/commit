@@ -19,7 +19,6 @@ commit:: $(add-item)
 	@git add $(patsubst %.add,%,$@)
 else
 commit::
-	$(info Git working directory clean.)
 	@npx shx echo -n
 endif
 
