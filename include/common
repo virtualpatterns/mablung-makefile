@@ -47,7 +47,7 @@ test:: build
 	@npx ava $(or $(argument),$(arg),$(a))
 
 ifeq ($(dirty-item),)
-pre-release::
+pre-release:: update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
 else
