@@ -3,22 +3,15 @@ ifndef current-folder
 
 .PHONY: update update-0 update-1
 
-# $(info --------------------)
-# $(info update-package = $(update-package))
-# $(info --------------------)
-
 update:: update-0;
 
-ifeq ($(dirty-item),)
 update-0:
 	@npx npm-check-updates --upgrade
 	@$(MAKE) update-1
-else
-update-0:
-	$(error Git working directory not clean.)
-endif
 
-ifneq ($(dirty-item),)
+ifneq ($(filter $\
+				package.json,$\
+				$(dirty-item)),)
 update-1:
 	@$(MAKE) re-install
 else
