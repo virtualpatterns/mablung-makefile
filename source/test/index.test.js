@@ -25,11 +25,11 @@ Test('MAKEFILE_PATH', (test) => {
 })
 
 Test('.babelrc.json', async (test) => {
-  test.false(await FileSystem.pathExists(`${FolderPath}/../.babelrc.json`))
+  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../.babelrc.json`)))
 })
 
 Test('.eslintrc.json', async (test) => {
-  test.false(await FileSystem.pathExists(`${FolderPath}/../.eslintrc.json`))
+  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../.eslintrc.json`)))
 })
 
 Test('sample.babelrc.json', async (test) => {
