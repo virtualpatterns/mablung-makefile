@@ -1,6 +1,5 @@
 import { createRequire as CreateRequire } from 'module'
 import FileSystem from 'fs-extra'
-import JSON5 from 'json5'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
@@ -34,7 +33,7 @@ Test('.eslintrc.json', async (test) => {
 })
 
 Test('sample.babelrc.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('../sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('../sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('sample.DS_Store', async (test) => {
@@ -42,7 +41,7 @@ Test('sample.DS_Store', async (test) => {
 })
 
 Test('sample.eslintrc.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('../sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('../sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/index.cjs', async (test) => {
@@ -54,11 +53,11 @@ Test('resource/index.js', async (test) => {
 })
 
 Test('resource/index.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/index.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('./resource/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/sample.babelrc.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('./resource/sample.babelrc.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/sample.DS_Store', async (test) => {
@@ -66,7 +65,7 @@ Test('resource/sample.DS_Store', async (test) => {
 })
 
 Test('resource/sample.eslintrc.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('./resource/sample.eslintrc.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/copy/makefile', async (test) => {
@@ -74,7 +73,7 @@ Test('resource/copy/makefile', async (test) => {
 })
 
 Test('resource/copy/index.json', async (test) => {
-  test.true(JSON5.parse(await FileSystem.readFile(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
+  test.true((await FileSystem.readJson(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('resource/empty', async (test) => {
