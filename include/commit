@@ -6,21 +6,21 @@ add-item = $(patsubst $\
 						%.add,$\
 						$(dirty-item))
 
-.PHONY: commit
+.PHONY: pre-commit commit
 
 # $(info --------------------)
 # $(info add-item = >$(add-item)<)
 # $(info --------------------)
 
 ifneq ($(dirty-item),)
-pre-commit::
-	@npx shx echo -n
+pre-commit:: ;
 commit:: pre-commit $(add-item)
 	@git commit --message="$(or $(message),$(msg),$(m),updates)"
 %.add:
 	@git add $(patsubst %.add,%,$@)
 else
-commit::
+pre-commit:: ;
+commit:: pre-commit
 	$(info Git working directory clean.)
 	@npx shx true
 endif

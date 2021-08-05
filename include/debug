@@ -1,10 +1,9 @@
 
 ifndef current-folder
 
-.PHONY: debug
+.PHONY: pre-debug debug
 
-pre-debug::
-	@npx shx echo -n
+pre-debug:: ;
 debug:: pre-debug
 	@npx shx echo
 	@npx shx echo .FEATURES ........ $(.FEATURES)
@@ -24,7 +23,7 @@ debug-folder = $(strip $\
 											$(wildcard $(item)/makefile),,$\
 											$(item).debug))))
 
-.PHONY: debug pre-debug
+.PHONY: debug debug-0 debug-1
 
 # $(info --------------------)
 # $(info debug-folder = $(debug-folder))

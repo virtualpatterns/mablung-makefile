@@ -17,12 +17,11 @@ trim-folder-path = $(patsubst $\
 
 ifndef current-folder
 
-.PHONY: build
+.PHONY: pre-build build
 
 # @npx shx echo build ..... source/header
 # @npx shx echo build ..... source
-pre-build::
-	@npx shx echo -n
+pre-build:: ;
 build:: pre-build
 	@npx shx mkdir -p release/header
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header

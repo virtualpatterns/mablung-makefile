@@ -10,40 +10,34 @@ dirty-item = $(strip $\
 # $(info dirty-item = $(dirty-item))
 # $(info --------------------)
 
-.PHONY: version install re-install clean run cover test pre-release release
+.PHONY: pre-version version pre-install install pre-re-install re-install pre-clean clean pre-run run pre-cover cover pre-test test pre-release release
 
-pre-version::
-	@npx shx echo -n
+pre-version:: ;
 version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
 		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
 
-pre-install::
-	@npx shx echo -n
+pre-install:: ;
 install:: pre-install
 	@npm install
 
-pre-re-install::
-	@npx shx echo -n
+pre-re-install:: ;
 re-install:: pre-re-install
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
-pre-clean::
-	@npx shx echo -n
+pre-clean:: ;
 clean:: pre-clean
 	@npx shx rm -Rf coverage process release
 
-pre-run::
-	@npx shx echo -n
+pre-run:: ;
 run:: pre-run build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
-pre-cover::
-	@npx shx echo -n
+pre-cover:: ;
 cover:: pre-cover build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	$(eval project-name := $(notdir $(CURDIR)))
@@ -53,8 +47,7 @@ cover:: pre-cover build
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
 
-pre-test::
-	@npx shx echo -n
+pre-test:: ;
 test:: pre-test build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
@@ -73,7 +66,7 @@ else
 pre-release::
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
-release::
+release:: pre-release
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
 endif
