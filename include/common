@@ -10,38 +10,52 @@ dirty-item = $(strip $\
 # $(info dirty-item = $(dirty-item))
 # $(info --------------------)
 
-.PHONY: version install re-install clean run cover test pre-release set-version release
+.PHONY: version install re-install clean run cover test pre-release release
 
-version::
+pre-version::
+	@npx shx echo -n
+version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
 		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
 
-install::
+pre-install::
+	@npx shx echo -n
+install:: pre-install
 	@npm install
 
-re-install::
+pre-re-install::
+	@npx shx echo -n
+re-install:: pre-re-install
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
-clean::
+pre-clean::
+	@npx shx echo -n
+clean:: pre-clean
 	@npx shx rm -Rf coverage process release
 
-run:: build
+pre-run::
+	@npx shx echo -n
+run:: pre-run build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
 
-cover:: project-name := $(notdir $(CURDIR))
-cover:: build
+pre-cover::
+	@npx shx echo -n
+cover:: pre-cover build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	$(eval project-name := $(notdir $(CURDIR))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(argument),$(arg),$(a))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
 
-test:: build
+pre-test::
+	@npx shx echo -n
+test:: pre-test build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
@@ -50,20 +64,18 @@ ifeq ($(dirty-item),)
 pre-release:: update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
-else
-pre-release::
-	$(error Git working directory not clean.)
-endif
-
-ifeq ($(dirty-item),)
-release::
+release:: pre-release
 	@npm version $(or $(version),patch)
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
 else
+pre-release::
+	$(info Git working directory not clean ... $(dirty-item))
+	@npx shx false
 release::
-	$(error Git working directory not clean.)
+	$(info Git working directory not clean ... $(dirty-item))
+	@npx shx false
 endif
 
 endif

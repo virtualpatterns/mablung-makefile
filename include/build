@@ -21,7 +21,9 @@ ifndef current-folder
 
 # @npx shx echo build ..... source/header
 # @npx shx echo build ..... source
-build::
+pre-build::
+	@npx shx echo -n
+build:: pre-build
 	@npx shx mkdir -p release/header
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header
 	@npx shx mkdir -p release
