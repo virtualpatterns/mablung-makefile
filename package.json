@@ -28,7 +28,11 @@
         ]
       },
       {
-        "exclude": "source/header/**/*",
+        "exclude": [
+          "source/header/**/*",
+          "source/sandbox/**/*",
+          "source/test/**/*"
+        ],
         "plugins": [
           [
             "babel-plugin-add-header-comment",
