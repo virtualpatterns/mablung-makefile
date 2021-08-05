@@ -54,7 +54,8 @@ test:: pre-test build
 	@npx ava $(or $(argument),$(arg),$(a))
 
 ifeq ($(dirty-item),)
-pre-release:: update
+pre-pre-release:: ;
+pre-release:: pre-pre-release update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
 release:: pre-release
@@ -63,7 +64,8 @@ release:: pre-release
 	@npm publish --access public
 	@git push origin master
 else
-pre-release::
+pre-pre-release:: ;
+pre-release:: pre-pre-release
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
 release:: pre-release
