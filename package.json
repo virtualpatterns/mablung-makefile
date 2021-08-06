@@ -31,10 +31,7 @@
       },
       {
         "exclude": [
-          "source/header/**/*",
-          "source/sandbox/**/*",
-          "source/test/**/*",
-          "source/index.js"
+          "source/header/**/*"
         ],
         "plugins": [
           [
