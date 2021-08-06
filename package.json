@@ -15,7 +15,9 @@
   "babel": {
     "overrides": [
       {
-        "include": "source/**/*.cjs",
+        "include": [
+          "source/**/*.cjs"
+        ],
         "presets": [
           [
             "@babel/preset-env",
@@ -31,7 +33,8 @@
         "exclude": [
           "source/header/**/*",
           "source/sandbox/**/*",
-          "source/test/**/*"
+          "source/test/**/*",
+          "source/index.js"
         ],
         "plugins": [
           [
