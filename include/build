@@ -110,20 +110,20 @@ release/%/.babelrc.json: source/%/.babelrc.json;
 release/.eslintrc.json: source/.eslintrc.json;
 release/%/.eslintrc.json: source/%/.eslintrc.json;
 
-# @npx shx echo check ..... $< $(eslint-parameter)
 release/%.cjs: source/%.cjs
 	$(eval export SOURCE_PATH := $<)
 	$(eval export RELEASE_PATH := $@)
-	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx shx echo check ..... $< $(eslint-parameter)
 	@npx eslint $< $(eslint-parameter)
+	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
-# @npx shx echo check ..... $< $(eslint-parameter)
 release/%.js: source/%.js
 	$(eval export SOURCE_PATH := $<)
 	$(eval export RELEASE_PATH := $@)
-	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx shx echo check ..... $< $(eslint-parameter)
 	@npx eslint $< $(eslint-parameter)
+	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%: source/%
