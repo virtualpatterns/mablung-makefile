@@ -10,7 +10,7 @@ dirty-item = $(strip $\
 # $(info dirty-item = $(dirty-item))
 # $(info --------------------)
 
-.PHONY: pre-version version pre-install install pre-re-install re-install pre-clean clean pre-run run pre-cover cover pre-test test pre-release release
+.PHONY: pre-version version pre-install install pre-re-install re-install pre-clean clean pre-run run pre-cover cover pre-test test pre-pre-release pre-release release
 
 pre-version:: ;
 version:: pre-version
@@ -54,19 +54,15 @@ test:: pre-test build
 	@npx ava $(or $(argument),$(arg),$(a))
 
 ifeq ($(dirty-item),)
-ifeq ($(version),)
-pre-pre-release:: ;
-pre-release:: pre-pre-release
-	$(info A version must be specified (e.g. version=patch or version=prerelease or version=1.0.0))
-	@npx shx false
-release:: pre-release
-	$(info A version must be specified (e.g. version=patch or version=prerelease or version=1.0.0))
-	@npx shx false
-else
 pre-pre-release:: ;
 pre-release:: pre-pre-release update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+ifeq ($(version),)
+release::
+	$(info A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0))
+	@npx shx false
+else
 release:: pre-release
 	@npm version $(version)
 	@$(MAKE) clean test source-map=false
@@ -75,10 +71,10 @@ release:: pre-release
 endif
 else
 pre-pre-release:: ;
-pre-release:: pre-pre-release
+pre-release::
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
-release:: pre-release
+release::
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
 endif
