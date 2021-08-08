@@ -3,7 +3,7 @@
   "ava": {
     "failFast": true,
     "files": [
-      "release/test/**/*.test.*"
+      "release/**/test/**/*.test.*"
     ],
     "nodeArguments": [
       "--no-warnings",

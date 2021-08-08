@@ -3,7 +3,7 @@
   "ava": {
     "failFast": true,
     "files": [
-      "release/test/**/*.test.*"
+      "release/**/test/**/*.test.*"
     ],
     "nodeArguments": [
       "--no-warnings",
@@ -111,10 +111,10 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "/include",
-    "/release/command",
-    "/release/header",
-    "/release/library",
+    "include",
+    "release/command",
+    "release/header",
+    "release/library",
     "makefile"
   ],
   "license": "GPL-3.0+",

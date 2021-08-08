@@ -54,15 +54,25 @@ test:: pre-test build
 	@npx ava $(or $(argument),$(arg),$(a))
 
 ifeq ($(dirty-item),)
+ifeq ($(version),)
+pre-pre-release:: ;
+pre-release:: pre-pre-release
+	$(info A version must be specified (e.g. version=patch or version=prerelease or version=1.0.0))
+	@npx shx false
+release:: pre-release
+	$(info A version must be specified (e.g. version=patch or version=prerelease or version=1.0.0))
+	@npx shx false
+else
 pre-pre-release:: ;
 pre-release:: pre-pre-release update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
 release:: pre-release
-	@npm version $(or $(version),patch)
+	@npm version $(version)
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
+endif
 else
 pre-pre-release:: ;
 pre-release:: pre-pre-release
