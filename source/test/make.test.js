@@ -58,7 +58,7 @@ Test.skip('run', (test) => {
 
 })
 
-Test.skip('run argument=...', (test) => {
+Test.skip('run argument="..."', (test) => {
 
   let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
 
@@ -87,7 +87,7 @@ Test.skip('test', (test) => {
 
 })
 
-Test.only('release', (test) => {
+Test.skip('release', (test) => {
 
   let result = Shell.exec('make release --just-print', { 'silent': true })
 
@@ -97,7 +97,11 @@ Test.only('release', (test) => {
 
 })
 
-Test.skip('release version=...', (test) => {
-  test.is(Shell.exec('make release version=prerelease --just-print', { 'silent': true }).code, 0)
-})
+Test.only('release version=...', (test) => {
 
+  let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
+
+  test.is(result.code, 0)
+  test.is(result.stdout, '\n')
+
+})
