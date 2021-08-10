@@ -154,7 +154,7 @@ Test('release ver=... --just-print', (test) => {
 
 })
 
-Test.skip('release v=... --just-print', (test) => {
+Test('release v=... --just-print', (test) => {
 
   let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
