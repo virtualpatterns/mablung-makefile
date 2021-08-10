@@ -174,7 +174,7 @@ Test('commit --just-print', (test) => {
 
 })
 
-Test.skip('update --just-print', (test) => {
+Test('update --just-print', (test) => {
 
   let result = Shell.exec('make update --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
