@@ -5,10 +5,10 @@ ifndef current-folder
 
 pre-debug:: ;
 debug:: pre-debug
-	@echo
-	@echo .FEATURES ........ $(.FEATURES)
-	@echo MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST)))
-	@echo
+	@npx shx echo
+	@npx shx echo .FEATURES ........ $(.FEATURES)
+	@npx shx echo MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST)))
+	@npx shx echo
 	@$(MAKE) debug current-folder=source
 
 else
@@ -29,18 +29,19 @@ debug-folder = $(strip $\
 # $(info debug-folder = $(debug-folder))
 # $(info --------------------)
 
-debug:: debug-0 debug-1
-	@echo -n
+pre-debug:: ;
+debug:: pre-debug debug-0 debug-1
+	@npx shx true
 
 debug-0:
-	@echo current-folder ... $(current-folder)
-	@echo make-folder ...... $(patsubst $(current-folder)/%,%,$(patsubst %.make,%,$(make-folder)))
-	@echo build-folder ..... $(patsubst $(current-folder)/%,%,$(patsubst %.build,%,$(build-folder)))
-	@echo build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))
-	@echo
+	@npx shx echo current-folder ... $(current-folder)
+	@npx shx echo make-folder ...... $(patsubst $(current-folder)/%,%,$(make-folder))
+	@npx shx echo build-folder ..... $(patsubst $(current-folder)/%,%,$(build-folder))
+	@npx shx echo build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))
+	@npx shx echo
 
 debug-1: $(debug-folder)
-	@echo -n
+	@npx shx true
 
 source/%.debug:
 	@$(MAKE) debug current-folder=$(patsubst %.debug,%,$@) 

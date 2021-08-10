@@ -44,7 +44,7 @@ make-folder = $(call $\
 											$(call get-content,$(item)),$\
 											$(if $\
 												$(wildcard $(item)/makefile),$\
-												$(item).make)))))
+												$(item))))))
 
 ifndef filter-build-folder
 filter-build-folder = $(1)
@@ -60,7 +60,7 @@ build-folder = $(call $\
 											$(call get-content,$(item)),$\
 											$(if $\
 												$(wildcard $(item)/makefile),,$\
-												$(item).build)))))
+												$(item))))))
 
 ifndef filter-build-item
 filter-build-item = $(1)
@@ -89,7 +89,7 @@ build-item = $(call $\
 # $(info --------------------)
 
 pre-build:: ;
-build:: $(make-folder) $(build-folder) $(build-item)
+build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@npx shx true
 
 # @npx shx echo make ...... $(patsubst %.make,%,$@)
