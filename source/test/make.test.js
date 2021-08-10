@@ -201,7 +201,7 @@ Test('build --just-print', (test) => {
 
 })
 
-Test.only('debug', (test) => {
+Test('debug', (test) => {
 
   test.timeout(100)
 
