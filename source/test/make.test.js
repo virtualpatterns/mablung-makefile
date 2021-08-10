@@ -184,7 +184,7 @@ Test('update --just-print', (test) => {
 
 })
 
-Test.skip('build --just-print', (test) => {
+Test('build --just-print', (test) => {
 
   let result = Shell.exec('make build --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
