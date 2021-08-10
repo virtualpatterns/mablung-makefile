@@ -3,15 +3,15 @@ import Test from 'ava'
 
 import { Package } from '../library/package.js'
 
-Test.skip('null', (test) => {
+Test('null', (test) => {
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
 })
 
-Test.skip('null --just-print', (test) => {
+Test('null --just-print', (test) => {
   test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
-Test.skip('(default)', (test) => {
+Test('(default)', (test) => {
 
   let result = Shell.exec('make', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -21,7 +21,7 @@ Test.skip('(default)', (test) => {
 
 })
 
-Test.skip('version', (test) => {
+Test('version', (test) => {
 
   let result = Shell.exec('make version', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -31,7 +31,7 @@ Test.skip('version', (test) => {
 
 })
 
-Test.skip('install --just-print', (test) => {
+Test('install --just-print', (test) => {
 
   let result = Shell.exec('make install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -41,7 +41,7 @@ Test.skip('install --just-print', (test) => {
   
 })
 
-Test.skip('re-install --just-print', (test) => {
+Test('re-install --just-print', (test) => {
 
   let result = Shell.exec('make re-install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -53,7 +53,7 @@ Test.skip('re-install --just-print', (test) => {
   
 })
 
-Test.skip('clean --just-print', (test) => {
+Test('clean --just-print', (test) => {
 
   let result = Shell.exec('make clean --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -63,7 +63,7 @@ Test.skip('clean --just-print', (test) => {
 
 })
 
-Test.skip('run', (test) => {
+Test('run', (test) => {
 
   let result = Shell.exec('make run', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -73,7 +73,7 @@ Test.skip('run', (test) => {
 
 })
 
-Test.skip('run argument="..."', (test) => {
+Test('run argument="..."', (test) => {
 
   let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -84,7 +84,7 @@ Test.skip('run argument="..."', (test) => {
 })
 
 
-Test.skip('run arg="..."', (test) => {
+Test('run arg="..."', (test) => {
 
   let result = Shell.exec('make run arg="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -94,7 +94,7 @@ Test.skip('run arg="..."', (test) => {
 
 })
 
-Test.skip('run a="..."', (test) => {
+Test('run a="..."', (test) => {
 
   let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -104,7 +104,7 @@ Test.skip('run a="..."', (test) => {
 
 })
 
-Test.skip('cover --just-print', (test) => {
+Test('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -114,7 +114,7 @@ Test.skip('cover --just-print', (test) => {
 
 })
 
-Test.skip('test --just-print', (test) => {
+Test('test --just-print', (test) => {
 
   let result = Shell.exec('make test --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -124,7 +124,7 @@ Test.skip('test --just-print', (test) => {
 
 })
 
-Test.skip('release --just-print', (test) => {
+Test('release --just-print', (test) => {
 
   let result = Shell.exec('make release --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -134,7 +134,7 @@ Test.skip('release --just-print', (test) => {
 
 })
 
-Test.skip('release version=... --just-print', (test) => {
+Test('release version=... --just-print', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -144,7 +144,7 @@ Test.skip('release version=... --just-print', (test) => {
 
 })
 
-Test.skip('release ver=... --just-print', (test) => {
+Test('release ver=... --just-print', (test) => {
 
   let result = Shell.exec('make release ver=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -154,7 +154,7 @@ Test.skip('release ver=... --just-print', (test) => {
 
 })
 
-Test.skip('release v=... --just-print', (test) => {
+Test('release v=... --just-print', (test) => {
 
   let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -164,7 +164,7 @@ Test.skip('release v=... --just-print', (test) => {
 
 })
 
-Test.skip('commit --just-print', (test) => {
+Test('commit --just-print', (test) => {
 
   let result = Shell.exec('make commit --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -174,7 +174,7 @@ Test.skip('commit --just-print', (test) => {
 
 })
 
-Test.skip('update --just-print', (test) => {
+Test('update --just-print', (test) => {
 
   let result = Shell.exec('make update --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -184,7 +184,7 @@ Test.skip('update --just-print', (test) => {
 
 })
 
-Test.skip('build --just-print', (test) => {
+Test('build --just-print', (test) => {
 
   let result = Shell.exec('make build --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -201,7 +201,7 @@ Test.skip('build --just-print', (test) => {
 
 })
 
-Test.only('debug', (test) => {
+Test('debug', (test) => {
 
   let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
