@@ -32,10 +32,16 @@ pre-clean:: ;
 clean:: pre-clean
 	@npx shx rm -Rf coverage process release
 
+ifeq ($(or $(argument),$(arg),$(a)),)
+run::
+	$(info An argument must be specified (e.g. argument=release/sandbox/index.js))
+	@npx shx false
+else
 pre-run:: ;
 run:: pre-run build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
+endif
 
 pre-cover:: ;
 cover:: pre-cover build

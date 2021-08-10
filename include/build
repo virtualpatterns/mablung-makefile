@@ -79,7 +79,7 @@ build-item = $(call $\
 											$(call get-content,$(item)),,$\
 											$(item))))))
 
-.PHONY: build copy ignore
+.PHONY: pre-build build copy ignore
 
 # $(info --------------------)
 # $(info current-folder ... $(current-folder))
@@ -88,6 +88,7 @@ build-item = $(call $\
 # $(info build-item ....... $(build-item))
 # $(info --------------------)
 
+pre-build:: ;
 build:: $(make-folder) $(build-folder) $(build-item)
 	@npx shx echo -n
 

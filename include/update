@@ -17,7 +17,7 @@ update-1:
 	@$(MAKE) re-install
 else
 update-1:
-	@npx shx echo -n
+	@echo -n
 endif
 
 endif
