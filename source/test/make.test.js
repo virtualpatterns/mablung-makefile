@@ -106,3 +106,13 @@ Test.skip('release version=...', (test) => {
   test.is(stdout[stdout.length - 2], 'git push origin master')
 
 })
+
+Test.only('commit', (test) => {
+
+  let result = Shell.exec('make commit --just-print', { 'silent': true })
+
+  test.is(result.code, 0)
+  test.is(result.stdout,  'Git working directory clean.\n' +
+                          'npx shx true\n')
+
+})
