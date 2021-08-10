@@ -201,11 +201,11 @@ Test('build --just-print', (test) => {
 
 })
 
-Test('debug --just-print', (test) => {
+Test('debug', (test) => {
 
-  test.timeout(100)
+  test.timeout(120)
 
-  let result = Shell.exec('make debug --just-print', { 'silent': true })
+  let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
