@@ -97,7 +97,7 @@ Test.skip('release', (test) => {
 
 })
 
-Test.only('release version=...', (test) => {
+Test.skip('release version=...', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
