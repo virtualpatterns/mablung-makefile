@@ -100,8 +100,9 @@ Test.skip('release', (test) => {
 Test.only('release version=...', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
-  test.is(result.stdout, '\n')
+  test.is(stdout[stdout.length - 2], 'git push origin master')
 
 })
