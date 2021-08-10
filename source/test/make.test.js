@@ -3,15 +3,15 @@ import Test from 'ava'
 
 import { Package } from '../library/package.js'
 
-Test.serial('null', (test) => {
+Test('null', (test) => {
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
 })
 
-Test.serial('null --just-print', (test) => {
+Test('null --just-print', (test) => {
   test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
-Test.serial('(default)', (test) => {
+Test('(default)', (test) => {
 
   let result = Shell.exec('make', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -21,7 +21,7 @@ Test.serial('(default)', (test) => {
 
 })
 
-Test.serial('version', (test) => {
+Test('version', (test) => {
 
   let result = Shell.exec('make version', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -31,7 +31,7 @@ Test.serial('version', (test) => {
 
 })
 
-Test.serial('install --just-print', (test) => {
+Test('install --just-print', (test) => {
 
   let result = Shell.exec('make install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -41,7 +41,7 @@ Test.serial('install --just-print', (test) => {
   
 })
 
-Test.serial('re-install --just-print', (test) => {
+Test('re-install --just-print', (test) => {
 
   let result = Shell.exec('make re-install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -53,7 +53,7 @@ Test.serial('re-install --just-print', (test) => {
   
 })
 
-Test.serial('clean --just-print', (test) => {
+Test('clean --just-print', (test) => {
 
   let result = Shell.exec('make clean --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -63,7 +63,7 @@ Test.serial('clean --just-print', (test) => {
 
 })
 
-Test.serial('run', (test) => {
+Test('run', (test) => {
 
   let result = Shell.exec('make run', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -73,7 +73,7 @@ Test.serial('run', (test) => {
 
 })
 
-Test.serial('run argument="..."', (test) => {
+Test('run argument="..."', (test) => {
 
   let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -84,7 +84,7 @@ Test.serial('run argument="..."', (test) => {
 })
 
 
-Test.serial('run arg="..."', (test) => {
+Test('run arg="..."', (test) => {
 
   let result = Shell.exec('make run arg="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -94,7 +94,7 @@ Test.serial('run arg="..."', (test) => {
 
 })
 
-Test.serial('run a="..."', (test) => {
+Test('run a="..."', (test) => {
 
   let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -104,7 +104,7 @@ Test.serial('run a="..."', (test) => {
 
 })
 
-Test.serial('cover --just-print', (test) => {
+Test('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -114,7 +114,7 @@ Test.serial('cover --just-print', (test) => {
 
 })
 
-Test.serial('test --just-print', (test) => {
+Test('test --just-print', (test) => {
 
   let result = Shell.exec('make test --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -124,7 +124,7 @@ Test.serial('test --just-print', (test) => {
 
 })
 
-Test.serial('release --just-print', (test) => {
+Test('release --just-print', (test) => {
 
   let result = Shell.exec('make release --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -134,7 +134,7 @@ Test.serial('release --just-print', (test) => {
 
 })
 
-Test.serial('release version=... --just-print', (test) => {
+Test.skip('release version=... --just-print', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -144,7 +144,7 @@ Test.serial('release version=... --just-print', (test) => {
 
 })
 
-Test.serial('release ver=... --just-print', (test) => {
+Test.skip('release ver=... --just-print', (test) => {
 
   let result = Shell.exec('make release ver=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -154,7 +154,7 @@ Test.serial('release ver=... --just-print', (test) => {
 
 })
 
-Test.serial('release v=... --just-print', (test) => {
+Test.skip('release v=... --just-print', (test) => {
 
   let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -164,7 +164,7 @@ Test.serial('release v=... --just-print', (test) => {
 
 })
 
-Test.serial('commit --just-print', (test) => {
+Test.skip('commit --just-print', (test) => {
 
   let result = Shell.exec('make commit --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -174,7 +174,7 @@ Test.serial('commit --just-print', (test) => {
 
 })
 
-Test.serial('update --just-print', (test) => {
+Test.skip('update --just-print', (test) => {
 
   let result = Shell.exec('make update --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -184,7 +184,7 @@ Test.serial('update --just-print', (test) => {
 
 })
 
-Test.serial('build --just-print', (test) => {
+Test.skip('build --just-print', (test) => {
 
   let result = Shell.exec('make build --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -201,7 +201,7 @@ Test.serial('build --just-print', (test) => {
 
 })
 
-Test.serial('debug', (test) => {
+Test.skip('debug', (test) => {
 
   let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
