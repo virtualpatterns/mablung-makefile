@@ -4,7 +4,8 @@ ifndef current-folder
 .PHONY: pre-update update update-0 update-1
 
 pre-update:: ;
-update:: update-0;
+update:: pre-update update-0
+	@npx shx true
 
 update-0:
 	@npx npm-check-updates --upgrade
@@ -17,7 +18,7 @@ update-1:
 	@$(MAKE) re-install
 else
 update-1:
-	@echo -n
+	@npx shx true
 endif
 
 endif

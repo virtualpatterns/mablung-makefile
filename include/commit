@@ -13,14 +13,19 @@ add-item = $(patsubst $\
 # $(info --------------------)
 
 ifneq ($(dirty-item),)
-pre-commit:: ;
-commit:: pre-commit $(add-item)
-	@git commit --message="$(or $(message),$(msg),$(m),updates)"
-%.add:
-	@git add $(patsubst %.add,%,$@)
+ifeq ($(or $(message),$(msg),$(m)),)
+commit::
+	$(info A message must be specified (e.g. message="make tests"))
+	@npx shx false
 else
 pre-commit:: ;
-commit:: pre-commit
+%.add:
+	@git add $(patsubst %.add,%,$@)
+commit:: pre-commit $(add-item)
+	@git commit --message="$(or $(message),$(msg),$(m))"
+endif
+else
+commit::
 	$(info Git working directory clean.)
 	@npx shx true
 endif

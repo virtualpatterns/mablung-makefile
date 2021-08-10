@@ -90,7 +90,7 @@ build-item = $(call $\
 
 pre-build:: ;
 build:: $(make-folder) $(build-folder) $(build-item)
-	@npx shx echo -n
+	@npx shx true
 
 # @npx shx echo make ...... $(patsubst %.make,%,$@)
 source/%.make:
@@ -139,6 +139,6 @@ copy::
 
 # @npx shx echo ignore .... $(current-folder)
 ignore::
-	@npx shx echo -n 
+	@npx shx true 
 
 endif

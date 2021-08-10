@@ -67,6 +67,25 @@ Test.skip('run argument="..."', (test) => {
 
 })
 
+
+Test.skip('run arg="..."', (test) => {
+
+  let result = Shell.exec('make run arg="release/command/mablung-makefile.js get-version"', { 'silent': true })
+
+  test.is(result.code, 0)
+  test.is(result.stdout, `${Package.name}@${Package.version}\n`)
+
+})
+
+Test.skip('run a="..."', (test) => {
+
+  let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
+
+  test.is(result.code, 0)
+  test.is(result.stdout, `${Package.name}@${Package.version}\n`)
+
+})
+
 Test.skip('cover', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
@@ -100,6 +119,26 @@ Test.skip('release', (test) => {
 Test.skip('release version=...', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.is(stdout[stdout.length - 2], 'git push origin master')
+
+})
+
+Test.skip('release ver=...', (test) => {
+
+  let result = Shell.exec('make release ver=prerelease --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.is(stdout[stdout.length - 2], 'git push origin master')
+
+})
+
+Test.skip('release v=...', (test) => {
+
+  let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)

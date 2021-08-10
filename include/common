@@ -64,13 +64,13 @@ pre-pre-release:: ;
 pre-release:: pre-pre-release update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
-ifeq ($(version),)
+ifeq ($(or $(version),$(ver),$(v)),)
 release::
 	$(info A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0))
 	@npx shx false
 else
 release:: pre-release
-	@npm version $(version)
+	@npm version $(or $(version),$(ver),$(v))
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
