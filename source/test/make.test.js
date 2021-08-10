@@ -201,7 +201,7 @@ Test('build --just-print', (test) => {
 
 })
 
-Test('debug', (test) => {
+Test.skip('debug', (test) => {
 
   let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
