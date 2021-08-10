@@ -92,10 +92,12 @@ Test.only('release', (test) => {
   let result = Shell.exec('make release --just-print', { 'silent': true })
 
   test.is(result.code, 0)
-  test.is(result.stdout, 'An argument must be specified (e.g. argument=release/sandbox/index.js)\n')
+  test.is(result.stdout,  'A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0)\n' +
+                          'npx shx false\n')
 
 })
 
 Test.skip('release version=...', (test) => {
   test.is(Shell.exec('make release version=prerelease --just-print', { 'silent': true }).code, 0)
 })
+
