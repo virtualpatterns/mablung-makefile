@@ -15,7 +15,7 @@ add-item = $(patsubst $\
 ifneq ($(dirty-item),)
 ifneq ($(or $(message),$(msg),$(m)),)
 commit:: pre-commit $(addsuffix .add,$(dirty-item))
-	$(if $(verbose),@npx shx echo add ....... $(patsubst %.add,%,$@))
+	$(if $(verbose),@npx shx echo commit ....)
 	@git commit --message="$(or $(message),$(msg),$(m))"
 pre-commit:: ;
 %.add:
