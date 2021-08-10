@@ -1,3 +1,8 @@
+
+ifneq ($(verbose),true)
+override verbose :=
+endif
+
 ifndef current-folder
 
 dirty-item = $(strip $\
@@ -12,38 +17,41 @@ dirty-item = $(strip $\
 
 .PHONY: pre-version version pre-install install pre-re-install re-install pre-clean clean pre-run run pre-cover cover pre-test test pre-pre-release pre-release release
 
-pre-version:: ;
 version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
 		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
 
-pre-install:: ;
+pre-version:: ;
+
 install:: pre-install
 	@npm install
 
-pre-re-install:: ;
+pre-install:: ;
+
 re-install:: pre-re-install
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
-pre-clean:: ;
+pre-re-install:: ;
+
 clean:: pre-clean
 	@npx shx rm -Rf coverage process release
 
-ifeq ($(or $(argument),$(arg),$(a)),)
-run::
-	$(info An argument must be specified (e.g. argument=release/sandbox/index.js))
-	@npx shx false
-else
-pre-run:: ;
+pre-clean:: ;
+
+ifneq ($(or $(argument),$(arg),$(a)),)
 run:: pre-run build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(arg),$(a))
+pre-run:: ;
+else
+run::
+	$(info An argument must be specified (e.g. argument=release/sandbox/index.js))
+	@npx shx false
 endif
 
-pre-cover:: ;
 cover:: pre-cover build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	$(eval project-name := $(notdir $(CURDIR)))
@@ -53,34 +61,36 @@ cover:: pre-cover build
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
 
-pre-test:: ;
+pre-cover:: ;
+
 test:: pre-test build
 	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
 	@npx ava $(or $(argument),$(arg),$(a))
 
+pre-test:: ;
+
 ifeq ($(dirty-item),)
-pre-pre-release:: ;
-pre-release:: pre-pre-release update
-	@npm version prerelease
-	@$(MAKE) clean cover source-map=true
-ifeq ($(or $(version),$(ver),$(v)),)
-release::
-	$(info A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0))
-	@npx shx false
-else
+ifneq ($(or $(version),$(ver),$(v)),)
 release:: pre-release
 	@npm version $(or $(version),$(ver),$(v))
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
 	@git push origin master
-endif
 else
+release::
+	$(info A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0))
+	@npx shx false
+endif
+pre-release:: pre-pre-release update
+	@npm version prerelease
+	@$(MAKE) clean cover source-map=true
 pre-pre-release:: ;
-pre-release::
+else
+release::
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
-release::
+pre-release::
 	$(info Git working directory not clean ... $(dirty-item))
 	@npx shx false
 endif

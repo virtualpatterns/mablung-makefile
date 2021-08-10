@@ -19,14 +19,17 @@ ifndef current-folder
 
 .PHONY: pre-build build
 
-# @npx shx echo build ..... source/header
-# @npx shx echo build ..... source
-pre-build:: ;
 build:: pre-build
+	$(if $(verbose),@npx shx echo create .... source/header)
 	@npx shx mkdir -p release/header
+	$(if $(verbose),@npx shx echo build ..... source/header)
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header
+	$(if $(verbose),@npx shx echo create .... source)
 	@npx shx mkdir -p release
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source
+	$(if $(verbose),@npx shx echo build ..... source)
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder=source/header
+
+pre-build:: ;
 
 else
 
@@ -39,7 +42,9 @@ make-folder = $(call $\
 								$(strip $\
 									$(foreach $\
 										item,$\
-										$(call get-content,$(current-folder)),$\
+										$(filter-out $\
+											$(exclude-folder),$\
+											$(call get-content,$(current-folder))),$\
 										$(if $\
 											$(call get-content,$(item)),$\
 											$(if $\
@@ -55,7 +60,9 @@ build-folder = $(call $\
 								$(strip $\
 									$(foreach $\
 										item,$\
-										$(call get-content,$(current-folder)),$\
+										$(filter-out $\
+											$(exclude-folder),$\
+											$(call get-content,$(current-folder))),$\
 										$(if $\
 											$(call get-content,$(item)),$\
 											$(if $\
@@ -83,33 +90,41 @@ build-item = $(call $\
 
 # $(info --------------------)
 # $(info current-folder ... $(current-folder))
+# $(info exclude-folder ... $(exclude-folder))
 # $(info make-folder ...... $(make-folder))
 # $(info build-folder ..... $(build-folder))
 # $(info build-item ....... $(build-item))
 # $(info --------------------)
 
-pre-build:: ;
 build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@npx shx true
 
-# @npx shx echo make ...... $(patsubst %.make,%,$@)
+pre-build:: ;
+
 source/%.make:
+	$(if $(verbose),@npx shx echo make ...... $(patsubst %.make,%,$@))
 	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-folder=$(patsubst %.make,%,$@)
 
-# @npx shx echo build ..... $(patsubst %.build,%,$@)
 source/%.build: release/%.create
+	$(if $(verbose),@npx shx echo build ..... $(patsubst %.build,%,$@))
 	@$(MAKE) build current-folder=$(patsubst %.build,%,$@) 
 
-# @npx shx echo create .... $(patsubst %.create,%,$@)
 release/%.create:
+	$(if $(verbose),@npx shx echo create .... $(patsubst %.create,%,$@))
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
-release/.DS_Store: source/.DS_Store;
-release/%/.DS_Store: source/%/.DS_Store;
-release/.babelrc.json: source/.babelrc.json;
-release/%/.babelrc.json: source/%/.babelrc.json;
-release/.eslintrc.json: source/.eslintrc.json;
-release/%/.eslintrc.json: source/%/.eslintrc.json;
+release/.DS_Store: source/.DS_Store
+	$(if $(verbose),@npx shx echo ignore .... $<)
+release/%/.DS_Store: source/%/.DS_Store
+	$(if $(verbose),@npx shx echo ignore .... $<)
+release/.babelrc.json: source/.babelrc.json
+	$(if $(verbose),@npx shx echo ignore .... $<)
+release/%/.babelrc.json: source/%/.babelrc.json
+	$(if $(verbose),@npx shx echo ignore .... $<)
+release/.eslintrc.json: source/.eslintrc.json
+	$(if $(verbose),@npx shx echo ignore .... $<)
+release/%/.eslintrc.json: source/%/.eslintrc.json
+	$(if $(verbose),@npx shx echo ignore .... $<)
 
 release/%.cjs: source/%.cjs
 	$(eval export SOURCE_PATH := $<)
@@ -131,14 +146,14 @@ release/%: source/%
 	@npx shx echo copy ...... $@
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
-# @npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
-# @npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile
 copy::
+	$(if $(verbose),@npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder))))
 	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
+	$(if $(verbose),@npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile)
 	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
 
-# @npx shx echo ignore .... $(current-folder)
 ignore::
+	$(if $(verbose),@npx shx echo ignore .... $(current-folder))
 	@npx shx true 
 
 endif

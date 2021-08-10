@@ -3,7 +3,6 @@ ifndef current-folder
 
 .PHONY: pre-debug debug
 
-pre-debug:: ;
 debug:: pre-debug
 	@npx shx echo
 	@npx shx echo .FEATURES ........ $(.FEATURES)
@@ -11,27 +10,16 @@ debug:: pre-debug
 	@npx shx echo
 	@$(MAKE) debug current-folder=source
 
-else
+pre-debug:: ;
 
-debug-folder = $(strip $\
-								$(foreach $\
-									item,$\
-									$(call get-content,$(current-folder)),$\
-									$(if $\
-										$(call get-content,$(item)),$\
-										$(if $\
-											$(wildcard $(item)/makefile),,$\
-											$(item).debug))))
+else
 
 .PHONY: debug debug-0 debug-1
 
-# $(info --------------------)
-# $(info debug-folder = $(debug-folder))
-# $(info --------------------)
-
-pre-debug:: ;
 debug:: pre-debug debug-0 debug-1
 	@npx shx true
+
+pre-debug:: ;
 
 debug-0:
 	@npx shx echo current-folder ... $(current-folder)
@@ -40,7 +28,7 @@ debug-0:
 	@npx shx echo build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))
 	@npx shx echo
 
-debug-1: $(debug-folder)
+debug-1: $(addsuffix .debug,$(build-folder))
 	@npx shx true
 
 source/%.debug:

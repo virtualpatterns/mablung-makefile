@@ -13,16 +13,18 @@ add-item = $(patsubst $\
 # $(info --------------------)
 
 ifneq ($(dirty-item),)
-ifeq ($(or $(message),$(msg),$(m)),)
+ifneq ($(or $(message),$(msg),$(m)),)
+commit:: pre-commit $(addsuffix .add,$(dirty-item))
+	$(if $(verbose),@npx shx echo add ....... $(patsubst %.add,%,$@))
+	@git commit --message="$(or $(message),$(msg),$(m))"
+pre-commit:: ;
+%.add:
+	$(if $(verbose),@npx shx echo add ....... $(patsubst %.add,%,$@))
+	@git add $(patsubst %.add,%,$@)
+else
 commit::
 	$(info A message must be specified (e.g. message="make tests"))
 	@npx shx false
-else
-pre-commit:: ;
-%.add:
-	@git add $(patsubst %.add,%,$@)
-commit:: pre-commit $(add-item)
-	@git commit --message="$(or $(message),$(msg),$(m))"
 endif
 else
 commit::
