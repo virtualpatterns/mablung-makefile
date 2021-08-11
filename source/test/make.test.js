@@ -6,16 +6,6 @@ import { Package } from '../library/package.js'
 
 const Test = BaseTest.serial
 
-Test.only('null', (test) => {
-  // an invalid target fails
-  test.is(Shell.exec('make null', { 'silent': true }).code, 2)
-})
-
-Test.only('null --just-print', (test) => {
-  // an invalid target fails even when --just-print
-  test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
-})
-
 Test.only('(default)', (test) => {
 
   let result = Shell.exec('make', { 'silent': true })
@@ -24,6 +14,16 @@ Test.only('(default)', (test) => {
   test.is(result.code, 0)
   test.true(stdout.includes(`${Package.name}@${Package.version}`))
 
+})
+
+Test.only('null', (test) => {
+  // an invalid target fails
+  test.is(Shell.exec('make null', { 'silent': true }).code, 2)
+})
+
+Test.only('null --just-print', (test) => {
+  // an invalid target fails even when --just-print
+  test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
 Test.only('commit message="..." --just-print (dirty)', (test) => {
