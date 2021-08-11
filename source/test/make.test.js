@@ -4,6 +4,7 @@ import BaseTest from 'ava'
 
 import { Package } from '../library/package.js'
 
+const Process = process
 const Test = BaseTest.serial
 
 Test('(default)', (test) => {
@@ -236,7 +237,7 @@ Test('test (dry-run)', (test) => {
 
 })
 
-Test('release (dry-run, non-dirty)', (test) => {
+(Process.env.version ? Test.failing : Test)('release (dry-run, non-dirty)', (test) => {
 
   let result = Shell.exec('make --dry-run release', { 'silent': true })
   let stdout = result.stdout.split('\n')
