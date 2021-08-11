@@ -303,7 +303,7 @@ Test.only('debug', (test) => {
   test.is(result.code, 0)
 
   test.log(stdout)
-  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/commit include/update include/build include/debug'))
+  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/build include/debug'))
   test.true(stdout.includes('build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
 
 })
