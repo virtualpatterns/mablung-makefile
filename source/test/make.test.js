@@ -33,7 +33,7 @@ Test('null (dry-run)', (test) => {
 
   Test(`commit ${variable}=... (dry-run, dirty)`, (test) => {
 
-    let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
+    let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
     Shell.touch(name)
 
@@ -56,7 +56,7 @@ Test('null (dry-run)', (test) => {
 
 Test('commit (dry-run, dirty)', (test) => {
 
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
+  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
   Shell.touch(name)
 
@@ -248,7 +248,7 @@ Test('release (dry-run, non-dirty)', (test) => {
 
 Test('release (dry-run, dirty)', (test) => {
 
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
+  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
   Shell.touch(name)
 
