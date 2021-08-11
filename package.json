@@ -143,6 +143,7 @@
   "devDependencies": {
     "@virtualpatterns/mablung-worker": "0.0.2-40",
     "depcheck": "^1.4.2",
-    "luxon": "^2.0.2"
+    "luxon": "^2.0.2",
+    "shelljs": "^0.8.4"
   }
 }
