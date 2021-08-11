@@ -302,7 +302,6 @@ Test.only('debug (dry-run)', (test) => {
 
   test.is(result.code, 0)
 
-  test.log(stdout)
   test.true(stdout.includes('npx shx echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
   test.true(stdout.includes('npx shx echo build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
 
