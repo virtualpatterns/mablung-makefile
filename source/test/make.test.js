@@ -179,7 +179,7 @@ Test.only('run', (test) => {
 
 })
 
-Test.skip('cover --just-print', (test) => {
+Test.only('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -189,7 +189,7 @@ Test.skip('cover --just-print', (test) => {
 
 })
 
-Test.skip('test --just-print', (test) => {
+Test.only('test --just-print', (test) => {
 
   let result = Shell.exec('make test --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
