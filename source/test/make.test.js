@@ -39,8 +39,9 @@ Test.only('commit message="..." --just-print (dirty)', (test) => {
 
     test.is(result.code, 0)
 
-    test.log(stdout)
-    // test.true(stdout.includes('...'))
+    // test.log(stdout)
+    test.true(stdout.includes('git add 20210811031116-test'))
+    test.true(stdout.includes('git commit --message="test"'))
 
   } finally {
     Shell.rm(name)
