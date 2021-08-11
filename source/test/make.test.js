@@ -285,15 +285,15 @@ Test('build (dry-run)', (test) => {
 
 Test.only('build exclude-folder=... (dry-run)', (test) => {
 
-  let result = Shell.exec('make --dry-run build', { 'silent': true })
+  let result = Shell.exec('make --dry-run build exclude-folder=source/test', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
 
-  test.log(stdout)
-  // test.true(stdout.includes('npx shx mkdir -p release/header'))
-  // test.true(stdout.includes('npx shx mkdir -p release'))
-  // test.true(stdout.includes('npx shx mkdir -p release/test'))
+  // test.log(stdout)
+  test.true(stdout.includes('npx shx mkdir -p release/header'))
+  test.true(stdout.includes('npx shx mkdir -p release'))
+  test.false(stdout.includes('npx shx mkdir -p release/test'))
 
 })
 
