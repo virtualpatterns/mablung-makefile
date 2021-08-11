@@ -266,7 +266,7 @@ Test.only('release --just-print (dirty)', (test) => {
 
 })
 
-Test.skip('build --just-print', (test) => {
+Test.only('build --just-print', (test) => {
 
   let result = Shell.exec('make build --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
