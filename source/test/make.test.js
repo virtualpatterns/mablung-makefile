@@ -297,7 +297,7 @@ Test('debug', (test) => {
 
   test.timeout(480)
 
-  let result = Shell.exec('make debug', { 'silent': false })
+  let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
