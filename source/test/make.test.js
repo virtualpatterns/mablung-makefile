@@ -283,7 +283,7 @@ Test.only('build --just-print', (test) => {
 
 })
 
-Test.only('debug', (test) => {
+Test.skip('debug', (test) => {
 
   test.timeout(240)
 
