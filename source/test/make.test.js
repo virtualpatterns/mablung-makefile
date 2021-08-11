@@ -77,7 +77,7 @@ Test.only('commit --just-print (non-dirty)', (test) => {
 
 })
 
-Test.skip('update --just-print', (test) => {
+Test.only('update --just-print', (test) => {
 
   let result = Shell.exec('make update --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -86,7 +86,7 @@ Test.skip('update --just-print', (test) => {
   test.true(stdout.includes('npx npm-check-updates --upgrade'))
 
 })
-Test.skip('version', (test) => {
+Test.only('version', (test) => {
 
   let result = Shell.exec('make version', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -96,7 +96,7 @@ Test.skip('version', (test) => {
 
 })
 
-Test.skip('install --just-print', (test) => {
+Test.only('install --just-print', (test) => {
 
   let result = Shell.exec('make install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -106,7 +106,7 @@ Test.skip('install --just-print', (test) => {
   
 })
 
-Test.skip('re-install --just-print', (test) => {
+Test.only('re-install --just-print', (test) => {
 
   let result = Shell.exec('make re-install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
