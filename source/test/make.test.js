@@ -280,6 +280,7 @@ Test('build (dry-run)', (test) => {
 
   test.true(stdout.includes('npx shx mkdir -p release/header'))
   test.true(stdout.includes('npx shx mkdir -p release'))
+  test.true(stdout.includes('npx shx mkdir -p release/test'))
 
 })
 
@@ -289,6 +290,9 @@ Test('build exclude-folder=... (dry-run)', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
+
+  test.true(stdout.includes('npx shx mkdir -p release/header'))
+  test.true(stdout.includes('npx shx mkdir -p release'))
   test.false(stdout.includes('npx shx mkdir -p release/test'))
 
 })
@@ -301,6 +305,20 @@ Test('debug (dry-run)', (test) => {
   test.is(result.code, 0)
 
   test.true(stdout.includes('echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
+  test.true(stdout.includes('echo build-item ....... dependency.test.js index.test.js make.test.js'))
+  test.true(stdout.includes('echo build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
+
+})
+
+Test('debug exclude-folder=... (dry-run)', (test) => {
+
+  let result = Shell.exec('make --dry-run debug exclude-folder=source/test', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+
+  test.true(stdout.includes('echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
+  test.false(stdout.includes('echo build-item ....... dependency.test.js index.test.js make.test.js'))
   test.true(stdout.includes('echo build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
 
 })
