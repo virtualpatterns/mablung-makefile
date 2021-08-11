@@ -3,15 +3,15 @@ import Test from 'ava'
 
 import { Package } from '../library/package.js'
 
-Test('null', (test) => {
+Test.skip('null', (test) => {
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
 })
 
-Test('null --just-print', (test) => {
+Test.skip('null --just-print', (test) => {
   test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
-Test('(default)', (test) => {
+Test.skip('(default)', (test) => {
 
   let result = Shell.exec('make', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -21,7 +21,36 @@ Test('(default)', (test) => {
 
 })
 
-Test('version', (test) => {
+Test.skip('commit --just-print', (test) => {
+
+  let result = Shell.exec('make commit --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.true(stdout.includes('Git working directory clean.'))
+
+})
+
+Test.skip('commit --just-print', (test) => {
+
+  let result = Shell.exec('make commit --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.true(stdout.includes('Git working directory clean.'))
+
+})
+
+Test.skip('update --just-print', (test) => {
+
+  let result = Shell.exec('make update --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.true(stdout.includes('npx npm-check-updates --upgrade'))
+
+})
+Test.skip('version', (test) => {
 
   let result = Shell.exec('make version', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -31,7 +60,7 @@ Test('version', (test) => {
 
 })
 
-Test('install --just-print', (test) => {
+Test.skip('install --just-print', (test) => {
 
   let result = Shell.exec('make install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -41,7 +70,7 @@ Test('install --just-print', (test) => {
   
 })
 
-Test('re-install --just-print', (test) => {
+Test.skip('re-install --just-print', (test) => {
 
   let result = Shell.exec('make re-install --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -53,7 +82,7 @@ Test('re-install --just-print', (test) => {
   
 })
 
-Test('clean --just-print', (test) => {
+Test.skip('clean --just-print', (test) => {
 
   let result = Shell.exec('make clean --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -63,7 +92,7 @@ Test('clean --just-print', (test) => {
 
 })
 
-Test('run', (test) => {
+Test.skip('run', (test) => {
 
   let result = Shell.exec('make run', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -73,7 +102,7 @@ Test('run', (test) => {
 
 })
 
-Test('run argument="..."', (test) => {
+Test.skip('run argument="..."', (test) => {
 
   let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -84,7 +113,7 @@ Test('run argument="..."', (test) => {
 })
 
 
-Test('run arg="..."', (test) => {
+Test.skip('run arg="..."', (test) => {
 
   let result = Shell.exec('make run arg="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -94,7 +123,7 @@ Test('run arg="..."', (test) => {
 
 })
 
-Test('run a="..."', (test) => {
+Test.skip('run a="..."', (test) => {
 
   let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -104,7 +133,7 @@ Test('run a="..."', (test) => {
 
 })
 
-Test('cover --just-print', (test) => {
+Test.skip('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -114,7 +143,7 @@ Test('cover --just-print', (test) => {
 
 })
 
-Test('test --just-print', (test) => {
+Test.skip('test --just-print', (test) => {
 
   let result = Shell.exec('make test --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -124,7 +153,7 @@ Test('test --just-print', (test) => {
 
 })
 
-Test('release --just-print', (test) => {
+Test.skip('release --just-print', (test) => {
 
   let result = Shell.exec('make release --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -134,7 +163,7 @@ Test('release --just-print', (test) => {
 
 })
 
-Test('release version=... --just-print', (test) => {
+Test.skip('release version=... --just-print', (test) => {
 
   let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -144,7 +173,7 @@ Test('release version=... --just-print', (test) => {
 
 })
 
-Test('release ver=... --just-print', (test) => {
+Test.skip('release ver=... --just-print', (test) => {
 
   let result = Shell.exec('make release ver=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -154,7 +183,7 @@ Test('release ver=... --just-print', (test) => {
 
 })
 
-Test('release v=... --just-print', (test) => {
+Test.skip('release v=... --just-print', (test) => {
 
   let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -164,27 +193,7 @@ Test('release v=... --just-print', (test) => {
 
 })
 
-Test('commit --just-print', (test) => {
-
-  let result = Shell.exec('make commit --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('Git working directory clean.'))
-
-})
-
-Test('update --just-print', (test) => {
-
-  let result = Shell.exec('make update --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx npm-check-updates --upgrade'))
-
-})
-
-Test('build --just-print', (test) => {
+Test.skip('build --just-print', (test) => {
 
   let result = Shell.exec('make build --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -201,7 +210,7 @@ Test('build --just-print', (test) => {
 
 })
 
-Test('debug', (test) => {
+Test.skip('debug', (test) => {
 
   test.timeout(120)
 

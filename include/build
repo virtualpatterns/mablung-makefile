@@ -17,7 +17,7 @@ trim-folder-path = $(patsubst $\
 
 ifndef current-folder
 
-.PHONY: pre-build build
+.PHONY: build pre-build
 
 build:: pre-build
 	$(if $(verbose),@npx shx echo create .... source/header)
@@ -86,7 +86,7 @@ build-item = $(call $\
 											$(call get-content,$(item)),,$\
 											$(item))))))
 
-.PHONY: pre-build build copy ignore
+.PHONY: build pre-build copy ignore
 
 # $(info --------------------)
 # $(info current-folder ... $(current-folder))
@@ -147,7 +147,7 @@ release/%: source/%
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
-	$(if $(verbose),@npx shx echo copy ...... $(current-folder) to $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder))))
+	$(if $(verbose),@npx shx echo copy ...... $(patsubst source/%,release/%,$(current-folder)))
 	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
 	$(if $(verbose),@npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile)
 	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
