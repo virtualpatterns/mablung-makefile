@@ -38,8 +38,6 @@ Test.only('commit message="..." --just-print (dirty)', (test) => {
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
-
-    // test.log(stdout)
     test.true(stdout.includes(`git add ${name}`))
     test.true(stdout.includes('git commit --message="test"'))
 
@@ -61,8 +59,6 @@ Test.only('commit --just-print (dirty)', (test) => {
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
-
-    // test.log(stdout)
     test.true(stdout.includes('A message must be specified (e.g. message="make tests")'))
 
   } finally {
