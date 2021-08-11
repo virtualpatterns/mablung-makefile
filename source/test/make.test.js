@@ -293,7 +293,7 @@ Test('build exclude-folder=... (dry-run)', (test) => {
 
 })
 
-Test('debug (dry-run)', (test) => {
+Test.only('debug (dry-run)', (test) => {
 
   test.timeout(480)
 
