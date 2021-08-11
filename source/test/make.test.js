@@ -318,5 +318,5 @@ Test('debug exclude-folder=... (dry-run)', (test) => {
 
   test.true(stdout.includes('echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
   test.false(stdout.includes('echo build-item ....... dependency.test.js index.test.js make.test.js'))
-\
+
 })
