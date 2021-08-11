@@ -223,13 +223,20 @@ Test.only('test --just-print', (test) => {
 
 })
 
-Test.only('test argument="..." --just-print', (test) => {
+[
+  'argument',
+  'a'
+].forEach((variable) => {
 
-  let result = Shell.exec('make test argument="release/test/make.test.js" --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+  Test.only(`test ${variable}="..." --just-print`, (test) => {
 
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx ava release/test/make.test.js'))
+    let result = Shell.exec(`make test ${variable}="release/test/make.test.js" --just-print`, { 'silent': true })
+    let stdout = result.stdout.split('\n')
+
+    test.is(result.code, 0)
+    test.true(stdout.includes('npx ava release/test/make.test.js'))
+
+  })
 
 })
 
