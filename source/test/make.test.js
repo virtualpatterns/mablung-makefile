@@ -295,8 +295,6 @@ Test('build exclude-folder=... (dry-run)', (test) => {
 
 Test.only('debug (dry-run)', (test) => {
 
-  test.timeout(480)
-
   let result = Shell.exec('make --dry-run debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
