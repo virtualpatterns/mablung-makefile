@@ -285,7 +285,7 @@ Test.only('build --just-print', (test) => {
 
 Test.only('debug', (test) => {
 
-  test.timeout(120)
+  test.timeout(240)
 
   let result = Shell.exec('make debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
