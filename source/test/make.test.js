@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import Shell from 'shelljs'
 import BaseTest from 'ava'
 
@@ -23,33 +24,31 @@ Test.skip('(default)', (test) => {
 
 })
 
-// Test.skip('commit --just-print', (test) => {
+Test.only('commit message="..." --just-print (dirty)', (test) => {
 
-//   let result = Shell.exec('make commit --just-print', { 'silent': true })
-//   let stdout = result.stdout.split('\n')
+  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
-//   test.is(result.code, 0)
-//   test.true(stdout.includes('Git working directory clean.'))
+  Shell.touch(name)
 
-// })
+  try {
+
+    let result = Shell.exec('make commit message="test" --just-print', { 'silent': true })
+    let stdout = result.stdout.split('\n')
+
+    test.is(result.code, 0)
+
+    test.log(stdout)
+    // test.true(stdout.includes('...'))
+
+  } finally {
+    Shell.rm(name)
+  }
+
+})
 
 Test.only('commit --just-print (non-dirty)', (test) => {
 
   let result = Shell.exec('make commit --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('Git working directory clean.'))
-
-})
-
-Test('commit --just-print (dirty)', (test) => {
-
-  let result = null
-  result = Shell.touch('commit-just-print-dirty.touch')
-
-  result = Shell.exec('make commit --just-print', { 'silent': true })
-
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
