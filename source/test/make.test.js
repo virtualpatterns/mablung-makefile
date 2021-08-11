@@ -293,17 +293,17 @@ Test('build exclude-folder=... (dry-run)', (test) => {
 
 })
 
-Test('debug', (test) => {
+Test('debug (dry-run)', (test) => {
 
   test.timeout(480)
 
-  let result = Shell.exec('make debug', { 'silent': true })
+  let result = Shell.exec('make --dry-run debug', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
 
   test.log(stdout)
-  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/build include/debug'))
-  test.true(stdout.includes('build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
+  test.true(stdout.includes('npx shx echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
+  test.true(stdout.includes('npx shx echo build-item ....... empty index.cjs index.js index.json sample.DS_Store sample.babelrc.json sample.eslintrc.json'))
 
 })
