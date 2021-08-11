@@ -186,7 +186,7 @@ Test.only('cover argument="..." --just-print', (test) => {
 
   test.is(result.code, 0)
 
-  test.log(stdout)
+  test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
   test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
 
 })
