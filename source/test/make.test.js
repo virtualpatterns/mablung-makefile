@@ -219,7 +219,24 @@ Test.only('test --just-print', (test) => {
 
 })
 
-Test.skip('release --just-print', (test) => {
+;[
+  'version',
+  'v'
+].forEach((variable) => {
+
+  Test.only(`release ${variable}=... --just-print (non-dirty)`, (test) => {
+
+    let result = Shell.exec(`make release ${variable}=prerelease --just-print`, { 'silent': true })
+    let stdout = result.stdout.split('\n')
+
+    test.is(result.code, 0)
+    test.true(stdout.includes('git push origin master'))
+
+  })
+
+})
+
+Test.only('release --just-print (non-dirty)', (test) => {
 
   let result = Shell.exec('make release --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -229,33 +246,25 @@ Test.skip('release --just-print', (test) => {
 
 })
 
-Test.skip('release version=... --just-print', (test) => {
+Test.only('release --just-print (dirty)', (test) => {
 
-  let result = Shell.exec('make release version=prerelease --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
-  test.is(result.code, 0)
-  test.true(stdout.includes('git push origin master'))
+  Shell.touch(name)
 
-})
+  try {
 
-Test.skip('release ver=... --just-print', (test) => {
+    let result = Shell.exec('make release --just-print', { 'silent': true })
+    let stdout = result.stdout.split('\n')
 
-  let result = Shell.exec('make release ver=prerelease --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+    test.is(result.code, 0)
 
-  test.is(result.code, 0)
-  test.true(stdout.includes('git push origin master'))
+    test.log(stdout)
+    // test.true(stdout.includes('...'))
 
-})
-
-Test.skip('release v=... --just-print', (test) => {
-
-  let result = Shell.exec('make release v=prerelease --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('git push origin master'))
+  } finally {
+    Shell.rm(name)
+  }
 
 })
 
