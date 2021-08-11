@@ -258,9 +258,7 @@ Test.only('release --just-print (dirty)', (test) => {
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
-
-    test.log(stdout)
-    // test.true(stdout.includes('...'))
+    test.true(stdout.includes(`Git working directory not clean ... ${name}`))
 
   } finally {
     Shell.rm(name)
