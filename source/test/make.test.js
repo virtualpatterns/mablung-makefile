@@ -179,7 +179,19 @@ Test.only('run', (test) => {
 
 })
 
-Test.only('cover --just-print', (test) => {
+Test.only('cover argument="..." --just-print', (test) => {
+
+  let result = Shell.exec('make cover argument="release/test/make.test.js" --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+
+  test.log(stdout)
+  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+
+})
+
+Test.skip('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -189,7 +201,7 @@ Test.only('cover --just-print', (test) => {
 
 })
 
-Test.only('test --just-print', (test) => {
+Test.skip('test --just-print', (test) => {
 
   let result = Shell.exec('make test --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
