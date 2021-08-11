@@ -21,9 +21,9 @@ Test.only('null', (test) => {
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
 })
 
-Test.only('null --just-print', (test) => {
+Test.only('null (print)', (test) => {
   // an invalid target fails even when --just-print
-  test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
+  test.is(Shell.exec('make --just-print null', { 'silent': true }).code, 2)
 })
 
 ;[
@@ -31,7 +31,7 @@ Test.only('null --just-print', (test) => {
   'm'
 ].forEach((variable) => {
 
-  Test.only(`commit ${variable}="..." --just-print (dirty)`, (test) => {
+  Test.only(`commit ${variable}=... (print, dirty)`, (test) => {
 
     let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
@@ -39,7 +39,7 @@ Test.only('null --just-print', (test) => {
 
     try {
 
-      let result = Shell.exec(`make commit ${variable}="test" --just-print`, { 'silent': true })
+      let result = Shell.exec(`make commit ${variable}=test --just-print`, { 'silent': true })
       let stdout = result.stdout.split('\n')
 
       test.is(result.code, 0)
@@ -54,7 +54,7 @@ Test.only('null --just-print', (test) => {
 
 })
 
-Test.only('commit --just-print (dirty)', (test) => {
+Test.only('commit (print, dirty)', (test) => {
 
   let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
@@ -62,7 +62,7 @@ Test.only('commit --just-print (dirty)', (test) => {
 
   try {
 
-    let result = Shell.exec('make commit --just-print', { 'silent': true })
+    let result = Shell.exec('make --just-print commit', { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -74,9 +74,9 @@ Test.only('commit --just-print (dirty)', (test) => {
 
 })
 
-Test.only('commit --just-print (non-dirty)', (test) => {
+Test.only('commit (print, non-dirty)', (test) => {
 
-  let result = Shell.exec('make commit --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print commit', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -84,9 +84,9 @@ Test.only('commit --just-print (non-dirty)', (test) => {
 
 })
 
-Test.only('update --just-print', (test) => {
+Test.only('update (print)', (test) => {
 
-  let result = Shell.exec('make update --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print update', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -104,9 +104,9 @@ Test.only('version', (test) => {
 
 })
 
-Test.only('install --just-print', (test) => {
+Test.only('install (print)', (test) => {
 
-  let result = Shell.exec('make install --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print install', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -114,9 +114,9 @@ Test.only('install --just-print', (test) => {
   
 })
 
-Test.only('re-install --just-print', (test) => {
+Test.only('re-install (print)', (test) => {
 
-  let result = Shell.exec('make re-install --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print re-install', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -126,9 +126,9 @@ Test.only('re-install --just-print', (test) => {
   
 })
 
-Test.only('clean --just-print', (test) => {
+Test.only('clean (print)', (test) => {
 
-  let result = Shell.exec('make clean --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print clean', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -163,9 +163,9 @@ Test.only('run', (test) => {
 
 })
 
-Test.only('cover --just-print', (test) => {
+Test.only('cover (print)', (test) => {
 
-  let result = Shell.exec('make cover --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print cover', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -178,9 +178,9 @@ Test.only('cover --just-print', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test.only(`cover ${variable}="..." --just-print`, (test) => {
+  Test.only(`cover ${variable}=... --just-print`, (test) => {
 
-    let result = Shell.exec(`make cover ${variable}="release/test/make.test.js" --just-print`, { 'silent': true })
+    let result = Shell.exec(`make cover ${variable}=release/test/make.test.js --just-print`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -192,9 +192,9 @@ Test.only('cover --just-print', (test) => {
 
 })
 
-Test.only('test --just-print', (test) => {
+Test.only('test (print)', (test) => {
 
-  let result = Shell.exec('make test --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print test', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -207,9 +207,9 @@ Test.only('test --just-print', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test.only(`test ${variable}="..." --just-print`, (test) => {
+  Test.only(`test ${variable}=... --just-print`, (test) => {
 
-    let result = Shell.exec(`make test ${variable}="release/test/make.test.js" --just-print`, { 'silent': true })
+    let result = Shell.exec(`make test ${variable}=release/test/make.test.js --just-print`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -224,7 +224,7 @@ Test.only('test --just-print', (test) => {
   'v'
 ].forEach((variable) => {
 
-  Test.only(`release ${variable}=... --just-print (non-dirty)`, (test) => {
+  Test.only(`release ${variable}=... (print, non-dirty)`, (test) => {
 
     let result = Shell.exec(`make release ${variable}=prerelease --just-print`, { 'silent': true })
     let stdout = result.stdout.split('\n')
@@ -236,9 +236,9 @@ Test.only('test --just-print', (test) => {
 
 })
 
-Test.only('release --just-print (non-dirty)', (test) => {
+Test.only('release (print, non-dirty)', (test) => {
 
-  let result = Shell.exec('make release --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print release', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -246,7 +246,7 @@ Test.only('release --just-print (non-dirty)', (test) => {
 
 })
 
-Test.only('release --just-print (dirty)', (test) => {
+Test.only('release (print, dirty)', (test) => {
 
   let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
@@ -254,7 +254,7 @@ Test.only('release --just-print (dirty)', (test) => {
 
   try {
 
-    let result = Shell.exec('make release --just-print', { 'silent': true })
+    let result = Shell.exec('make --just-print release', { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -266,9 +266,26 @@ Test.only('release --just-print (dirty)', (test) => {
 
 })
 
-Test.only('build --just-print', (test) => {
+Test.only('build (print)', (test) => {
 
-  let result = Shell.exec('make build --just-print', { 'silent': true })
+  let result = Shell.exec('make --just-print build', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+
+  // test.log(stdout)
+  // i don't know where the following commands come from ...
+  // rm release/test/header.create release/test/command.create release/test/resource.create
+  // rm release/test.create release/header.create release/command.create release/library.create release/sandbox.create
+
+  test.true(stdout.includes('npx shx mkdir -p release/header'))
+  test.true(stdout.includes('npx shx mkdir -p release'))
+
+})
+
+Test.skip('build exclude-folder=... (print)', (test) => {
+
+  let result = Shell.exec('make --just-print build exclude-folder=', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
