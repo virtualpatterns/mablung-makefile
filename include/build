@@ -23,11 +23,11 @@ build:: pre-build
 	$(if $(verbose),@npx shx echo create .... source/header)
 	@npx shx mkdir -p release/header
 	$(if $(verbose),@npx shx echo build ..... source/header)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header exclude-folder="$(strip $(exclude-folder))"
 	$(if $(verbose),@npx shx echo create .... source)
 	@npx shx mkdir -p release
 	$(if $(verbose),@npx shx echo build ..... source)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder=source/header
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder="$(strip $(exclude-folder) source/header)"
 
 pre-build:: ;
 
