@@ -1,7 +1,9 @@
 import Shell from 'shelljs'
-import Test from 'ava'
+import BaseTest from 'ava'
 
 import { Package } from '../library/package.js'
+
+const Test = BaseTest.serial
 
 Test.skip('null', (test) => {
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
@@ -31,15 +33,27 @@ Test.skip('(default)', (test) => {
 
 // })
 
-Test('commit --just-print', (test) => {
+Test.only('commit --just-print (non-dirty)', (test) => {
 
   let result = Shell.exec('make commit --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
-  test.is(result.code, 2)
+  test.is(result.code, 0)
+  test.true(stdout.includes('Git working directory clean.'))
 
-  test.log(stdout)
-  // test.true(stdout.includes('Git working directory clean.'))
+})
+
+Test('commit --just-print (dirty)', (test) => {
+
+  let result = null
+  result = Shell.touch('commit-just-print-dirty.touch')
+
+  result = Shell.exec('make commit --just-print', { 'silent': true })
+
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+  test.true(stdout.includes('Git working directory clean.'))
 
 })
 
