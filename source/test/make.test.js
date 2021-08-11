@@ -191,6 +191,18 @@ Test.only('cover argument="..." --just-print', (test) => {
 
 })
 
+Test.only('cover a="..." --just-print', (test) => {
+
+  let result = Shell.exec('make cover a="release/test/make.test.js" --just-print', { 'silent': true })
+  let stdout = result.stdout.split('\n')
+
+  test.is(result.code, 0)
+
+  test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
+  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+
+})
+
 Test.skip('cover --just-print', (test) => {
 
   let result = Shell.exec('make cover --just-print', { 'silent': true })
