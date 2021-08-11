@@ -21,15 +21,15 @@ Test.skip('(default)', (test) => {
 
 })
 
-Test.skip('commit --just-print', (test) => {
+// Test.skip('commit --just-print', (test) => {
 
-  let result = Shell.exec('make commit --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+//   let result = Shell.exec('make commit --just-print', { 'silent': true })
+//   let stdout = result.stdout.split('\n')
 
-  test.is(result.code, 0)
-  test.true(stdout.includes('Git working directory clean.'))
+//   test.is(result.code, 0)
+//   test.true(stdout.includes('Git working directory clean.'))
 
-})
+// })
 
 Test('commit --just-print', (test) => {
 
