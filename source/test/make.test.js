@@ -62,9 +62,8 @@ Test.only('commit --just-print (dirty)', (test) => {
 
     test.is(result.code, 0)
 
-    test.log(stdout)
-    // test.true(stdout.includes(`git add ${name}`))
-    // test.true(stdout.includes('git commit --message="test"'))
+    // test.log(stdout)
+    test.true(stdout.includes('A message must be specified (e.g. message="make tests")'))
 
   } finally {
     Shell.rm(name)
