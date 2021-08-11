@@ -226,7 +226,7 @@ Test.only('test --just-print', (test) => {
 [
   'argument',
   'a'
-].forEach((variable) => {
+].foreach((variable) => {
 
   Test.only(`test ${variable}="..." --just-print`, (test) => {
 
