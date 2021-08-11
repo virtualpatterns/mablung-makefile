@@ -47,6 +47,27 @@ Test.only('commit message="..." --just-print (dirty)', (test) => {
 
 })
 
+Test.only('commit m="..." --just-print (dirty)', (test) => {
+
+  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
+
+  Shell.touch(name)
+
+  try {
+
+    let result = Shell.exec('make commit m="test" --just-print', { 'silent': true })
+    let stdout = result.stdout.split('\n')
+
+    test.is(result.code, 0)
+    test.true(stdout.includes(`git add ${name}`))
+    test.true(stdout.includes('git commit --message="test"'))
+
+  } finally {
+    Shell.rm(name)
+  }
+
+})
+
 Test.only('commit --just-print (dirty)', (test) => {
 
   let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
