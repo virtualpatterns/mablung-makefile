@@ -118,7 +118,7 @@ Test.only('re-install --just-print', (test) => {
   
 })
 
-Test.skip('clean --just-print', (test) => {
+Test.only('clean --just-print', (test) => {
 
   let result = Shell.exec('make clean --just-print', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -128,17 +128,7 @@ Test.skip('clean --just-print', (test) => {
 
 })
 
-Test.skip('run', (test) => {
-
-  let result = Shell.exec('make run', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 2)
-  test.true(stdout.includes('An argument must be specified (e.g. argument=release/sandbox/index.js)'))
-
-})
-
-Test.skip('run argument="..."', (test) => {
+Test.only('run argument="..."', (test) => {
 
   let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -148,10 +138,9 @@ Test.skip('run argument="..."', (test) => {
 
 })
 
+Test.only('run a="..."', (test) => {
 
-Test.skip('run arg="..."', (test) => {
-
-  let result = Shell.exec('make run arg="release/command/mablung-makefile.js get-version"', { 'silent': true })
+  let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -159,13 +148,13 @@ Test.skip('run arg="..."', (test) => {
 
 })
 
-Test.skip('run a="..."', (test) => {
+Test.only('run', (test) => {
 
-  let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
+  let result = Shell.exec('make run', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
-  test.is(result.code, 0)
-  test.true(stdout.includes(`${Package.name}@${Package.version}`))
+  test.is(result.code, 2)
+  test.true(stdout.includes('An argument must be specified (e.g. argument=release/sandbox/index.js)'))
 
 })
 
