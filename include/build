@@ -20,13 +20,13 @@ ifndef current-folder
 .PHONY: build pre-build
 
 build:: pre-build
-	$(if $(verbose),@npx shx echo create .... source/header)
+	$(if $(verbose),@echo create .... source/header)
 	@npx shx mkdir -p release/header
-	$(if $(verbose),@npx shx echo build ..... source/header)
+	$(if $(verbose),@echo build ..... source/header)
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header exclude-folder="$(strip $(exclude-folder))"
-	$(if $(verbose),@npx shx echo create .... source)
+	$(if $(verbose),@echo create .... source)
 	@npx shx mkdir -p release
-	$(if $(verbose),@npx shx echo build ..... source)
+	$(if $(verbose),@echo build ..... source)
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder="$(strip $(exclude-folder) source/header)"
 
 pre-build:: ;
@@ -102,58 +102,58 @@ build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-f
 pre-build:: ;
 
 source/%.make:
-	$(if $(verbose),@npx shx echo make ...... $(patsubst %.make,%,$@))
+	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
 	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-folder=$(patsubst %.make,%,$@)
 
 source/%.build: release/%.create
-	$(if $(verbose),@npx shx echo build ..... $(patsubst %.build,%,$@))
+	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
 	@$(MAKE) build current-folder=$(patsubst %.build,%,$@) 
 
 release/%.create:
-	$(if $(verbose),@npx shx echo create .... $(patsubst %.create,%,$@))
+	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 release/.DS_Store: source/.DS_Store
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 release/%/.DS_Store: source/%/.DS_Store
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 release/.babelrc.json: source/.babelrc.json
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 release/%/.babelrc.json: source/%/.babelrc.json
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 release/.eslintrc.json: source/.eslintrc.json
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 release/%/.eslintrc.json: source/%/.eslintrc.json
-	$(if $(verbose),@npx shx echo ignore .... $<)
+	$(if $(verbose),@echo ignore .... $<)
 
 release/%.cjs: source/%.cjs
 	$(eval export SOURCE_PATH := $<)
 	$(eval export RELEASE_PATH := $@)
-	@npx shx echo check ..... $< $(eslint-parameter)
+	@echo check ..... $< $(eslint-parameter)
 	@npx eslint $< $(eslint-parameter)
-	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%.js: source/%.js
 	$(eval export SOURCE_PATH := $<)
 	$(eval export RELEASE_PATH := $@)
-	@npx shx echo check ..... $< $(eslint-parameter)
+	@echo check ..... $< $(eslint-parameter)
 	@npx eslint $< $(eslint-parameter)
-	@npx shx echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%: source/%
-	@npx shx echo copy ...... $@
+	@echo copy ...... $@
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
-	$(if $(verbose),@npx shx echo copy ...... $(patsubst source/%,release/%,$(current-folder)))
+	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-folder)))
 	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
-	$(if $(verbose),@npx shx echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile)
+	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile)
 	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
 
 ignore::
-	$(if $(verbose),@npx shx echo ignore .... $(current-folder))
+	$(if $(verbose),@echo ignore .... $(current-folder))
 	@npx shx true 
 
 endif

@@ -24,13 +24,13 @@ ifneq ($(dirty-item),)
 ifneq ($(or $(message),$(m)),)
 
 commit:: pre-commit $(addsuffix .add,$(dirty-item))
-	$(if $(verbose),@npx shx echo commit .... $(dirty-item))
+	$(if $(verbose),@echo commit .... $(dirty-item))
 	@git commit --message="$(or $(message),$(m))"
 
 pre-commit:: ;
 
 %.add:
-	$(if $(verbose),@npx shx echo add ....... $(patsubst %.add,%,$@))
+	$(if $(verbose),@echo add ....... $(patsubst %.add,%,$@))
 	@git add $(patsubst %.add,%,$@)
 
 else

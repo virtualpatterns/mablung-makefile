@@ -4,10 +4,10 @@ ifndef current-folder
 .PHONY: debug pre-debug
 
 debug:: pre-debug
-	@npx shx echo
-	@npx shx echo .FEATURES ........ $(.FEATURES)
-	@npx shx echo MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST)))
-	@npx shx echo
+	@echo
+	@echo .FEATURES ........ $(.FEATURES)
+	@echo MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST)))
+	@echo
 	@$(MAKE) debug current-folder=source
 
 pre-debug:: ;
@@ -22,11 +22,11 @@ debug:: pre-debug debug-0 debug-1
 pre-debug:: ;
 
 debug-0:
-	@npx shx echo current-folder ... $(current-folder)
-	@npx shx echo make-folder ...... $(patsubst $(current-folder)/%,%,$(make-folder))
-	@npx shx echo build-folder ..... $(patsubst $(current-folder)/%,%,$(build-folder))
-	@npx shx echo build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))
-	@npx shx echo
+	@echo current-folder ... $(current-folder)
+	@echo make-folder ...... $(patsubst $(current-folder)/%,%,$(make-folder))
+	@echo build-folder ..... $(patsubst $(current-folder)/%,%,$(build-folder))
+	@echo build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))
+	@echo
 
 debug-1: $(addsuffix .debug,$(build-folder))
 	@npx shx true
