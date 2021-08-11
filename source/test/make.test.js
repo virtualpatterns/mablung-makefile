@@ -223,7 +223,7 @@ Test.only('test --just-print', (test) => {
 
 })
 
-[
+;[
   'argument',
   'a'
 ].foreach((variable) => {
