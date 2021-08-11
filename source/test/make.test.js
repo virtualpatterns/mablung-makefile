@@ -39,7 +39,7 @@ Test('null (dry-run)', (test) => {
 
     try {
 
-      let result = Shell.exec(`make commit ${variable}=test --dry-run`, { 'silent': true })
+      let result = Shell.exec(`make --dry-run commit ${variable}=test`, { 'silent': true })
       let stdout = result.stdout.split('\n')
 
       test.is(result.code, 0)
@@ -178,9 +178,9 @@ Test('cover (dry-run)', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test(`cover ${variable}=... --dry-run`, (test) => {
+  Test(`cover ${variable}=... (dry-run)`, (test) => {
 
-    let result = Shell.exec(`make cover ${variable}=release/test/make.test.js --dry-run`, { 'silent': true })
+    let result = Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -207,9 +207,9 @@ Test('test (dry-run)', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test(`test ${variable}=... --dry-run`, (test) => {
+  Test(`test ${variable}=... (dry-run)`, (test) => {
 
-    let result = Shell.exec(`make test ${variable}=release/test/make.test.js --dry-run`, { 'silent': true })
+    let result = Shell.exec(`make --dry-run test ${variable}=release/test/make.test.js`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
@@ -226,7 +226,7 @@ Test('test (dry-run)', (test) => {
 
   Test(`release ${variable}=... (dry-run, non-dirty)`, (test) => {
 
-    let result = Shell.exec(`make release ${variable}=prerelease --dry-run`, { 'silent': true })
+    let result = Shell.exec(`make --dry-run release ${variable}=prerelease`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
