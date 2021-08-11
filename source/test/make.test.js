@@ -7,10 +7,12 @@ import { Package } from '../library/package.js'
 const Test = BaseTest.serial
 
 Test.skip('null', (test) => {
+  // an invalid target fails
   test.is(Shell.exec('make null', { 'silent': true }).code, 2)
 })
 
 Test.skip('null --just-print', (test) => {
+  // an invalid target fails even when --just-print
   test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
