@@ -283,7 +283,7 @@ Test('build (dry-run)', (test) => {
 
 })
 
-Test.only('build exclude-folder=... (dry-run)', (test) => {
+Test('build exclude-folder=... (dry-run)', (test) => {
 
   let result = Shell.exec('make --dry-run build exclude-folder=source/test', { 'silent': true })
   let stdout = result.stdout.split('\n')
@@ -293,7 +293,7 @@ Test.only('build exclude-folder=... (dry-run)', (test) => {
 
 })
 
-Test.only('debug', (test) => {
+Test('debug', (test) => {
 
   test.timeout(240)
 
