@@ -26,45 +26,31 @@ Test.only('null --just-print', (test) => {
   test.is(Shell.exec('make null --just-print', { 'silent': true }).code, 2)
 })
 
-Test.only('commit message="..." --just-print (dirty)', (test) => {
+;[
+  'message',
+  'm'
+].forEach((variable) => {
 
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
+  Test.only(`commit ${variable}="..." --just-print (dirty)`, (test) => {
 
-  Shell.touch(name)
+    let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
 
-  try {
+    Shell.touch(name)
 
-    let result = Shell.exec('make commit message="test" --just-print', { 'silent': true })
-    let stdout = result.stdout.split('\n')
+    try {
 
-    test.is(result.code, 0)
-    test.true(stdout.includes(`git add ${name}`))
-    test.true(stdout.includes('git commit --message="test"'))
+      let result = Shell.exec(`make commit ${variable}="test" --just-print`, { 'silent': true })
+      let stdout = result.stdout.split('\n')
 
-  } finally {
-    Shell.rm(name)
-  }
+      test.is(result.code, 0)
+      test.true(stdout.includes(`git add ${name}`))
+      test.true(stdout.includes('git commit --message="test"'))
 
-})
+    } finally {
+      Shell.rm(name)
+    }
 
-Test.only('commit m="..." --just-print (dirty)', (test) => {
-
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmss')}-test`
-
-  Shell.touch(name)
-
-  try {
-
-    let result = Shell.exec('make commit m="test" --just-print', { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 0)
-    test.true(stdout.includes(`git add ${name}`))
-    test.true(stdout.includes('git commit --message="test"'))
-
-  } finally {
-    Shell.rm(name)
-  }
+  })
 
 })
 
@@ -107,6 +93,7 @@ Test.only('update --just-print', (test) => {
   test.true(stdout.includes('npx npm-check-updates --upgrade'))
 
 })
+
 Test.only('version', (test) => {
 
   let result = Shell.exec('make version', { 'silent': true })
@@ -149,23 +136,20 @@ Test.only('clean --just-print', (test) => {
 
 })
 
-Test.only('run argument="..."', (test) => {
+;[
+  'argument',
+  'a'
+].forEach((variable) => {
 
-  let result = Shell.exec('make run argument="release/command/mablung-makefile.js get-version"', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+  Test.only(`run ${variable}="..."`, (test) => {
 
-  test.is(result.code, 0)
-  test.true(stdout.includes(`${Package.name}@${Package.version}`))
+    let result = Shell.exec(`make run ${variable}="release/command/mablung-makefile.js get-version"`, { 'silent': true })
+    let stdout = result.stdout.split('\n')
 
-})
+    test.is(result.code, 0)
+    test.true(stdout.includes(`${Package.name}@${Package.version}`))
 
-Test.only('run a="..."', (test) => {
-
-  let result = Shell.exec('make run a="release/command/mablung-makefile.js get-version"', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes(`${Package.name}@${Package.version}`))
+  })
 
 })
 
@@ -189,27 +173,22 @@ Test.only('cover --just-print', (test) => {
 
 })
 
-Test.only('cover argument="..." --just-print', (test) => {
+;[
+  'argument',
+  'a'
+].forEach((variable) => {
 
-  let result = Shell.exec('make cover argument="release/test/make.test.js" --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
+  Test.only(`cover ${variable}="..." --just-print`, (test) => {
 
-  test.is(result.code, 0)
+    let result = Shell.exec(`make cover ${variable}="release/test/make.test.js" --just-print`, { 'silent': true })
+    let stdout = result.stdout.split('\n')
 
-  test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
-  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+    test.is(result.code, 0)
 
-})
+    test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
+    test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
 
-Test.only('cover a="..." --just-print', (test) => {
-
-  let result = Shell.exec('make cover a="release/test/make.test.js" --just-print', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
-  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+  })
 
 })
 
