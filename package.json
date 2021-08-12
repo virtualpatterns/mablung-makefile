@@ -10,7 +10,7 @@
       "--unhandled-rejections=strict"
     ],
     "require": [
-      "./release/library/source-map-support.js"
+      "./release/header/library/source-map-support.js"
     ],
     "verbose": true
   },
