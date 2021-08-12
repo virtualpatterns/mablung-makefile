@@ -1,7 +1,3 @@
 import SourceMapSupport from 'source-map-support'
 
-SourceMapSupport.install({
-  'handleUncaughtExceptions': false
-})
-
-export { SourceMapSupport }
+SourceMapSupport.install({ 'handleUncaughtExceptions': false })

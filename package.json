@@ -110,6 +110,7 @@
   "exports": {
     "./header": "./release/header/index.js",
     "./package": "./release/header/library/package.js",
+    "./source-map-support": "./release/header/library/source-map-support.js",
     "./package.json": "./package.json"
   },
   "files": [
