@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import '../library/source-map-support.js'
+import '../header/library/source-map-support.js'
 
 import { createRequire as CreateRequire } from 'module'
 import Command from 'commander'

@@ -1,6 +1,10 @@
-import '../library/source-map-support.js'
+import './library/source-map-support.js'
 
-import { Package } from './package.js'
+import { Package } from './library/package.js'
+
+SourceMapSupport.install({
+  'handleUncaughtExceptions': false
+})
 
 process.exitCode = 0
 
