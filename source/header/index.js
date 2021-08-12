@@ -1,3 +1,5 @@
+import '../library/source-map-support.js'
+
 import { Package } from './package.js'
 
 process.exitCode = 0
