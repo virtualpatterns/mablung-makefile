@@ -138,10 +138,21 @@
 # $(info asd = $(asd))
 # $(info .SHELLSTATUS = $(.SHELLSTATUS))
 
-get-it = $(info get-it)$\
-					abc
-
-do-it: $(call get-it);
-
-do-that:
+do-it:: do-it-0
 	@echo $@
+
+do-it-0:
+	@echo $@
+
+do-it:: pre-do-it
+
+pre-do-it:
+	@echo $@
+
+do-it:: pre-pre-do-it
+
+pre-pre-do-it:
+	@echo $@
+
+do-it::
+	@echo $@ again

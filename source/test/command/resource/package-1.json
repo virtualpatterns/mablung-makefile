@@ -1,0 +1,14 @@
+{
+  "babel": {
+    "overrides": [
+      {},
+      {
+        "exclude": [
+          "source/header/**/*",
+          "source/sandbox/**/*",
+          "source/test/**/*"
+        ]
+      }
+    ]
+  }
+}

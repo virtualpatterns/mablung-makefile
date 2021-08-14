@@ -3,8 +3,10 @@
 import '../header/library/source-map-support.js'
 
 import { createRequire as CreateRequire } from 'module'
+import Clone from 'clone'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
+import Is from '@pwn/is'
 import Path from 'path'
 
 import { Package } from '../library/package.js'
@@ -64,10 +66,27 @@ Command
       let _path = Require.resolve(Path.resolve(path))
       let _package = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
 
-      if (_package.name !== Package.name) {
+      if (Is.not.equal(_package.name, Package.name)) {
 
-        _package.babel = Package.babel
-        _package.eslintConfig = Package.eslintConfig
+        let sourceConfiguration = null
+        sourceConfiguration = Clone(Package.babel)
+
+        sourceConfiguration.overrides[1].exclude = []
+
+        let targetConfiguration = null
+        targetConfiguration = Clone(_package.babel || { 'overrides': [ {}, { 'exclude': [] } ] })
+
+        let targetExclude = null
+        targetExclude = targetConfiguration.overrides[1].exclude
+        targetExclude = Is.array(targetExclude) ? targetExclude : [ targetExclude ]
+
+        sourceConfiguration.overrides[1].exclude.push(...targetExclude)
+
+        _package.babel = sourceConfiguration
+
+        sourceConfiguration = Clone(Package.eslintConfig)
+
+        _package.eslintConfig = sourceConfiguration
 
         await FileSystem.writeJson(_path, _package, { 'encoding': 'utf-8', 'spaces': 2 })
 
