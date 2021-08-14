@@ -4,9 +4,9 @@
       {},
       {
         "exclude": [
-          "source/header/**/*",
-          "source/sandbox/**/*",
-          "source/test/**/*"
+          "source/header",
+          "source/sandbox",
+          "source/test"
         ]
       }
     ]
