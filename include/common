@@ -45,7 +45,7 @@ else
 
 commit::
 	$(info Git working directory clean.)
-	$(info )
+	@npx shx true
 
 endif
 
@@ -69,7 +69,7 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
-	$(info)
+	@npx shx true
 
 pre-update:: ;
 
@@ -84,8 +84,7 @@ update-1:
 
 else
 
-update-1:
-	$(info)
+update-1: ;
 
 endif
 
