@@ -1,5 +1,7 @@
 export default function (option) {
 
+  console.dir(option)
+  
   return {
     "failFast": true,
     "files": [
