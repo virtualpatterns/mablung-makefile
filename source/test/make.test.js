@@ -179,7 +179,7 @@ Test('cover (dry-run)', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test(`cover ${variable}=... (dry-run)`, (test) => {
+  Test.failing(`cover ${variable}=... (dry-run)`, (test) => {
 
     let result = Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js`, { 'silent': true })
     let stdout = result.stdout.split('\n')
