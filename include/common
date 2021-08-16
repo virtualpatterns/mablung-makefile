@@ -74,7 +74,7 @@ update:: pre-update update-0
 pre-update:: ;
 
 update-0:
-	@npx npm-check-updates --upgrade
+	@npx npm-check-updates --configFilePath configuration --configFileName npm-check-updates.json --upgrade
 	@$(MAKE) update-1
 
 ifneq ($(filter package.json,$(dirty-item)),)
