@@ -179,14 +179,14 @@ Test('cover (dry-run)', (test) => {
   'a'
 ].forEach((variable) => {
 
-  Test.failing(`cover ${variable}=... (dry-run)`, (test) => {
+  Test(`cover ${variable}=... (dry-run)`, (test) => {
 
     let result = Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js`, { 'silent': true })
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
 
-    test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
+    test.true(stdout.includes('npx c8 --config configuration/c8.json ava release/test/make.test.js'))
     test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
 
   })
