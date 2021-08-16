@@ -214,7 +214,7 @@ Test('test (dry-run)', (test) => {
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
-    test.true(stdout.includes('npx ava release/test/make.test.js'))
+    test.true(stdout.includes('npx ava --config ava.js release/test/make.test.js'))
 
   })
 
