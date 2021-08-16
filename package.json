@@ -54,16 +54,6 @@
   "bin": {
     "mablung-makefile": "./release/command/mablung-makefile.js"
   },
-  "c8": {
-    "all": true,
-    "exclude": [
-      "release/sandbox"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "src": "release"
-  },
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "eslintConfig": {
     "env": {
