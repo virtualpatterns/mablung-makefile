@@ -45,7 +45,7 @@ else
 
 commit::
 	$(info Git working directory clean.)
-	$(info)
+	$(info )
 
 endif
 
