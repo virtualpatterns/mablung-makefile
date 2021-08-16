@@ -1,7 +1,6 @@
 {
   "all": true,
   "exclude": [
-    "release/sandbox"
   ],
   "reporter": [
     "html"
