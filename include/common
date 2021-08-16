@@ -50,6 +50,21 @@ commit::
 endif
 
 # --------------------
+.PHONY: install pre-install re-install pre-re-install
+# --------------------
+
+install:: pre-install
+	@npm install
+
+pre-install:: ;
+
+re-install:: pre-re-install
+	@rm -Rf node_modules package-lock.json
+	@npm install
+
+pre-re-install:: ;
+
+# --------------------
 .PHONY: update pre-update update-0 update-1
 # --------------------
 
@@ -85,21 +100,6 @@ version:: pre-version
 		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
 
 pre-version:: ;
-
-# --------------------
-.PHONY: install pre-install re-install pre-re-install
-# --------------------
-
-install:: pre-install
-	@npm install
-
-pre-install:: ;
-
-re-install:: pre-re-install
-	@rm -Rf node_modules package-lock.json
-	@npm install
-
-pre-re-install:: ;
 
 # --------------------
 .PHONY: clean pre-clean

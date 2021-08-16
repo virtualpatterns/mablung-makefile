@@ -15,7 +15,7 @@
         ]
       },
       {
-        "exclude": "source/header/**/*",
+        "exclude": "source/header",
         "plugins": [
           [
             "babel-plugin-add-header-comment",
