@@ -1,6 +1,6 @@
 
 ifneq ($(verbose),true)
-override verbose :=
+override verbose =
 endif
 
 ifndef current-folder
@@ -24,20 +24,20 @@ ifneq ($(dirty-item),)
 ifneq ($(or $(message),$(m)),)
 
 commit:: pre-commit $(addsuffix .add,$(dirty-item))
-	$(if $(verbose),@echo commit .... $(dirty-item))
+	$(if $(verbose),$(info commit .... $(dirty-item)))
 	@git commit --message="$(or $(message),$(m))"
 
 pre-commit:: ;
 
 %.add:
-	$(if $(verbose),@echo add ....... $(patsubst %.add,%,$@))
+	$(if $(verbose),$(info add ....... $(patsubst %.add,%,$@)))
 	@git add $(patsubst %.add,%,$@)
 
 else
 
 commit::
 	$(info A message must be specified (e.g. message="make tests"))
-	@npx shx false
+	$(error Error)
 
 endif
 
@@ -45,7 +45,7 @@ else
 
 commit::
 	$(info Git working directory clean.)
-	@npx shx true
+	$(info)
 
 endif
 
@@ -69,12 +69,12 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
-	@npx shx true
+	$(info)
 
 pre-update:: ;
 
 update-0:
-	@npx npm-check-updates --configFilePath configuration --configFileName npm-check-updates.json
+	@npx npm-check-updates --configFilePath configuration --configFileName update.json
 	@$(MAKE) update-1
 
 ifneq ($(filter package.json,$(dirty-item)),)
@@ -85,7 +85,7 @@ update-1:
 else
 
 update-1:
-	@npx shx true
+	$(info)
 
 endif
 
@@ -97,7 +97,7 @@ version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
-		@$(MAKE) run argument="release/command/mablung-makefile.js get-version")
+		@$(MAKE) run parameter="release/command/mablung-makefile.js get-version")
 
 pre-version:: ;
 
@@ -114,19 +114,20 @@ pre-clean:: ;
 .PHONY: run pre-run
 # --------------------
 
-ifneq ($(or $(argument),$(a)),)
+ifneq ($(or $(parameter),$(p)),)
 
+# run:: node-parameter = --no-warnings --unhandled-rejections=strict
 run:: pre-run build
-	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	@node --no-warnings --unhandled-rejections=strict $(or $(argument),$(a))
+	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
+	@node $(node-parameter) $(or $(parameter),$(p))
 
 pre-run:: ;
 
 else
 
 run::
-	$(info An argument must be specified (e.g. argument=release/sandbox/index.js))
-	@npx shx false
+	$(info A parameter must be specified (e.g. parameter=release/sandbox/index.js))
+	$(error Error)
 
 endif
 
@@ -134,11 +135,11 @@ endif
 .PHONY: cover pre-cover test pre-test
 # --------------------
 
+cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
-	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
-	$(eval project-name := $(notdir $(CURDIR)))
+	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
-	@npx c8 --config configuration/c8.json ava --config ava.js $(or $(argument),$(a))
+	@npx c8 --config configuration/cover.json ava --config test.js $(or $(parameter),$(p))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
@@ -146,9 +147,9 @@ cover:: pre-cover build
 pre-cover:: ;
 
 test:: pre-test build
-	$(eval export MAKEFILE_PATH := $(realpath $(MAKEFILE_LIST)))
+	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
-	@npx ava --config ava.js $(or $(argument),$(a))
+	@npx ava --config test.js $(or $(parameter),$(p))
 
 pre-test:: ;
 
@@ -170,7 +171,7 @@ else
 
 release::
 	$(info A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0))
-	@npx shx false
+	$(error Error)
 
 endif
 
@@ -184,11 +185,11 @@ else
 
 release::
 	$(info Git working directory not clean ... $(dirty-item))
-	@npx shx false
+	$(error Error)
 
 pre-release::
 	$(info Git working directory not clean ... $(dirty-item))
-	@npx shx false
+	$(error Error)
 
 endif
 
