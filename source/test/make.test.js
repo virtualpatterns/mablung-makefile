@@ -186,7 +186,7 @@ Test('cover (dry-run)', (test) => {
 
     test.is(result.code, 0)
 
-    test.true(stdout.includes('npx c8 --config configuration/cover.json ava --config test.js release/test/make.test.js'))
+    test.true(stdout.includes('npx c8 --config configuration/cover.json ava --config test.cjs release/test/make.test.js'))
     test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
 
   })
@@ -199,7 +199,7 @@ Test('test (dry-run)', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
-  test.true(stdout.includes('npx ava --config test.js '))
+  test.true(stdout.includes('npx ava --config test.cjs '))
 
 })
 
@@ -214,7 +214,7 @@ Test('test (dry-run)', (test) => {
     let stdout = result.stdout.split('\n')
 
     test.is(result.code, 0)
-    test.true(stdout.includes('npx ava --config test.js release/test/make.test.js'))
+    test.true(stdout.includes('npx ava --config test.cjs release/test/make.test.js'))
 
   })
 
