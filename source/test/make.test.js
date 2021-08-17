@@ -138,8 +138,8 @@ Test('clean (dry-run)', (test) => {
 })
 
 ;[
-  'argument',
-  'a'
+  'parameter',
+  'p'
 ].forEach((variable) => {
 
   Test(`run ${variable}="..."`, (test) => {
@@ -160,7 +160,7 @@ Test('run', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 2)
-  test.true(stdout.includes('An argument must be specified (e.g. argument=release/sandbox/index.js)'))
+  test.true(stdout.includes('A parameter must be specified (e.g. parameter=release/sandbox/index.js)'))
 
 })
 
@@ -175,8 +175,8 @@ Test('cover (dry-run)', (test) => {
 })
 
 ;[
-  'argument',
-  'a'
+  'parameter',
+  'p'
 ].forEach((variable) => {
 
   Test(`cover ${variable}=... (dry-run)`, (test) => {
@@ -204,8 +204,8 @@ Test('test (dry-run)', (test) => {
 })
 
 ;[
-  'argument',
-  'a'
+  'parameter',
+  'p'
 ].forEach((variable) => {
 
   Test(`test ${variable}=... (dry-run)`, (test) => {
