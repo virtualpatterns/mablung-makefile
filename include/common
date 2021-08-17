@@ -178,6 +178,7 @@ endif
 pre-release:: pre-pre-release update
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+	@git push origin master
 
 pre-pre-release:: ;
 
