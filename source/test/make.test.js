@@ -66,7 +66,7 @@ Test('commit (dry-run, dirty)', (test) => {
     let result = Shell.exec('make --dry-run commit', { 'silent': true })
     let stdout = result.stdout.split('\n')
 
-    test.is(result.code, 0)
+    test.is(result.code, 2)
     test.true(stdout.includes('A message must be specified (e.g. message="make tests")'))
 
   } finally {
