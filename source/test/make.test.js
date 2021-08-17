@@ -305,8 +305,8 @@ Test('build exclude-folder=... (dry-run)', (test) => {
 
   test.is(result.code, 0)
 
-  test.true(stdout.includes('echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
-  test.true(stdout.includes('echo build-item ....... dependency.test.js index.test.js make.test.js'))
+  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/build include/debug'))
+  test.true(stdout.includes('build-item ....... dependency.test.js index.test.js make.test.js'))
 
 })
 
@@ -317,7 +317,7 @@ Test('build exclude-folder=... (dry-run)', (test) => {
 
   test.is(result.code, 0)
 
-  test.true(stdout.includes('echo MAKEFILE_LIST .... makefile include/common include/build include/debug'))
-  test.false(stdout.includes('echo build-item ....... dependency.test.js index.test.js make.test.js'))
+  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/build include/debug'))
+  test.false(stdout.includes('build-item ....... dependency.test.js index.test.js make.test.js'))
 
 })
