@@ -11,6 +11,8 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "configuration/check.json",
+    "configuration/compile.json",
     "include",
     "release/command",
     "release/header",
