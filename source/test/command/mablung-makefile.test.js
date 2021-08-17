@@ -3,8 +3,6 @@ import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
 
-import { Package } from '../../library/package.js'
-
 import { MablungMakefileProcess } from './mablung-makefile-process.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
@@ -25,57 +23,110 @@ Test('get-path', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
-Test('update-package', async (test) => {
-  let process = new MablungMakefileProcess({ 'update-package': true })
-  test.is(await process.whenExit(), 1)
+Test('update-configuration', async (test) => {
+  let process = new MablungMakefileProcess({ 'update-configuration': true })
+  test.is(await process.whenExit(), 0)
 })
 
-Test('update-package package-0.json', async (test) => {
+Test('update-configuration configuration-0', async (test) => {
 
-  let _path = `${FolderPath}/resource/package-0.json`
-  let _packageBefore = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
+  let sourcePath = `${FolderPath}/../../../configuration`
+  let sourceCheckPath = `${sourcePath}/check.json`
+  let sourceCompilePath = `${sourcePath}/compile.json`
 
-  let process = new MablungMakefileProcess({ 'update-package': _path })
+  let targetPath = `${FolderPath}/resource/configuration-0`
+  let targetCheckPath = `${targetPath}/check.json`
+  let targetCompilePath = `${targetPath}/compile.json`
+
+  let [
+    sourceCheckConfiguration,
+    sourceCompileConfiguration
+  ] = await Promise.all([
+    FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
+    FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
+  ])
+
+  let process = new MablungMakefileProcess({ 'update-configuration': targetPath })
 
   try {
 
     test.is(await process.whenExit(), 0)
 
-    let _packageAfter = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
+    let [
+      targetCheckConfigurationAfter,
+      targetCompileConfigurationAfter
+    ] = await Promise.all([
+      FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+    ])
 
-    test.deepEqual(_packageAfter.babel.overrides[1].exclude, [])
+    test.deepEqual(targetCheckConfigurationAfter, sourceCheckConfiguration)
+    test.deepEqual(targetCompileConfigurationAfter.overrides[1].exclude, [])
 
-    _packageAfter.babel.overrides[1].exclude = Package.babel.overrides[1].exclude
-    test.deepEqual(_packageAfter.babel, Package.babel)
-    test.deepEqual(_packageAfter.eslintConfig, Package.eslintConfig)
+    sourceCompileConfiguration.overrides[1].exclude = []
+    test.deepEqual(targetCompileConfigurationAfter, sourceCompileConfiguration)
 
   } finally {
-    await FileSystem.writeJson(_path, _packageBefore, { 'encoding': 'utf-8', 'spaces': 2 })
+
+    await Promise.all([
+      FileSystem.remove(targetCheckPath),
+      FileSystem.remove(targetCompilePath)
+    ])
+
   }
 
 })
 
-Test('update-package package-1.json', async (test) => {
+Test('update-configuration configuration-1', async (test) => {
 
-  let _path = `${FolderPath}/resource/package-1.json`
-  let _packageBefore = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
+  let sourcePath = `${FolderPath}/../../../configuration`
+  let sourceCheckPath = `${sourcePath}/check.json`
+  let sourceCompilePath = `${sourcePath}/compile.json`
 
-  let process = new MablungMakefileProcess({ 'update-package': _path })
+  let targetPath = `${FolderPath}/resource/configuration-1`
+  let targetCheckPath = `${targetPath}/check.json`
+  let targetCompilePath = `${targetPath}/compile.json`
+
+  let [
+    sourceCheckConfiguration,
+    sourceCompileConfiguration,
+    targetCheckConfigurationBefore,
+    targetCompileConfigurationBefore
+  ] = await Promise.all([
+    FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
+    FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' }),
+    FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+    FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+  ])
+
+  let process = new MablungMakefileProcess({ 'update-configuration': targetPath })
 
   try {
 
     test.is(await process.whenExit(), 0)
 
-    let _packageAfter = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
+    let [
+      targetCheckConfigurationAfter,
+      targetCompileConfigurationAfter
+    ] = await Promise.all([
+      FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+    ])
 
-    test.deepEqual(_packageAfter.babel.overrides[1].exclude, _packageBefore.babel.overrides[1].exclude)
+    test.deepEqual(targetCheckConfigurationAfter, sourceCheckConfiguration)
+    test.deepEqual(targetCompileConfigurationAfter.overrides[1].exclude, targetCompileConfigurationBefore.overrides[1].exclude)
 
-    _packageAfter.babel.overrides[1].exclude = Package.babel.overrides[1].exclude
-    test.deepEqual(_packageAfter.babel, Package.babel)
-    test.deepEqual(_packageAfter.eslintConfig, Package.eslintConfig)
+    sourceCompileConfiguration.overrides[1].exclude = []
+    targetCompileConfigurationAfter.overrides[1].exclude = []
+    test.deepEqual(targetCompileConfigurationAfter, sourceCompileConfiguration)
 
   } finally {
-    await FileSystem.writeJson(_path, _packageBefore, { 'encoding': 'utf-8', 'spaces': 2 })
+
+    await Promise.all([
+      FileSystem.writeJson(targetCheckPath, targetCheckConfigurationBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
+      FileSystem.writeJson(targetCompilePath, targetCompileConfigurationBefore, { 'encoding': 'utf-8', 'spaces': 2 })
+    ])
+
   }
 
 })

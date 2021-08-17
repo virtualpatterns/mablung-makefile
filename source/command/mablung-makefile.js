@@ -3,16 +3,15 @@
 import '../header/library/source-map-support.js'
 
 import { createRequire as CreateRequire } from 'module'
-import Clone from 'clone'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
-import Is from '@pwn/is'
 import Path from 'path'
+import URL from 'url'
 
 import { Package } from '../library/package.js'
 
-import { UpdatePackageError } from './error/update-package-error.js'
-
+const FilePath = URL.fileURLToPath(import.meta.url)
+const FolderPath = Path.dirname(FilePath)
 const Process = process
 const Require = CreateRequire(import.meta.url)
 
@@ -54,45 +53,32 @@ Command
   })
 
 Command
-  .command('update-package')
-  .argument('[path]', 'Path to update', './package.json')
-  .description('Update the babel and eslintConfig keys of the package.json at the given path.')
+  .command('update-configuration')
+  .argument('[path]', 'Path to update', './configuration')
+  .description('Update the check.json and compile.json files at the given path.')
   .action(async (path) => {
 
     process.exitCode = 0
 
     try {
 
-      let _path = Require.resolve(Path.resolve(path))
-      let _package = await FileSystem.readJson(_path, { 'encoding': 'utf-8' })
+      let sourcePath = `${FolderPath}/../../configuration`
+      let targetPath = Path.resolve(path)
 
-      if (Is.not.equal(_package.name, Package.name)) {
+      let sourceCheckPath = Require.resolve(`${sourcePath}/check.json`)
+      let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
 
-        let sourceConfiguration = null
-        sourceConfiguration = Clone(Package.babel)
+      await FileSystem.writeJson(`${targetPath}/check.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
 
-        sourceConfiguration.overrides[1].exclude = []
+      let sourceCompilePath = Require.resolve(`${sourcePath}/compile.json`)
+      let sourceCompileConfiguration = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
 
-        let targetConfiguration = null
-        targetConfiguration = Clone(_package.babel || { 'overrides': [ {}, { 'exclude': [] } ] })
+      let targetCompilePath = `${targetPath}/compile.json`
+      let targetCompileConfiguration = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
 
-        let targetExclude = null
-        targetExclude = targetConfiguration.overrides[1].exclude
-        targetExclude = Is.array(targetExclude) ? targetExclude : [ targetExclude ]
+      sourceCompileConfiguration.overrides[1].exclude = targetCompileConfiguration.overrides[1].exclude
 
-        sourceConfiguration.overrides[1].exclude.push(...targetExclude)
-
-        _package.babel = sourceConfiguration
-
-        sourceConfiguration = Clone(Package.eslintConfig)
-
-        _package.eslintConfig = sourceConfiguration
-
-        await FileSystem.writeJson(_path, _package, { 'encoding': 'utf-8', 'spaces': 2 })
-
-      } else {
-        throw new UpdatePackageError(path)
-      }
+      await FileSystem.writeJson(targetCompilePath, sourceCompileConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
 
     /* c8 ignore next 4 */
     } catch (error) {
