@@ -242,7 +242,7 @@ Test('test (dry-run)', (test) => {
   let result = Shell.exec('make --dry-run release', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
-  test.is(result.code, 0)
+  test.is(result.code, 2)
   test.true(stdout.includes('A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0)'))
 
 })
@@ -258,7 +258,7 @@ Test('release (dry-run, dirty)', (test) => {
     let result = Shell.exec('make --dry-run release', { 'silent': true })
     let stdout = result.stdout.split('\n')
 
-    test.is(result.code, 0)
+    test.is(result.code, 2)
     test.true(stdout.includes(`Git working directory not clean ... ${name}`))
 
   } finally {
