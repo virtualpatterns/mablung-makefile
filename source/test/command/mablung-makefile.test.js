@@ -79,7 +79,7 @@ Test('update-configuration configuration-0', async (test) => {
 
 Test('update-configuration configuration-1', async (test) => {
 
-  let sourcePath = `${FolderPath}/../../../configuration`
+  let sourcePath = `${FolderPath}/../../..`
   let sourceCheckPath = `${sourcePath}/.eslintrc.json`
   let sourceCompilePath = `${sourcePath}/.babelrc.json`
 
