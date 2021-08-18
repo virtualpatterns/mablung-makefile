@@ -11,8 +11,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "configuration/check.json",
-    "configuration/compile.json",
+    ".babelrc.json",
+    ".eslintrc.json",
     "include",
     "release/command",
     "release/header",
