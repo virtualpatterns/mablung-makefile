@@ -17,7 +17,6 @@
     },
     {
       "exclude": [
-        "source/configuration",
         "source/header",
         "source/sandbox",
         "source/test",
