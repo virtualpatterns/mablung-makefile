@@ -1,4 +1,4 @@
-export function Configuration( /* option */ ) {
+module.exports = function({ path }) {
   
   return {
     'failFast': true,

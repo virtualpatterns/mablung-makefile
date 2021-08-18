@@ -74,7 +74,7 @@ update:: pre-update update-0
 pre-update:: ;
 
 update-0:
-	@npx npm-check-updates --configFilePath configuration --configFileName update.json
+	@npx npm-check-updates --configFileName .npm-check-updates-rc.json
 	@$(MAKE) update-1
 
 ifneq ($(filter package.json,$(dirty-item)),)
@@ -139,7 +139,7 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
-	@npx c8 --config configuration/cover.json ava --config test.cjs $(or $(parameter),$(p))
+	@npx c8 ava --config .avarc.cjs $(or $(parameter),$(p))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
@@ -149,7 +149,7 @@ pre-cover:: ;
 test:: pre-test build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
-	@npx ava --config test.cjs $(or $(parameter),$(p))
+	@npx ava --config .avarc.cjs $(or $(parameter),$(p))
 
 pre-test:: ;
 
