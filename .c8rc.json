@@ -1,7 +1,8 @@
 {
   "all": true,
   "exclude": [
-    "release/sandbox"
+    "release/sandbox",
+    ".avarc.js"
   ],
   "reporter": [
     "html"
