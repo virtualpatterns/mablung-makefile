@@ -5,10 +5,13 @@ import '../header/library/source-map-support.js'
 import { createRequire as CreateRequire } from 'module'
 import Command from 'commander'
 import FileSystem from 'fs-extra'
+import Is from '@pwn/is'
 import Path from 'path'
 import URL from 'url'
 
 import { Package } from '../library/package.js'
+
+import { UpdatePackageError } from './error/update-package-error.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
@@ -65,20 +68,26 @@ Command
       let sourcePath = Path.resolve(`${FolderPath}/../..`)
       let targetPath = Path.resolve(path)
 
-      let sourceCheckPath = Require.resolve(`${sourcePath}/.eslintrc.json`)
-      let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
+      if (Is.not.equal(targetPath, sourcePath)) {
 
-      await FileSystem.writeJson(`${targetPath}/.eslintrc.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+        let sourceCheckPath = Require.resolve(`${sourcePath}/.eslintrc.json`)
+        let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
 
-      let sourceCompilePath = Require.resolve(`${sourcePath}/.babelrc.json`)
-      let sourceCompileConfiguration = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
+        await FileSystem.writeJson(`${targetPath}/.eslintrc.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
 
-      let targetCompilePath = `${targetPath}/.babelrc.json`
-      let targetCompileConfiguration = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
+        let sourceCompilePath = Require.resolve(`${sourcePath}/.babelrc.json`)
+        let sourceCompileConfiguration = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
 
-      sourceCompileConfiguration.overrides[1].exclude = targetCompileConfiguration.overrides[1].exclude
+        let targetCompilePath = `${targetPath}/.babelrc.json`
+        let targetCompileConfiguration = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
 
-      await FileSystem.writeJson(targetCompilePath, sourceCompileConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+        sourceCompileConfiguration.overrides[1].exclude = targetCompileConfiguration.overrides[1].exclude
+
+        await FileSystem.writeJson(targetCompilePath, sourceCompileConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+
+      } else {
+        throw new UpdatePackageError(path)
+      }
 
     /* c8 ignore next 4 */
     } catch (error) {

@@ -25,7 +25,7 @@ Test('get-path', async (test) => {
 
 Test('update-configuration', async (test) => {
   let process = new MablungMakefileProcess({ 'update-configuration': true })
-  test.is(await process.whenExit(), 0)
+  test.is(await process.whenExit(), 1)
 })
 
 Test('update-configuration configuration-0', async (test) => {
