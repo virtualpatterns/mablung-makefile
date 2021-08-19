@@ -8,13 +8,9 @@ Test('(default)', async (test) => {
   let unused = await Check(Process.cwd(), {
     'ignoreMatches': [
       '@babel/cli',
-      // '@babel/core',
-      // // '@babel/eslint-parser',
       '@babel/preset-env',
       'babel-plugin-add-header-comment',
       'c8',
-      // 'eslint',
-      // // 'eslint-plugin-babel',
       'npm-check-updates',
       'shx'
     ],
@@ -23,6 +19,8 @@ Test('(default)', async (test) => {
       '**/*.js': [ Check.parser.es6, Check.parser.es7.default ]
     }
   })
+
+  // test.log(unused.using)
 
   test.deepEqual(unused.dependencies, [])
   test.deepEqual(unused.devDependencies, [])
