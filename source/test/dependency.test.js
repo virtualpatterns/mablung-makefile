@@ -8,13 +8,13 @@ Test('(default)', async (test) => {
   let unused = await Check(Process.cwd(), {
     'ignoreMatches': [
       '@babel/cli',
-      '@babel/core',
-      '@babel/eslint-parser',
+      // '@babel/core',
+      // // '@babel/eslint-parser',
       '@babel/preset-env',
       'babel-plugin-add-header-comment',
       'c8',
-      'eslint',
-      'eslint-plugin-babel',
+      // 'eslint',
+      // // 'eslint-plugin-babel',
       'npm-check-updates',
       'shx'
     ],

@@ -31,12 +31,12 @@ Test('update-configuration', async (test) => {
 Test('update-configuration configuration-0', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
-  let sourceCheckPath = `${sourcePath}/check.json`
-  let sourceCompilePath = `${sourcePath}/compile.json`
+  let sourceCheckPath = `${sourcePath}/.eslintrc.json`
+  let sourceCompilePath = `${sourcePath}/babel.config.json`
 
   let targetPath = `${FolderPath}/resource/configuration-0`
-  let targetCheckPath = `${targetPath}/check.json`
-  let targetCompilePath = `${targetPath}/compile.json`
+  let targetCheckPath = `${targetPath}/.eslintrc.json`
+  let targetCompilePath = `${targetPath}/babel.config.json`
 
   let [
     sourceCheckConfiguration,
@@ -80,12 +80,12 @@ Test('update-configuration configuration-0', async (test) => {
 Test('update-configuration configuration-1', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
-  let sourceCheckPath = `${sourcePath}/check.json`
-  let sourceCompilePath = `${sourcePath}/compile.json`
+  let sourceCheckPath = `${sourcePath}/.eslintrc.json`
+  let sourceCompilePath = `${sourcePath}/babel.config.json`
 
   let targetPath = `${FolderPath}/resource/configuration-1`
-  let targetCheckPath = `${targetPath}/check.json`
-  let targetCompilePath = `${targetPath}/compile.json`
+  let targetCheckPath = `${targetPath}/.eslintrc.json`
+  let targetCompilePath = `${targetPath}/babel.config.json`
 
   let [
     sourceCheckConfiguration,
