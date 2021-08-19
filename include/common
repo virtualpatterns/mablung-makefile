@@ -139,7 +139,7 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
-	@npx c8 ava --config test.cjs $(or $(parameter),$(p))
+	@npx c8 --config cover.json ava --config test.cjs $(or $(parameter),$(p))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
