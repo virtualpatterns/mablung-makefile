@@ -22,12 +22,12 @@ Test('MAKEFILE_PATH', (test) => {
   ])
 })
 
-Test('.babelrc.json', async (test) => {
-  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../.babelrc.json`)))
+Test('compile.json', async (test) => {
+  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../compile.json`)))
 })
 
-Test('.eslintrc.json', async (test) => {
-  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../.eslintrc.json`)))
+Test('check.json', async (test) => {
+  test.false(await FileSystem.pathExists(Path.resolve(`${FolderPath}/../check.json`)))
 })
 
 Test('sample.babelrc.json', async (test) => {

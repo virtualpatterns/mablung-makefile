@@ -134,6 +134,20 @@ release/%.cjs: source/%.cjs
 	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
+# release/%.cjs: release/%.cjs.check release/%.cjs.compile;
+
+# release/%.cjs.check: source/%.cjs
+# 	@echo check ..... $< $(eslint-parameter)
+# 	@npx eslint $< $(eslint-parameter)
+# 	@touch $@
+
+# release/%.cjs.compile: source/%.cjs
+# 	$(eval export SOURCE_PATH := $<)
+# 	$(eval export RELEASE_PATH := $(patsubst %.compile,%,$@)
+# 	@echo compile ... $(patsubst %.compile,%,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+# 	@npx babel $< --out-file $(patsubst %.compile,%,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+# 	@touch $@
+
 release/%.js: source/%.js
 	$(eval export SOURCE_PATH := $<)
 	$(eval export RELEASE_PATH := $@)

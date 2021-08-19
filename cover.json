@@ -2,7 +2,7 @@
   "all": true,
   "exclude": [
     "release/sandbox",
-    ".avarc.cjs"
+    "test.cjs"
   ],
   "reporter": [
     "html"

@@ -58,7 +58,7 @@ Command
 Command
   .command('update-configuration')
   .argument('[path]', 'Path to update', '.')
-  .description('Update the .babelrc.json and .eslintrc.json files at the given path.')
+  .description('Update the compile.json and check.json files at the given path.')
   .action(async (path) => {
 
     process.exitCode = 0
@@ -70,15 +70,15 @@ Command
 
       if (Is.not.equal(targetPath, sourcePath)) {
 
-        let sourceCheckPath = Require.resolve(`${sourcePath}/.eslintrc.json`)
+        let sourceCheckPath = Require.resolve(`${sourcePath}/check.json`)
         let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
 
-        await FileSystem.writeJson(`${targetPath}/.eslintrc.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+        await FileSystem.writeJson(`${targetPath}/check.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
 
-        let sourceCompilePath = Require.resolve(`${sourcePath}/.babelrc.json`)
+        let sourceCompilePath = Require.resolve(`${sourcePath}/compile.json`)
         let sourceCompileConfiguration = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
 
-        let targetCompilePath = `${targetPath}/.babelrc.json`
+        let targetCompilePath = `${targetPath}/compile.json`
         let targetCompileConfiguration = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
 
         sourceCompileConfiguration.overrides[1].exclude = targetCompileConfiguration.overrides[1].exclude
