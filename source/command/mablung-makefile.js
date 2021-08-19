@@ -58,7 +58,7 @@ Command
 Command
   .command('update-configuration')
   .argument('[path]', 'Path to update', '.')
-  .description('Update the compile.json and check.json files at the given path.')
+  .description('Update the check.json and compile.json files at the given path.')
   .action(async (path) => {
 
     process.exitCode = 0
