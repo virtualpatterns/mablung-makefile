@@ -156,9 +156,29 @@ release/%.js: source/%.js
 	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
+# release/%.js: release/%.js.check release/%.js.compile;
+
+# release/%.js.check: source/%.js
+# 	@echo check ..... $< $(eslint-parameter)
+# 	@npx eslint $< $(eslint-parameter)
+# 	@npx shx touch $@
+
+# release/%.js.compile: source/%.js
+# 	$(eval export SOURCE_PATH := $<)
+# 	$(eval export RELEASE_PATH := $(patsubst %.compile,%,$@))
+# 	@echo compile ... $(patsubst %.compile,%,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+# 	@npx babel $< --out-file $(patsubst %.compile,%,$@) --source-maps $(or $(source-map),true) $(babel-parameter)
+# 	@npx shx touch $@
+
 release/%: source/%
 	@echo copy ...... $@
 	@npx shx cp -R $< $(call trim-folder-path,$@)
+
+# release/%: release/%.copy;
+
+# release/%.copy: source/%
+# 	@echo copy ...... $(patsubst %.copy,%,$@)
+# 	@npx shx cp -R $< $(call trim-folder-path,$(patsubst %.copy,%,$@))
 
 copy::
 	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-folder)))
