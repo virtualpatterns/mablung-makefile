@@ -74,8 +74,8 @@ Test('resource/copy/index.json', async (test) => {
   test.true((await FileSystem.readJson(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
-Test('resource/empty', async (test) => {
-  test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`))
+(FileSystem.pathExistsSync(`${FolderPath}/../../source/test/resource/empty`) ? Test : Test.failing)('resource/empty', async (test) => {
+  test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`), `git does not recognize empty directories, create '${Path.relative('', Path.resolve(`${FolderPath}/../../source/test/resource/empty`))}' manually`)
 })
 
 Test('resource/ignore', async (test) => {
