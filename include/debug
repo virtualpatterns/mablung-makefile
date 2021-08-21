@@ -4,6 +4,7 @@ ifndef current-folder
 .PHONY: debug pre-debug
 
 debug:: pre-debug
+	$(info - debug ------------------------------------------------------------------------)
 	$(info )
 	$(info .FEATURES ........ $(.FEATURES))
 	$(info MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST))))

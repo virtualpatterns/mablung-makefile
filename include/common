@@ -24,6 +24,7 @@ ifneq ($(dirty-item),)
 ifneq ($(or $(message),$(m)),)
 
 commit:: pre-commit $(addsuffix .add,$(dirty-item))
+	$(info - commit -----------------------------------------------------------------------)
 	$(if $(verbose),$(info commit .... $(dirty-item)))
 	@git commit --message="$(or $(message),$(m))"
 
@@ -54,6 +55,7 @@ endif
 # --------------------
 
 install:: pre-install
+	$(info - install ----------------------------------------------------------------------)
 	@npm install
 
 pre-install:: ;
@@ -69,6 +71,7 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
+	$(info - update -----------------------------------------------------------------------)
 	@npx shx true
 
 pre-update:: ;
@@ -94,6 +97,7 @@ endif
 # --------------------
 
 version:: pre-version
+	$(info - version ----------------------------------------------------------------------)
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
@@ -106,6 +110,7 @@ pre-version:: ;
 # --------------------
 
 clean:: pre-clean
+	$(info - clean ------------------------------------------------------------------------)
 	@npx shx rm -Rf coverage process release
 
 pre-clean:: ;
@@ -118,6 +123,7 @@ ifneq ($(or $(parameter),$(p)),)
 
 # run:: node-parameter = --no-warnings --unhandled-rejections=strict
 run:: pre-run build
+	$(info - run --------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@node $(node-parameter) $(or $(parameter),$(p))
 
@@ -137,6 +143,7 @@ endif
 
 cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
+	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(parameter),$(p))
@@ -147,6 +154,7 @@ cover:: pre-cover build
 pre-cover:: ;
 
 test:: pre-test build
+	$(info - test -------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
 	@npx ava $(or $(parameter),$(p))
@@ -162,6 +170,7 @@ ifeq ($(dirty-item),)
 ifneq ($(or $(version),$(v)),)
 
 release:: pre-release
+	$(info - release ----------------------------------------------------------------------)
 	@npm version $(or $(version),$(v))
 	@$(MAKE) clean test source-map=false
 	@npm publish --access public
@@ -176,6 +185,7 @@ release::
 endif
 
 pre-release:: pre-pre-release update
+	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
 	@git push origin master
