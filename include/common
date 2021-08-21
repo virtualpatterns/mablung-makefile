@@ -71,12 +71,12 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
-	$(info - update -----------------------------------------------------------------------)
 	@npx shx true
 
 pre-update:: ;
 
 update-0:
+	$(info - update -----------------------------------------------------------------------)
 	@npx npm-check-updates
 	@$(MAKE) update-1
 
