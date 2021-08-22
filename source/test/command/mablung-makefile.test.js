@@ -52,6 +52,14 @@ Test('update-configuration configuration-0', async (test) => {
 
     test.is(await process.whenExit(), 0)
 
+    test.deepEqual(await Promise.all([
+      FileSystem.pathExists(targetCheckPath),
+      FileSystem.pathExists(targetCompilePath)
+    ]), [
+      true,
+      true
+    ])
+    
     let [
       targetCheckConfigurationAfter,
       targetCompileConfigurationAfter

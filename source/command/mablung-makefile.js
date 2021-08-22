@@ -70,6 +70,8 @@ Command
 
       if (Is.not.equal(targetPath, sourcePath)) {
 
+        await FileSystem.ensureDir(targetPath)
+
         let sourceCheckPath = Require.resolve(`${sourcePath}/.eslintrc.json`)
         let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
 
