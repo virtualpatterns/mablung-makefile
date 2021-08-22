@@ -32,7 +32,7 @@ pre-commit:: ;
 
 %.add:
 	$(if $(verbose),$(info add ....... $(patsubst %.add,%,$@)))
-	git add $(patsubst %.add,%,$@)
+	@git add $(patsubst %.add,%,$@)
 
 else
 
