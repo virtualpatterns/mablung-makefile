@@ -20,6 +20,7 @@ ifndef current-folder
 .PHONY: build pre-build
 
 build:: pre-build
+	$(info - build ------------------------------------------------------------------------)
 	$(if $(verbose),@echo create .... source/header)
 	@npx shx mkdir -p release/header
 	$(if $(verbose),@echo build ..... source/header)
@@ -29,8 +30,7 @@ build:: pre-build
 	$(if $(verbose),@echo build ..... source)
 	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder="$(strip $(exclude-folder) source/header)"
 
-pre-build::
-	$(info - build ------------------------------------------------------------------------)
+pre-build:: ;
 
 else
 
