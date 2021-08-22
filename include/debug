@@ -4,14 +4,14 @@ ifndef current-folder
 .PHONY: debug pre-debug
 
 debug:: pre-debug
-	$(info - debug ------------------------------------------------------------------------)
 	$(info )
 	$(info .FEATURES ........ $(.FEATURES))
 	$(info MAKEFILE_LIST .... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST))))
 	$(info )
 	@$(MAKE) debug current-folder=source
 
-pre-debug:: ;
+pre-debug::
+	$(info - debug ------------------------------------------------------------------------)
 
 else
 

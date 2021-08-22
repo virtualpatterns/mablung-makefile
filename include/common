@@ -55,16 +55,17 @@ endif
 # --------------------
 
 install:: pre-install
-	$(info - install ----------------------------------------------------------------------)
 	@npm install
 
-pre-install:: ;
+pre-install::
+	$(info - install ----------------------------------------------------------------------)
 
 re-install:: pre-re-install
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
-pre-re-install:: ;
+pre-re-install::
+	$(info - pre-install ------------------------------------------------------------------)
 
 # --------------------
 .PHONY: update pre-update update-0 update-1
@@ -73,10 +74,10 @@ pre-re-install:: ;
 update:: pre-update update-0
 	@npx shx true
 
-pre-update:: ;
+pre-update::
+	$(info - update -----------------------------------------------------------------------)
 
 update-0:
-	$(info - update -----------------------------------------------------------------------)
 	@npx npm-check-updates
 	@$(MAKE) update-1
 
@@ -97,23 +98,23 @@ endif
 # --------------------
 
 version:: pre-version
-	$(info - version ----------------------------------------------------------------------)
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
 		@$(MAKE) run parameter="release/command/mablung-makefile.js get-version")
 
-pre-version:: ;
+pre-version::
+	$(info - version ----------------------------------------------------------------------)
 
 # --------------------
 .PHONY: clean pre-clean
 # --------------------
 
 clean:: pre-clean
-	$(info - clean ------------------------------------------------------------------------)
 	@npx shx rm -Rf coverage process release
 
-pre-clean:: ;
+pre-clean::
+	$(info - clean ------------------------------------------------------------------------)
 
 # --------------------
 .PHONY: run pre-run
@@ -123,11 +124,11 @@ ifneq ($(or $(parameter),$(p)),)
 
 # run:: node-parameter = --no-warnings --unhandled-rejections=strict
 run:: pre-run build
-	$(info - run --------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@node $(node-parameter) $(or $(parameter),$(p))
 
-pre-run:: ;
+pre-run::
+	$(info - run --------------------------------------------------------------------------)
 
 else
 
@@ -143,7 +144,6 @@ endif
 
 cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
-	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage process
 	@npx c8 ava $(or $(parameter),$(p))
@@ -151,15 +151,16 @@ cover:: pre-cover build
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
 
-pre-cover:: ;
+pre-cover::
+	$(info - cover ------------------------------------------------------------------------)
 
 test:: pre-test build
-	$(info - test -------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf process
 	@npx ava $(or $(parameter),$(p))
 
-pre-test:: ;
+pre-test::
+	$(info - test -------------------------------------------------------------------------)
 
 # --------------------
 .PHONY: release pre-release pre-pre-release
@@ -185,12 +186,12 @@ release::
 endif
 
 pre-release:: pre-pre-release update
-	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
 	@git push origin master
 
-pre-pre-release:: ;
+pre-pre-release::
+	$(info - pre-release ------------------------------------------------------------------)
 
 else
 
