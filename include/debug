@@ -24,9 +24,9 @@ pre-debug:: ;
 
 debug-0:
 	$(info current-folder ... $(current-folder))
-	$(info make-folder ...... $(patsubst $(current-folder)/%,%,$(make-folder)))
-	$(info build-folder ..... $(patsubst $(current-folder)/%,%,$(build-folder)))
-	$(info build-item ....... $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item))))
+	$(info make-folder ...... $(sort $(patsubst $(current-folder)/%,%,$(make-folder))))
+	$(info build-folder ..... $(sort $(patsubst $(current-folder)/%,%,$(build-folder))))
+	$(info build-item ....... $(sort $(patsubst $(current-folder)/%,%,$(patsubst release/%,source/%,$(build-item)))))
 	$(info )
 
 debug-1: $(addsuffix .debug,$(build-folder));
