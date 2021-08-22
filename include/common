@@ -25,7 +25,7 @@ ifneq ($(or $(message),$(m)),)
 
 commit:: pre-commit $(addsuffix .add,$(dirty-item))
 	$(info - commit -----------------------------------------------------------------------)
-	$(if $(verbose),$(info commit .... $(dirty-item)))
+	$(if $(verbose),$(info commit .... $(or $(message),$(m))))
 	@git commit --message="$(or $(message),$(m))"
 
 pre-commit:: ;

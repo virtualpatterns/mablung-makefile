@@ -15,9 +15,9 @@ Test('(default)', async (test) => {
       'shx'
     ],
     'parsers': {
+      '**/*.js': [ Check.parser.es7.default ]
       // '**/*.cjs': [ Check.parser.es6, Check.parser.es7.default ],
       // '**/*.js': [ Check.parser.es6, Check.parser.es7.default ]
-      '**/*.js': [Check.parser.es6]
     }
   })
 
