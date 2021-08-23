@@ -7,5 +7,6 @@
   "reporter": [
     "html"
   ],
-  "src": "release"
+  "src": "release",
+  "tempDirectory": "coverage/data"
 }

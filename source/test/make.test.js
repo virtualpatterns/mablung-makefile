@@ -75,15 +75,15 @@ Test('commit (dry-run, dirty)', (test) => {
 
 })
 
-// Test('commit (dry-run, non-dirty)', (test) => {
+Test('commit (dry-run, non-dirty)', (test) => {
 
-//   let result = Shell.exec('make --dry-run commit', { 'silent': true })
-//   let stdout = result.stdout.split('\n')
+  let result = Shell.exec('make --dry-run commit', { 'silent': true })
+  let stdout = result.stdout.split('\n')
 
-//   test.is(result.code, 0)
-//   test.true(stdout.includes('Git working directory clean.'))
+  test.is(result.code, 0)
+  test.true(stdout.includes('Git working directory clean.'))
 
-// })
+})
 
 Test('update (dry-run)', (test) => {
 
