@@ -170,7 +170,7 @@ Test('cover (dry-run)', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
-  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+  test.true(stdout.includes('npx shx cp -R coverage ../Shared/mablung-makefile'))
 
 })
 
@@ -187,7 +187,7 @@ Test('cover (dry-run)', (test) => {
     test.is(result.code, 0)
 
     test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
-    test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
+    test.true(stdout.includes('npx shx cp -R coverage ../Shared/mablung-makefile'))
 
   })
 
