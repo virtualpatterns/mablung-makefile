@@ -1,6 +1,5 @@
 .DS_Store
 .archive/
-coverage/
 node_modules/
 process/
 release/

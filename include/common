@@ -150,7 +150,7 @@ cover:: pre-cover build
 	@npx c8 ava $(or $(parameter),$(p))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-	@npx shx mv coverage ../Shared/$(project-name)
+	@npx shx cp -R coverage ../Shared/$(project-name)
 
 pre-cover:: ;
 
@@ -189,6 +189,7 @@ pre-release:: pre-pre-release update
 	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+	@$(MAKE) commit message=coverage
 	@git push origin master
 
 pre-pre-release:: ;
