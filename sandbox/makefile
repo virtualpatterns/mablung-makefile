@@ -1,3 +1,16 @@
+
+dirty-item = $(strip $\
+							$(filter $\
+								$(include-folder),$\
+								$(patsubst $\
+									%/,$\
+									%,$\
+									$(shell git status --porcelain | awk '{print $$2}'))))
+
+$(info --------------------)
+$(info dirty-item = $(dirty-item))
+$(info --------------------)
+
 # a/b/c:
 # 	@echo a/b/c
 # a/b/c:
@@ -140,6 +153,8 @@
 
 # do-it:: do-it-0
 # 	@echo $@
+
+$(info $(wildcard coverage))
 
 do-it:: pre-do-it
 	@echo $@
