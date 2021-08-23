@@ -5,7 +5,8 @@
     "ava.config.cjs"
   ],
   "reporter": [
-    "text"
+    "html",
+    "text-summary"
   ],
   "src": "release",
   "tempDirectory": "coverage/data"
