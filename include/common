@@ -146,21 +146,22 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf coverage process
+	@npx shx rm -Rf process
 	@npx c8 ava $(or $(parameter),$(p))
+	@npx shx rm -Rf coverage process/coverage/data
+	@npx shx mv process/coverage .
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-	@npx shx mv coverage ../Shared/$(project-name)
+	@npx shx cp -R coverage ../Shared/$(project-name)
 
 # cover:: pre-cover build
 # 	$(info - cover ------------------------------------------------------------------------)
 # 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-# 	@npx shx rm -Rf .coverage .coverage-data process
+# 	@npx shx rm -Rf process
 # 	@npx c8 ava $(or $(parameter),$(p))
-# 	@npx shx rm -Rf coverage
-# 	@npx shx mv .coverage coverage
 # 	@npx shx mkdir -p ../Shared/$(project-name)
 # 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
+# 	@npx shx mv coverage ../Shared/$(project-name)
 # 	@npx shx cp -R coverage ../Shared/$(project-name)
 
 pre-cover:: ;
@@ -200,6 +201,7 @@ pre-release:: pre-pre-release update
 	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
+	@$(MAKE) commit message=coverage
 	@git push origin master
 
 pre-pre-release:: ;
