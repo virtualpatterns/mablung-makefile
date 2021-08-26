@@ -3,12 +3,14 @@
 # include-dirty-item ... filter ....... blank = include everything
 
 dirty-item = $(strip $\
-							$(filter $\
-								$(or $(include-dirty-item),%),$\
-								$(patsubst $\
-									%/,$\
-									%,$\
-									$(shell git status --porcelain | awk '{print $$2}'))))
+							$(filter-out $\
+								$(exclude-dirty-item),$\
+								$(filter $\
+									$(or $(include-dirty-item),%),$\
+									$(patsubst $\
+										%/,$\
+										%,$\
+										$(shell git status --porcelain | awk '{print $$2}')))))
 
 $(info --------------------)
 $(info dirty-item = $(dirty-item))

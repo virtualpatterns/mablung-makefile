@@ -9,10 +9,7 @@ ifndef current-build-folder
 # include-dirty-item ... filter ....... blank = include everything
 
 dirty-item = $(strip $\
-							$(patsubst $\
-								%/,$\
-								%,$\
-								$(shell git status --porcelain | awk '{print $$2}')))
+							$(shell git status --porcelain | awk '{print $$2}'))
 
 # $(info --------------------)
 # $(info dirty-item = $(dirty-item))
@@ -22,19 +19,20 @@ dirty-item = $(strip $\
 .PHONY: commit pre-commit
 # --------------------
 
-ifneq ($(dirty-item),)
+commit-item = $(filter $\
+								$(or $(include-commit-item),%),$\
+								$(dirty-item))
+
+ifneq ($(commit-item),)
 
 ifneq ($(or $(message),$(m)),)
 
-commit:: pre-commit $(addsuffix .add,$(dirty-item))
-	$(if $(verbose),$(info commit .... $(or $(message),$(m))))
+commit:: pre-commit $(addsuffix .add,$(commit-item))
+	$(info commit .... $(or $(message),$(m)))
 	@git commit --message="$(or $(message),$(m))"
 
-pre-commit::
-	$(info - commit -----------------------------------------------------------------------)
-
 %.add:
-	$(if $(verbose),$(info add ....... $(patsubst %.add,%,$@)))
+	$(info add ....... $(patsubst %.add,%,$@))
 	@git add $(patsubst %.add,%,$@)
 
 else
@@ -45,11 +43,21 @@ commit::
 
 endif
 
+pre-commit::
+	$(info - commit -----------------------------------------------------------------------)
+	$(info The following items will be committed ... $(commit-item))
+	$(info --------------------------------------------------------------------------------)
+	@echo -n
+
 else
 
 commit::
 	$(info Git working directory clean.)
-	@npx shx true
+	@echo -n
+
+pre-commit::
+	$(info Git working directory clean.)
+	@echo -n
 
 endif
 
@@ -75,7 +83,7 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
-	@npx shx true
+	@echo -n
 
 pre-update:: ;
 
@@ -92,7 +100,7 @@ update-1:
 else
 
 update-1:
-	@npx shx true
+	@echo -n
 
 endif
 
