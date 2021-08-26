@@ -112,7 +112,7 @@ pre-version:: ;
 
 clean:: pre-clean
 	$(info - clean ------------------------------------------------------------------------)
-	@npx shx rm -Rf coverage process release
+	@npx shx rm -Rf process release
 
 pre-clean:: ;
 
