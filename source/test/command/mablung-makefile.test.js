@@ -8,7 +8,7 @@ import { MablungMakefileProcess } from './mablung-makefile-process.js'
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
 
-Test('(default)', async (test) => {
+Test('default', async (test) => {
   let process = new MablungMakefileProcess()
   test.is(await process.whenExit(), 1)
 })

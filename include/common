@@ -78,7 +78,7 @@ pre-update:: ;
 
 update-0:
 	$(info - update -----------------------------------------------------------------------)
-	@npx npm-check-updates
+	@npx ncu
 	@$(MAKE) update-1
 
 ifneq ($(filter package.json,$(dirty-item)),)
@@ -146,8 +146,10 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf coverage process
+	@npx shx rm -Rf .coverage .coverage-data process
 	@npx c8 ava $(or $(parameter),$(p))
+	@npx shx rm -Rf coverage
+	@npx shx mv .coverage coverage
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx cp -R coverage ../Shared/$(project-name)
@@ -189,7 +191,6 @@ pre-release:: pre-pre-release update
 	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
-	@$(MAKE) commit message=coverage
 	@git push origin master
 
 pre-pre-release:: ;

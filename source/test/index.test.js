@@ -16,7 +16,7 @@ Test('index.js', async (test) => {
 })
 
 Test('MAKEFILE_PATH', (test) => {
-  test.deepEqual(Process.env['MAKEFILE_PATH'].split(' '), [
+  test.deepEqual(Process.env.MAKEFILE_PATH.split(' '), [
     Require.resolve('../../makefile'),
     Require.resolve('../../include/common'),
     Require.resolve('../../include/build'),

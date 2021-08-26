@@ -7,7 +7,7 @@ import { Package } from '../library/package.js'
 const Process = process
 const Test = BaseTest.serial
 
-Test('(default)', (test) => {
+Test('default', (test) => {
 
   let result = Shell.exec('make', { 'silent': true })
   let stdout = result.stdout.split('\n')
