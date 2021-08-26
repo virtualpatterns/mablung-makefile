@@ -309,7 +309,7 @@ Test('debug (dry-run)', (test) => {
 
   let message = null
   test.true(stdout.includes(message = 'MAKEFILE_LIST .......... makefile include/common include/build include/debug'), `The output does not contain '${message}'.`)
-  test.true(stdout.includes(message = 'build-item  ............. dependency.test.js index.test.js make.test.js'), `The output does not contain '${message}'.`)
+  test.true(stdout.includes(message = 'build-item ............. dependency.test.js index.test.js make.test.js'), `The output does not contain '${message}'.`)
 
 })
 
