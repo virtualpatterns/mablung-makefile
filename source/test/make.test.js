@@ -91,7 +91,7 @@ Test('update (dry-run)', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
-  test.true(stdout.includes('npx npm-check-updates'))
+  test.true(stdout.includes('npx ncu'))
 
 })
 
