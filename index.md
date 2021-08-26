@@ -1,1 +1,1 @@
-[coverage](https://github.com/virtualpatterns/mablung-makefile/coverage/index.html)
+[coverage](https://github.com/virtualpatterns/mablung-makefile/tree/master/coverage/index.html)
