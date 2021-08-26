@@ -15,7 +15,7 @@ trim-folder-path = $(patsubst $\
 										$(dir $\
 											$(1)))
 
-ifndef current-folder
+ifndef current-build-folder
 
 .PHONY: build pre-build
 
@@ -24,11 +24,11 @@ build:: pre-build
 	$(if $(verbose),@echo create .... source/header)
 	@npx shx mkdir -p release/header
 	$(if $(verbose),@echo build ..... source/header)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source/header exclude-folder="$(strip $(exclude-folder))"
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-build-folder=source/header exclude-build-folder="$(strip $(exclude-build-folder))"
 	$(if $(verbose),@echo create .... source)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-folder=source exclude-folder="$(strip $(exclude-folder) source/header)"
+	@$(MAKE) --jobs=$(or $(job-count),4) build current-build-folder=source exclude-build-folder="$(strip $(exclude-build-folder) source/header)"
 
 pre-build:: ;
 
@@ -44,8 +44,8 @@ make-folder = $(call $\
 									$(foreach $\
 										item,$\
 										$(filter-out $\
-											$(exclude-folder),$\
-											$(call get-content,$(current-folder))),$\
+											$(exclude-build-folder),$\
+											$(call get-content,$(current-build-folder))),$\
 										$(if $\
 											$(call get-content,$(item)),$\
 											$(if $\
@@ -62,8 +62,8 @@ build-folder = $(call $\
 									$(foreach $\
 										item,$\
 										$(filter-out $\
-											$(exclude-folder),$\
-											$(call get-content,$(current-folder))),$\
+											$(exclude-build-folder),$\
+											$(call get-content,$(current-build-folder))),$\
 										$(if $\
 											$(call get-content,$(item)),$\
 											$(if $\
@@ -79,7 +79,7 @@ build-item = $(call $\
 							$(strip $\
 								$(foreach $\
 									item,$\
-									$(call get-content,$(current-folder)),$\
+									$(call get-content,$(current-build-folder)),$\
 									$(patsubst $\
 										source/%,$\
 										release/%,$\
@@ -90,11 +90,11 @@ build-item = $(call $\
 .PHONY: build pre-build copy ignore
 
 # $(info --------------------)
-# $(info current-folder ... $(current-folder))
-# $(info exclude-folder ... $(exclude-folder))
-# $(info make-folder ...... $(make-folder))
-# $(info build-folder ..... $(build-folder))
-# $(info build-item ....... $(build-item))
+# $(info current-build-folder ... $(current-build-folder))
+# $(info exclude-build-folder ... $(exclude-build-folder))
+# $(info make-folder ............ $(make-folder))
+# $(info build-folder ........... $(build-folder))
+# $(info build-item ............. $(build-item))
 # $(info --------------------)
 
 build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
@@ -104,11 +104,11 @@ pre-build:: ;
 
 source/%.make:
 	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
-	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-folder=$(patsubst %.make,%,$@)
+	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-build-folder=$(patsubst %.make,%,$@)
 
 source/%.build: release/%.create
 	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
-	@$(MAKE) build current-folder=$(patsubst %.build,%,$@) 
+	@$(MAKE) build current-build-folder=$(patsubst %.build,%,$@) 
 
 release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
@@ -182,13 +182,13 @@ release/%: source/%
 # 	@npx shx cp -R $< $(call trim-folder-path,$(patsubst %.copy,%,$@))
 
 copy::
-	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-folder)))
-	@npx shx cp -R $(current-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-folder)))
-	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-folder))/makefile)
-	@npx shx rm -f $(patsubst source/%,release/%,$(current-folder))/makefile
+	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
+	@npx shx cp -R $(current-build-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-build-folder)))
+	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
+	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 
 ignore::
-	$(if $(verbose),@echo ignore .... $(current-folder))
+	$(if $(verbose),@echo ignore .... $(current-build-folder))
 	@echo -n 
 
 endif

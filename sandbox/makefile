@@ -1,7 +1,10 @@
 
+# exclude-dirty-item ... filter-out ... blank = exclude nothing
+# include-dirty-item ... filter ....... blank = include everything
+
 dirty-item = $(strip $\
 							$(filter $\
-								$(include-folder),$\
+								$(or $(include-dirty-item),%),$\
 								$(patsubst $\
 									%/,$\
 									%,$\
@@ -154,23 +157,23 @@ $(info --------------------)
 # do-it:: do-it-0
 # 	@echo $@
 
-$(info $(wildcard coverage))
+# $(info $(wildcard coverage))
 
-do-it:: pre-do-it
-	@echo $@
-
-pre-do-it:
-	@echo $@
-
-# do-it:: pre-pre-do-it
-
-# pre-pre-do-it:
+# do-it:: pre-do-it
 # 	@echo $@
 
-do-it::
-	@echo $@ again
+# pre-do-it:
+# 	@echo $@
 
-pre-do-it: do-it-0
+# # do-it:: pre-pre-do-it
 
-do-it-0:
-	@echo $@
+# # pre-pre-do-it:
+# # 	@echo $@
+
+# do-it::
+# 	@echo $@ again
+
+# pre-do-it: do-it-0
+
+# do-it-0:
+# 	@echo $@

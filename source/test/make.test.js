@@ -285,9 +285,9 @@ Test('build (dry-run)', (test) => {
 
 })
 
-Test('build exclude-folder=... (dry-run)', (test) => {
+Test('build exclude-build-folder=... (dry-run)', (test) => {
 
-  let result = Shell.exec('make --dry-run build exclude-folder=source/test', { 'silent': true })
+  let result = Shell.exec('make --dry-run build exclude-build-folder=source/test', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
@@ -312,9 +312,9 @@ Test('debug (dry-run)', (test) => {
 })
 
 // ; (Process.env.version ? Test.skip : Test)
-Test('debug exclude-folder=... (dry-run)', (test) => {
+Test('debug exclude-build-folder=... (dry-run)', (test) => {
 
-  let result = Shell.exec('make --dry-run debug exclude-folder=source/test', { 'silent': true })
+  let result = Shell.exec('make --dry-run debug exclude-build-folder=source/test', { 'silent': true })
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)

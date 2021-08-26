@@ -3,7 +3,10 @@ ifneq ($(verbose),true)
 override verbose =
 endif
 
-ifndef current-folder
+ifndef current-build-folder
+
+# exclude-dirty-item ... filter-out ... blank = exclude nothing
+# include-dirty-item ... filter ....... blank = include everything
 
 dirty-item = $(strip $\
 							$(patsubst $\
