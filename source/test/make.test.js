@@ -300,7 +300,6 @@ Test('build exclude-build-folder=... (dry-run)', (test) => {
 
 })
 
-// ;(Process.env.version ? Test.skip : Test)
 Test('debug (dry-run)', (test) => {
 
   let result = Shell.exec('make --dry-run debug', { 'silent': true })
@@ -309,12 +308,11 @@ Test('debug (dry-run)', (test) => {
   test.is(result.code, 0)
 
   let message = null
-  test.true(stdout.includes(message = 'MAKEFILE_LIST .... makefile include/common include/build include/debug'), `The output does not contain '${message}'.`)
-  test.true(stdout.includes(message = 'build-item ....... dependency.test.js index.test.js make.test.js'), `The output does not contain '${message}'.`)
+  test.true(stdout.includes(message = 'MAKEFILE_LIST .......... makefile include/common include/build include/debug'), `The output does not contain '${message}'.`)
+  test.true(stdout.includes(message = 'build-item  ............. dependency.test.js index.test.js make.test.js'), `The output does not contain '${message}'.`)
 
 })
 
-// ; (Process.env.version ? Test.skip : Test)
 Test('debug exclude-build-folder=... (dry-run)', (test) => {
 
   let result = Shell.exec('make --dry-run debug exclude-build-folder=source/test', { 'silent': true })
@@ -322,7 +320,7 @@ Test('debug exclude-build-folder=... (dry-run)', (test) => {
 
   test.is(result.code, 0)
 
-  test.true(stdout.includes('MAKEFILE_LIST .... makefile include/common include/build include/debug'))
-  test.false(stdout.includes('build-item ....... dependency.test.js index.test.js make.test.js'))
+  test.true(stdout.includes('MAKEFILE_LIST .......... makefile include/common include/build include/debug'))
+  test.false(stdout.includes('build-item ............. dependency.test.js index.test.js make.test.js'))
 
 })
