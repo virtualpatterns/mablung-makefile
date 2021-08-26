@@ -4,11 +4,10 @@
     "release/sandbox",
     "ava.config.cjs"
   ],
-  "reportDir": ".coverage",
   "reporter": [
     "html",
     "text-summary"
   ],
   "src": "release",
-  "tempDirectory": ".coverage-data"
+  "tempDirectory": "coverage/data"
 }
