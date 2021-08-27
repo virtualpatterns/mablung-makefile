@@ -1,20 +1,13 @@
 import { createRequire as CreateRequire } from 'module'
 import { ForkedProcess } from '@virtualpatterns/mablung-worker'
-import FileSystem from 'fs-extra'
-import Path from 'path'
 
 const Require = CreateRequire(import.meta.url)
 
-class IndexProcess extends ForkedProcess {
+class MablungMakefileProcess extends ForkedProcess {
 
-  constructor(parameter = {}, option = {}) {
-    super(Require.resolve('../../header/index.js'), parameter, option)
-
-    let path = 'process/log/index-process.log'
-    FileSystem.ensureDirSync(Path.dirname(path))
-
-    this.writeTo(path)
-
+  constructor(logPath, parameter = {}, option = {}) {
+    super(Require.resolve('../../header/mablung-makefile.js'), parameter, option)
+    this.writeTo(logPath)
   }
 
   whenExit() {
@@ -38,4 +31,4 @@ class IndexProcess extends ForkedProcess {
   
 }
 
-export { IndexProcess }
+export { MablungMakefileProcess }

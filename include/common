@@ -5,9 +5,6 @@ endif
 
 ifndef current-build-folder
 
-# exclude-dirty-item ... filter-out ... blank = exclude nothing
-# include-dirty-item ... filter ....... blank = include everything
-
 dirty-item = $(strip $\
 							$(shell git status --porcelain | awk '{print $$2}'))
 
@@ -121,7 +118,7 @@ pre-version:: ;
 
 clean:: pre-clean
 	$(info - clean ------------------------------------------------------------------------)
-	@npx shx rm -Rf process release
+	@npx shx rm -Rf release
 
 pre-clean:: ;
 
@@ -155,30 +152,17 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf process
+	@npx shx rm -Rf data/coverage
 	@npx c8 ava $(or $(parameter),$(p))
-	@npx shx rm -Rf coverage process/coverage/data
-	@npx shx mv process/coverage .
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-	@npx shx cp -R coverage ../Shared/$(project-name)
-
-# cover:: pre-cover build
-# 	$(info - cover ------------------------------------------------------------------------)
-# 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-# 	@npx shx rm -Rf process
-# 	@npx c8 ava $(or $(parameter),$(p))
-# 	@npx shx mkdir -p ../Shared/$(project-name)
-# 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-# 	@npx shx mv coverage ../Shared/$(project-name)
-# 	@npx shx cp -R coverage ../Shared/$(project-name)
+	@npx shx mv coverage ../Shared/$(project-name)
 
 pre-cover:: ;
 
 test:: pre-test build
 	$(info - test -------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf process
 	@npx ava $(or $(parameter),$(p))
 
 pre-test:: ;

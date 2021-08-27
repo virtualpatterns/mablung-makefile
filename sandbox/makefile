@@ -1,21 +1,4 @@
 
-# exclude-dirty-item ... filter-out ... blank = exclude nothing
-# include-dirty-item ... filter ....... blank = include everything
-
-dirty-item = $(strip $\
-							$(filter-out $\
-								$(exclude-dirty-item),$\
-								$(filter $\
-									$(or $(include-dirty-item),%),$\
-									$(patsubst $\
-										%/,$\
-										%,$\
-										$(shell git status --porcelain | awk '{print $$2}')))))
-
-$(info --------------------)
-$(info dirty-item = $(dirty-item))
-$(info --------------------)
-
 # a/b/c:
 # 	@echo a/b/c
 # a/b/c:
@@ -179,3 +162,18 @@ $(info --------------------)
 
 # do-it-0:
 # 	@echo $@
+
+$(info MAKEFLAGS = $(MAKEFLAGS))
+$(info MAKECMDGOALS = $(MAKECMDGOALS))
+
+get-parameter = $(foreach $\
+									item,$\
+									$(MAKECMDGOALS),$\
+									$(if $\
+										$(findstring $(1),$(item)),$\
+										?))
+
+# % make -f sandbox/makefile clean test release/test/command/mablung-makefile* v14.16.1 master
+# MAKEFLAGS = 
+# MAKECMDGOALS = clean test release/test/command/mablung-makefile-process.js release/test/command/mablung-makefile-process.js.map release/test/command/mablung-makefile.test.js release/test/command/mablung-makefile.test.js.map
+# make: *** No rule to make target `clean'.  Stop.

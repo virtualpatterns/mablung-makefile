@@ -5,9 +5,7 @@ module.exports = function({ path }) {
     'files': [
       'release/**/test/**/*.test.*'
     ],
-    'require': [
-      './release/header/library/source-map-support.js'
-    ],
+    'require': [],
     'verbose': true
   }
 

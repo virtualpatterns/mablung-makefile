@@ -1,5 +1,5 @@
 .DS_Store
-archive/
-node_modules/
-process/
-release/
+/node_modules
+/archive
+/data
+/release

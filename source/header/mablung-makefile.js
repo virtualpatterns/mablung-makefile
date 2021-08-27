@@ -1,8 +1,9 @@
-import './library/source-map-support.js'
 
 import { Package } from './library/package.js'
 
-process.exitCode = 0
+const Process = process
+
+Process.exitCode = 0
 
 try {
   
@@ -13,10 +14,10 @@ try {
   console.log(`License:     ${Package.license}`)
   console.log(`Author:      ${Package.author}`)
   console.log(`Repository:  ${Package.repository.url}`)
-  console.log(`Source:      ${process.env.SOURCE_PATH}`)
+  console.log(`Source:      ${Process.env.SOURCE_PATH}`)
 
 /* c8 ignore next 4 */
 } catch (error) {
   console.error(error)
-  process.exitCode = 1
+  Process.exitCode = 1
 }

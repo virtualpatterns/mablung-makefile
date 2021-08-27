@@ -1,22 +1,19 @@
 {
   "author": "virtualpatterns.com <code@virtualpatterns.com> (http://www.virtualpatterns.com)",
-  "bin": {
-    "mablung-makefile": "./release/command/mablung-makefile.js"
-  },
+  "bin": "./release/command/mablung-makefile.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
-    "./header": "./release/header/index.js",
+    "./header": "./release/header/mablung-makefile.js",
     "./package": "./release/header/library/package.js",
-    "./source-map-support": "./release/header/library/source-map-support.js",
     "./package.json": "./package.json"
   },
   "files": [
-    "babel.config.json",
-    ".eslintrc.json",
     "include",
     "release/command",
     "release/header",
     "release/library",
+    ".eslintrc.json",
+    "babel.config.json",
     "makefile"
   ],
   "license": "GPL-3.0+",
