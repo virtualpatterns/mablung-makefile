@@ -133,7 +133,7 @@ Test('clean (dry-run)', (test) => {
   let stdout = result.stdout.split('\n')
 
   test.is(result.code, 0)
-  test.true(stdout.includes('npx shx rm -Rf process release'))
+  test.true(stdout.includes('npx shx rm -Rf release'))
 
 })
 
