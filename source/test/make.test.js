@@ -69,7 +69,7 @@ Test.serial('commit (dry-run, dirty)', (test) => {
 })
 
 Test.serial('commit (dry-run, non-dirty)', (test) => {
-  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
+  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 Test.serial('update (dry-run)', (test) => {
