@@ -9,8 +9,6 @@ const FolderPath = Path.dirname(FilePath)
 const Process = process
 const Require = CreateRequire(import.meta.url)
 
-const SourcePath = Path.resolve(`${FolderPath}/../../source/test/resource/empty`)
-
 Test('index.js', async (test) => {
   test.true((await import('../index.js')).OK)
 })
@@ -77,7 +75,7 @@ Test('resource/copy/index.json', async (test) => {
 })
 
 /* c8 ignore next 3 */
-;(FileSystem.pathExistsSync(SourcePath) ? Test : Test.skip)('resource/empty', async (test) => {
+;(FileSystem.pathExistsSync(`${FolderPath}/../../source/test/resource/empty`) ? Test : Test.skip)('resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`))
 })
 
