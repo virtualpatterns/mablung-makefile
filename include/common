@@ -85,12 +85,12 @@ pre-update:: ;
 update-0:
 	$(info - update -----------------------------------------------------------------------)
 	@npx ncu
-	@$(MAKE) update-1
+	@$(MAKE) --no-print-directory update-1
 
 ifneq ($(filter package.json,$(dirty-item)),)
 
 update-1:
-	@$(MAKE) re-install
+	@$(MAKE) --no-print-directory re-install
 
 else
 
@@ -108,7 +108,7 @@ version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
-		@$(MAKE) run parameter="release/command/mablung-makefile.js get-version")
+		@$(MAKE) --no-print-directory run parameter="release/command/mablung-makefile.js get-version")
 
 pre-version:: ;
 
@@ -177,7 +177,7 @@ ifneq ($(or $(version),$(v)),)
 release:: pre-release
 	$(info - release ----------------------------------------------------------------------)
 	@npm version $(or $(version),$(v))
-	@$(MAKE) clean test source-map=false
+	@$(MAKE) --no-print-directory clean test source-map=false
 	@npm publish --access public
 	@git push origin master
 
@@ -192,7 +192,7 @@ endif
 pre-release:: pre-pre-release update
 	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
-	@$(MAKE) clean cover source-map=true
+	@$(MAKE) --no-print-directory clean cover source-map=true
 	@git push origin master
 
 pre-pre-release:: ;

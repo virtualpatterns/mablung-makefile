@@ -9,7 +9,7 @@ debug:: pre-debug
 	$(info .FEATURES .............. $(.FEATURES))
 	$(info MAKEFILE_LIST .......... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST))))
 	$(info )
-	@$(MAKE) debug current-build-folder=source
+	@$(MAKE) --no-print-directory debug current-build-folder=source
 
 pre-debug::
 
@@ -33,6 +33,6 @@ debug-0:
 debug-1: $(addsuffix .debug,$(build-folder));
 
 source/%.debug:
-	@$(MAKE) debug current-build-folder=$(patsubst %.debug,%,$@) 
+	@$(MAKE) --no-print-directory debug current-build-folder=$(patsubst %.debug,%,$@) 
 
 endif

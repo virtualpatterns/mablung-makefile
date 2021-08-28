@@ -24,11 +24,11 @@ build:: pre-build
 	$(if $(verbose),@echo create .... source/header)
 	@npx shx mkdir -p release/header
 	$(if $(verbose),@echo build ..... source/header)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-build-folder=source/header exclude-build-folder="$(strip $(exclude-build-folder))"
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source/header
 	$(if $(verbose),@echo create .... source)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) --jobs=$(or $(job-count),4) build current-build-folder=source exclude-build-folder="$(strip $(exclude-build-folder) source/header)"
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source exclude-build-folder=source/header
 
 pre-build:: ;
 
@@ -104,11 +104,11 @@ pre-build:: ;
 
 source/%.make:
 	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
-	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile current-build-folder=$(patsubst %.make,%,$@)
+	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-build-folder=$(patsubst %.make,%,$@)
 
 source/%.build: release/%.create
 	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
-	@$(MAKE) build current-build-folder=$(patsubst %.build,%,$@) 
+	@$(MAKE) --no-print-directory build current-build-folder=$(patsubst %.build,%,$@) 
 
 release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
