@@ -38,7 +38,7 @@ Test.serial('null (dry-run)', (test) => {
   'm'
 ].forEach((variable) => {
 
-  Test(`commit ${variable}=... (dry-run, dirty)`, (test) => {
+  Test.serial(`commit ${variable}=... (dry-run, dirty)`, (test) => {
 
     let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
@@ -97,7 +97,7 @@ Test.serial('clean (dry-run)', (test) => {
   'p'
 ].forEach((variable) => {
 
-  Test(`run ${variable}="..."`, (test) => {
+  Test.serial(`run ${variable}="..."`, (test) => {
     test.is(Shell.exec(`make run ${variable}="release/command/mablung-makefile.js get-version" 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
@@ -116,7 +116,7 @@ Test.serial('cover (dry-run)', (test) => {
   'p'
 ].forEach((variable) => {
 
-  Test(`cover ${variable}=... (dry-run)`, (test) => {
+  Test.serial(`cover ${variable}=... (dry-run)`, (test) => {
     test.is(Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
@@ -131,7 +131,7 @@ Test.serial('test (dry-run)', (test) => {
   'p'
 ].forEach((variable) => {
 
-  Test(`test ${variable}=... (dry-run)`, (test) => {
+  Test.serial(`test ${variable}=... (dry-run)`, (test) => {
     test.is(Shell.exec(`make --dry-run test ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
@@ -142,7 +142,7 @@ Test.serial('test (dry-run)', (test) => {
   'v'
 ].forEach((variable) => {
 
-  Test(`release ${variable}=... (dry-run, non-dirty)`, (test) => {
+  Test.serial(`release ${variable}=... (dry-run, non-dirty)`, (test) => {
     test.is(Shell.exec(`make --dry-run release ${variable}=prerelease 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
