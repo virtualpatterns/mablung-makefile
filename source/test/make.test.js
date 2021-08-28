@@ -148,7 +148,7 @@ Test.serial('test (dry-run)', (test) => {
 
 })
 
-;(Process.env.version ? Test.serial.skip : Test.serisl)('release (dry-run, non-dirty)', (test) => {
+;(Process.env.version ? Test.serial.skip : Test.serial)('release (dry-run, non-dirty)', (test) => {
   test.is(Shell.exec(`make --dry-run release 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
