@@ -9,7 +9,7 @@ import URL from 'url'
 
 import { Package } from '../library/package.js'
 
-import { UpdatePackageError } from './error/update-package-error.js'
+import { UpdateConfigurationError } from './error/update-configuration-error.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
@@ -86,7 +86,7 @@ Command
         await FileSystem.writeJson(targetCompilePath, sourceCompileConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
 
       } else {
-        throw new UpdatePackageError(path)
+        throw new UpdateConfigurationError(path)
       }
 
     /* c8 ignore next 4 */
