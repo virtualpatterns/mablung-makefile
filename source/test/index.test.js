@@ -76,14 +76,9 @@ Test('resource/copy/index.json', async (test) => {
   test.true((await FileSystem.readJson(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
-;(FileSystem.pathExistsSync(SourcePath) ? Test : Test.failing)('resource/empty', async (test) => {
-
-  if (!(await FileSystem.pathExists(SourcePath))) {
-    test.log(`'${Path.relative('', SourcePath)}' does not exist!`)
-  }
-
+/* c8 ignore next 3 */
+;(FileSystem.pathExistsSync(SourcePath) ? Test : Test.skip)('resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`))
-
 })
 
 Test('resource/ignore', async (test) => {
