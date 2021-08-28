@@ -67,7 +67,7 @@ install:: pre-install
 pre-install:: ;
 
 re-install:: pre-re-install
-	$(info - pre-install ------------------------------------------------------------------)
+	$(info - re-install -------------------------------------------------------------------)
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
@@ -128,7 +128,6 @@ pre-clean:: ;
 
 ifneq ($(or $(parameter),$(p)),)
 
-# run:: node-parameter = --no-warnings --unhandled-rejections=strict
 run:: pre-run build
 	$(info - run --------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
@@ -152,7 +151,7 @@ cover:: project-name = $(notdir $(CURDIR))
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx shx rm -Rf data/coverage
+	@npx shx rm -Rf coverage data/coverage
 	@npx c8 ava $(or $(parameter),$(p))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
@@ -194,7 +193,6 @@ pre-release:: pre-pre-release update
 	$(info - pre-release ------------------------------------------------------------------)
 	@npm version prerelease
 	@$(MAKE) clean cover source-map=true
-	@$(MAKE) commit include-commit-item=coverage/% message=coverage
 	@git push origin master
 
 pre-pre-release:: ;

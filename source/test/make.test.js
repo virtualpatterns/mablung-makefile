@@ -1,30 +1,36 @@
 import { DateTime } from 'luxon'
+import FileSystem from 'fs-extra'
 import Shell from 'shelljs'
-import BaseTest from 'ava'
+import Path from 'path'
+import Test from 'ava'
+import URL from 'url'
 
-import { Package } from '../library/package.js'
-
+const FilePath = URL.fileURLToPath(import.meta.url)
+const FolderPath = Path.dirname(FilePath)
+const LogPath = Path.resolve(`${FolderPath}/../../data/make/make.log`)
 const Process = process
-const Test = BaseTest.serial
 
-Test('default', (test) => {
-
-  let result = Shell.exec('make', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes(`${Package.name}@${Package.version}`))
-
+Test.before(async () => {
+  await FileSystem.ensureDir(Path.dirname(LogPath))
+  await FileSystem.remove(LogPath)
 })
 
-Test('null', (test) => {
+Test.beforeEach((test) => {
+  Shell.exec(`echo "${test.title.replace(/^beforeEach hook for (.*)$/, 'Test.serial(\'$1\', () => { ... })')}" >> ${LogPath}`, { 'silent': true })
+})
+
+Test.serial('default', (test) => {
+  test.is(Shell.exec(`make 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+})
+
+Test.serial('null', (test) => {
   // an invalid target fails
-  test.is(Shell.exec('make null', { 'silent': true }).code, 2)
+  test.is(Shell.exec(`make null 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test('null (dry-run)', (test) => {
+Test.serial('null (dry-run)', (test) => {
   // an invalid target fails even when --dry-run
-  test.is(Shell.exec('make --dry-run null', { 'silent': true }).code, 2)
+  test.is(Shell.exec(`make --dry-run null 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
 ;[
@@ -39,14 +45,7 @@ Test('null (dry-run)', (test) => {
     Shell.touch(name)
 
     try {
-
-      let result = Shell.exec(`make --dry-run commit ${variable}=test`, { 'silent': true })
-      let stdout = result.stdout.split('\n')
-
-      test.is(result.code, 0)
-      test.true(stdout.includes(`git add ${name}`))
-      test.true(stdout.includes('git commit --message="test"'))
-
+      test.is(Shell.exec(`make --dry-run commit ${variable}=test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
     } finally {
       Shell.rm(name)
     }
@@ -55,86 +54,42 @@ Test('null (dry-run)', (test) => {
 
 })
 
-Test('commit (dry-run, dirty)', (test) => {
+Test.serial('commit (dry-run, dirty)', (test) => {
 
   let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
   Shell.touch(name)
 
   try {
-
-    let result = Shell.exec('make --dry-run commit', { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 2)
-    test.true(stdout.includes('A message must be specified (e.g. message="make tests")'))
-
+    test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
   } finally {
     Shell.rm(name)
   }
 
 })
 
-Test('commit (dry-run, non-dirty)', (test) => {
-
-  let result = Shell.exec('make --dry-run commit', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('Git working directory clean.'))
-
+Test.serial('commit (dry-run, non-dirty)', (test) => {
+  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test('update (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run update', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx ncu'))
-
+Test.serial('update (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run update 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test('version', (test) => {
-
-  let result = Shell.exec('make version', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes(`${Package.name}@${Package.version}`))
-
+Test.serial('version', (test) => {
+  test.is(Shell.exec(`make version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test('install (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run install', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npm install'))
-  
+Test.serial('install (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run install 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test('re-install (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run re-install', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  test.true(stdout.includes('rm -Rf node_modules package-lock.json'))
-  test.true(stdout.includes('npm install'))
-  
+Test.serial('re-install (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run re-install 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test('clean (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run clean', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx shx rm -Rf release'))
-
+Test.serial('clean (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run clean 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 ;[
@@ -143,35 +98,17 @@ Test('clean (dry-run)', (test) => {
 ].forEach((variable) => {
 
   Test(`run ${variable}="..."`, (test) => {
-
-    let result = Shell.exec(`make run ${variable}="release/command/mablung-makefile.js get-version"`, { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 0)
-    test.true(stdout.includes(`${Package.name}@${Package.version}`))
-
+    test.is(Shell.exec(`make run ${variable}="release/command/mablung-makefile.js get-version" 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
 })
 
-Test('run', (test) => {
-
-  let result = Shell.exec('make run', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 2)
-  test.true(stdout.includes('A parameter must be specified (e.g. parameter=release/sandbox/index.js)'))
-
+Test.serial('run', (test) => {
+  test.is(Shell.exec(`make run 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test('cover (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run cover', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
-
+Test.serial('cover (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run cover 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 ;[
@@ -180,27 +117,13 @@ Test('cover (dry-run)', (test) => {
 ].forEach((variable) => {
 
   Test(`cover ${variable}=... (dry-run)`, (test) => {
-
-    let result = Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js`, { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 0)
-
-    test.true(stdout.includes('npx c8 ava release/test/make.test.js'))
-    test.true(stdout.includes('npx shx mv coverage ../Shared/mablung-makefile'))
-
+    test.is(Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
 })
 
-Test('test (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run test', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-  test.true(stdout.includes('npx ava '))
-
+Test.serial('test (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 ;[
@@ -209,13 +132,7 @@ Test('test (dry-run)', (test) => {
 ].forEach((variable) => {
 
   Test(`test ${variable}=... (dry-run)`, (test) => {
-
-    let result = Shell.exec(`make --dry-run test ${variable}=release/test/make.test.js`, { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 0)
-    test.true(stdout.includes('npx ava release/test/make.test.js'))
-
+    test.is(Shell.exec(`make --dry-run test ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
 })
@@ -226,98 +143,33 @@ Test('test (dry-run)', (test) => {
 ].forEach((variable) => {
 
   Test(`release ${variable}=... (dry-run, non-dirty)`, (test) => {
-
-    let result = Shell.exec(`make --dry-run release ${variable}=prerelease`, { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 0)
-    test.true(stdout.includes('git push origin master'))
-
+    test.is(Shell.exec(`make --dry-run release ${variable}=prerelease 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
   })
 
 })
 
-;(Process.env.version ? Test.failing : Test)('release (dry-run, non-dirty)', (test) => {
-
-  let result = Shell.exec('make --dry-run release', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 2)
-  test.true(stdout.includes('A version must be specified (e.g. version=prerelease, version=patch, or version=1.0.0)'))
-
+;(Process.env.version ? Test.skip : Test)('release (dry-run, non-dirty)', (test) => {
+  test.is(Shell.exec(`make --dry-run release 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test('release (dry-run, dirty)', (test) => {
+Test.serial('release (dry-run, dirty)', (test) => {
 
   let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
 
   Shell.touch(name)
 
   try {
-
-    let result = Shell.exec('make --dry-run release', { 'silent': true })
-    let stdout = result.stdout.split('\n')
-
-    test.is(result.code, 2)
-    test.true(stdout.includes(`Git working directory not clean ... ${name}`))
-
+    test.is(Shell.exec(`make --dry-run release 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
   } finally {
     Shell.rm(name)
   }
 
 })
 
-Test('build (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run build', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  // test.log(stdout)
-  // i don't know where the following commands come from ...
-  // rm release/test/header.create release/test/command.create release/test/resource.create
-  // rm release/test.create release/header.create release/command.create release/library.create release/sandbox.create
-
-  test.true(stdout.includes('npx shx mkdir -p release/header'))
-  test.true(stdout.includes('npx shx mkdir -p release'))
-  test.true(stdout.includes('npx shx mkdir -p release/test'))
-
+Test.serial('build (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run build 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test('build exclude-build-folder=... (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run build exclude-build-folder=source/test', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  test.true(stdout.includes('npx shx mkdir -p release/header'))
-  test.true(stdout.includes('npx shx mkdir -p release'))
-  test.false(stdout.includes('npx shx mkdir -p release/test'))
-
-})
-
-Test('debug (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run debug', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  test.true(stdout.includes('MAKEFILE_LIST .......... makefile include/common include/build include/debug'))
-  test.true(stdout.includes('build-item ............. dependency.test.js index.test.js make.test.js'))
-
-})
-
-Test('debug exclude-build-folder=... (dry-run)', (test) => {
-
-  let result = Shell.exec('make --dry-run debug exclude-build-folder=source/test', { 'silent': true })
-  let stdout = result.stdout.split('\n')
-
-  test.is(result.code, 0)
-
-  test.true(stdout.includes('MAKEFILE_LIST .......... makefile include/common include/build include/debug'))
-  test.false(stdout.includes('build-item ............. dependency.test.js index.test.js make.test.js'))
-
+Test.serial('debug (dry-run)', (test) => {
+  test.is(Shell.exec(`make --dry-run debug 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })

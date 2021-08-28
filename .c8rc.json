@@ -9,5 +9,5 @@
     "text-summary"
   ],
   "src": "release",
-  "tempDirectory": "coverage/data"
+  "tempDirectory": "data/coverage"
 }
