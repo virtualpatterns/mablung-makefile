@@ -13,7 +13,8 @@ Test('index.js', async (test) => {
   test.true((await import('../index.js')).OK)
 })
 
-Test('MAKEFILE_PATH', (test) => {
+/* c8 ignore next 3 */
+;(Process.env.MAKEFILE_PATH ? Test : Test.skip)('MAKEFILE_PATH', (test) => {
   test.deepEqual(Process.env.MAKEFILE_PATH.split(' '), [
     Require.resolve('../../makefile'),
     Require.resolve('../../include/common'),

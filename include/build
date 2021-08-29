@@ -98,7 +98,7 @@ build-item = $(call $\
 # $(info --------------------)
 
 build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
-	@echo -n
+	@:
 
 pre-build:: ;
 
@@ -189,6 +189,6 @@ copy::
 
 ignore::
 	$(if $(verbose),@echo ignore .... $(current-build-folder))
-	@echo -n 
+	@:
 
 endif

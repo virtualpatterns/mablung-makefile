@@ -5,16 +5,12 @@ endif
 
 ifndef current-build-folder
 
-dirty-item = $(strip $\
-							$(shell git status --porcelain | awk '{print $$2}'))
-
-# $(info --------------------)
-# $(info dirty-item = $(dirty-item))
-# $(info --------------------)
-
 # --------------------
 .PHONY: commit pre-commit
 # --------------------
+
+dirty-item = $(strip $\
+							$(shell git status --porcelain | awk '{print $$2}'))
 
 commit-item = $(filter $\
 								$(or $(include-commit-item),%),$\
@@ -22,10 +18,10 @@ commit-item = $(filter $\
 
 ifneq ($(commit-item),)
 
-ifneq ($(or $(message),$(m)),)
+ifneq ($(message),)
 
 commit:: pre-commit $(addsuffix .add,$(commit-item))
-	@git commit --message="$(or $(message),$(m))"
+	@git commit --message="$(message)"
 
 %.add:
 	@git add $(patsubst %.add,%,$@)
@@ -42,17 +38,17 @@ pre-commit::
 	$(info - commit -----------------------------------------------------------------------)
 	$(info The following items will be committed ... $(commit-item))
 	$(info --------------------------------------------------------------------------------)
-	@echo -n
+	@:
 
 else
 
 commit::
 	$(info Git working directory clean.)
-	@echo -n
+	@:
 
 pre-commit::
 	$(info Git working directory clean.)
-	@echo -n
+	@:
 
 endif
 
@@ -78,7 +74,7 @@ pre-re-install:: ;
 # --------------------
 
 update:: pre-update update-0
-	@echo -n
+	@:
 
 pre-update:: ;
 
@@ -95,7 +91,7 @@ update-1:
 else
 
 update-1:
-	@echo -n
+	@:
 
 endif
 
@@ -104,7 +100,6 @@ endif
 # --------------------
 
 version:: pre-version
-	$(info - version ----------------------------------------------------------------------)
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
@@ -126,19 +121,33 @@ pre-clean:: ;
 .PHONY: run pre-run
 # --------------------
 
-ifneq ($(or $(parameter),$(p)),)
+get-argument = $(strip $\
+								$(foreach $\
+									item,$\
+									$(MAKECMDGOALS),$\
+									$(if $\
+										$(or $(find-argument-$(1)),$(findstring $(1),$(item))),$\
+										$(if $\
+											$(find-argument-$(1)),$\
+											$(item)$\
+											$(eval $(item):;@:),$\
+											$(eval find-argument-$(1) = $(item))))))
+
+run-argument := $(call get-argument,run)
+
+ifneq ($(or $(argument),$(run-argument)),)
 
 run:: pre-run build
 	$(info - run --------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@node $(node-parameter) $(or $(parameter),$(p))
+	@node $(node-parameter) $(or $(argument),$(run-argument))
 
 pre-run::
 
 else
 
 run::
-	$(info A parameter must be specified (e.g. parameter=release/sandbox/index.js))
+	$(info An argument must be specified (e.g. make run release/sandbox/index.js or make run argument=release/sandbox/index.js))
 	$(error Error)
 
 endif
@@ -148,21 +157,23 @@ endif
 # --------------------
 
 cover:: project-name = $(notdir $(CURDIR))
+cover:: cover-argument := $(call get-argument,cover)
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage data/coverage
-	@npx c8 ava $(or $(parameter),$(p))
+	@npx c8 ava $(cover-argument)
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
 
 pre-cover:: ;
 
+test:: test-argument := $(call get-argument,test)
 test:: pre-test build
 	$(info - test -------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx ava $(or $(parameter),$(p))
+	@npx ava $(test-argument)
 
 pre-test:: ;
 
@@ -172,11 +183,11 @@ pre-test:: ;
 
 ifeq ($(dirty-item),)
 
-ifneq ($(or $(version),$(v)),)
+ifneq ($(version),)
 
 release:: pre-release
 	$(info - release ----------------------------------------------------------------------)
-	@npm version $(or $(version),$(v))
+	@npm version $(version)
 	@$(MAKE) --no-print-directory clean test source-map=false
 	@npm publish --access public
 	@git push origin master

@@ -163,17 +163,40 @@
 # do-it-0:
 # 	@echo $@
 
-$(info MAKEFLAGS = $(MAKEFLAGS))
 $(info MAKECMDGOALS = $(MAKECMDGOALS))
 
-get-parameter = $(foreach $\
+# ifeq (run,$(firstword $(MAKECMDGOALS)))
+#   # use the rest as arguments for "run"
+#   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+#   # ...and turn them into do-nothing targets
+#   $(eval $(RUN_ARGS):;@:)
+# endif
+
+get-argument = $(strip $\
+								$(foreach $\
 									item,$\
 									$(MAKECMDGOALS),$\
 									$(if $\
-										$(findstring $(1),$(item)),$\
-										?))
+										$(or $(find-argument-$(1)),$(findstring $(1),$(item))),$\
+										$(if $\
+											$(find-argument-$(1)),$\
+											$(item)$\
+											$(eval $(item):;@:),$\
+											$(eval find-argument-$(1) = $(item))))))
 
-# % make -f sandbox/makefile clean test release/test/command/mablung-makefile* v14.16.1 master
-# MAKEFLAGS = 
+cover: argument := $(call get-argument,cover)
+cover:
+	@npx c8 ava $(argument)
+
+test: argument := $(call get-argument,test)
+test:
+	npx ava $(argument)
+
+babo:;@:
+
+bebe:
+	@:
+
+# % make -f sandbox/makefile clean test release/test/index.test.js
 # MAKECMDGOALS = clean test release/test/command/mablung-makefile-process.js release/test/command/mablung-makefile-process.js.map release/test/command/mablung-makefile.test.js release/test/command/mablung-makefile.test.js.map
 # make: *** No rule to make target `clean'.  Stop.
