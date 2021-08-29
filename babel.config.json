@@ -27,7 +27,7 @@
           "babel-plugin-add-header-comment",
           {
             "header": [
-              "!node release/header/mablung-makefile.js"
+              "!node release/header/index.js"
             ]
           }
         ]

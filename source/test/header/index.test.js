@@ -3,11 +3,11 @@ import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
 
-import { MablungMakefileProcess } from './mablung-makefile-process.js'
+import { IndexProcess } from './index-process.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
-const LogPath = Path.resolve(`${FolderPath}/../../../data/header/mablung-makefile.log`)
+const LogPath = Path.resolve(`${FolderPath}/../../../data/header/index.log`)
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -15,6 +15,6 @@ Test.before(async () => {
 })
 
 Test('default', async (test) => {
-  let process = new MablungMakefileProcess(LogPath)
+  let process = new IndexProcess(LogPath)
   test.is(await process.whenExit(), 0)
 })

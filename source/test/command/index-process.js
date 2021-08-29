@@ -3,10 +3,10 @@ import { ForkedProcess } from '@virtualpatterns/mablung-worker'
 
 const Require = CreateRequire(import.meta.url)
 
-class MablungMakefileProcess extends ForkedProcess {
+class IndexProcess extends ForkedProcess {
 
   constructor(logPath, parameter = {}, option = {}) {
-    super(Require.resolve('../../command/mablung-makefile.js'), parameter, option)
+    super(Require.resolve('../../command/index.js'), parameter, option)
     this.writeTo(logPath)
   }
 
@@ -31,4 +31,4 @@ class MablungMakefileProcess extends ForkedProcess {
   
 }
 
-export { MablungMakefileProcess }
+export { IndexProcess }

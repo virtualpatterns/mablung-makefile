@@ -1,9 +1,9 @@
 {
   "author": "virtualpatterns.com <code@virtualpatterns.com> (http://www.virtualpatterns.com)",
-  "bin": "./release/command/mablung-makefile.js",
+  "bin": "./release/command/index.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
-    "./header": "./release/header/mablung-makefile.js",
+    "./header": "./release/header/index.js",
     "./package": "./release/header/library/package.js",
     "./package.json": "./package.json"
   },

@@ -3,11 +3,11 @@ import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
 
-import { MablungMakefileProcess } from './mablung-makefile-process.js'
+import { IndexProcess } from './index-process.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
-const LogPath = Path.resolve(`${FolderPath}/../../../data/command/mablung-makefile.log`)
+const LogPath = Path.resolve(`${FolderPath}/../../../data/command/index.log`)
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -15,22 +15,22 @@ Test.before(async () => {
 })
 
 Test('default', async (test) => {
-  let process = new MablungMakefileProcess(LogPath)
+  let process = new IndexProcess(LogPath)
   test.is(await process.whenExit(), 1)
 })
 
 Test('get-version', async (test) => {
-  let process = new MablungMakefileProcess(LogPath, { 'get-version': true })
+  let process = new IndexProcess(LogPath, { 'get-version': true })
   test.is(await process.whenExit(), 0)
 })
 
 Test('get-path', async (test) => {
-  let process = new MablungMakefileProcess(LogPath, { 'get-path': true })
+  let process = new IndexProcess(LogPath, { 'get-path': true })
   test.is(await process.whenExit(), 0)
 })
 
 Test('update-configuration', async (test) => {
-  let process = new MablungMakefileProcess(LogPath, { 'update-configuration': true })
+  let process = new IndexProcess(LogPath, { 'update-configuration': true })
   test.is(await process.whenExit(), 1)
 })
 
@@ -52,7 +52,7 @@ Test('update-configuration configuration-0', async (test) => {
     FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
   ])
 
-  let process = new MablungMakefileProcess(LogPath, { 'update-configuration': targetPath })
+  let process = new IndexProcess(LogPath, { 'update-configuration': targetPath })
 
   try {
 
@@ -113,7 +113,7 @@ Test('update-configuration configuration-1', async (test) => {
     FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
   ])
 
-  let process = new MablungMakefileProcess(LogPath, { 'update-configuration': targetPath })
+  let process = new IndexProcess(LogPath, { 'update-configuration': targetPath })
 
   try {
 

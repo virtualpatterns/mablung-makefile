@@ -17,11 +17,12 @@ const Process = process
 const Require = CreateRequire(import.meta.url)
 
 Command
+  .name(Package.name.replace(/^(.*)\/(.*)$/, '$2'))
   .version(Package.version)
 
 Command
   .command('get-version')
-  .description('Return the name and version of the makefile package.')
+  .description('Return the name and version of the package.')
   .action(() => {
 
     Process.exitCode = 0
