@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
 import FileSystem from 'fs-extra'
+import Is from '@pwn/is'
 import Shell from 'shelljs'
 import Path from 'path'
 import Test from 'ava'
@@ -7,6 +7,7 @@ import URL from 'url'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
+const IsDirty = Is.not.emptyString(Shell.exec('git status --porcelain ', { 'silent': true }).stdout)
 const LogPath = Path.resolve(`${FolderPath}/../../data/make/make.log`)
 const Process = process
 
@@ -20,141 +21,79 @@ Test.beforeEach((test) => {
 })
 
 Test.serial('default', (test) => {
-  test.is(Shell.exec(`make 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+  test.is(Shell.exec(`make --dry-run 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 Test.serial('null', (test) => {
   // an invalid target fails
-  test.is(Shell.exec(`make null 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
-})
-
-Test.serial('null (dry-run)', (test) => {
-  // an invalid target fails even when --dry-run
   test.is(Shell.exec(`make --dry-run null 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test.serial('commit message=... (dry-run, dirty)', (test) => {
-
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
-
-  Shell.touch(name)
-
-  try {
-    test.is(Shell.exec(`make --dry-run commit message=test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-  } finally {
-    Shell.rm(name)
-  }
-
+Test.serial('commit message=...', (test) => {
+  test.is(Shell.exec(`make --dry-run commit message=test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 /* c8 ignore next 3 */
-;(Process.env.message ? Test.serial.skip : Test.serial)('commit (dry-run, dirty)', (test) => {
-
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
-
-  Shell.touch(name)
-
-  try {
-    test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
-  } finally {
-    Shell.rm(name)
-  }
-
+;(Process.env.message ? Test.serial.skip : Test.serial)('commit', (test) => {
+  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-/* c8 ignore next 3 */
-;(Shell.exec('') ? Test.serial.skip : Test.serial)('commit (dry-run, non-dirty)', (test) => {
-  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-})
-
-Test.serial('update (dry-run)', (test) => {
+Test.serial('update', (test) => {
   test.is(Shell.exec(`make --dry-run update 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 Test.serial('version', (test) => {
-  test.is(Shell.exec(`make version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+  test.is(Shell.exec(`make --dry-run version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('install (dry-run)', (test) => {
+Test.serial('install', (test) => {
   test.is(Shell.exec(`make --dry-run install 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('re-install (dry-run)', (test) => {
+Test.serial('re-install', (test) => {
   test.is(Shell.exec(`make --dry-run re-install 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('clean (dry-run)', (test) => {
+Test.serial('clean', (test) => {
   test.is(Shell.exec(`make --dry-run clean 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-;[ 'parameter', 'p' ].forEach((variable) => {
-
-  Test.serial(`run ${variable}="..."`, (test) => {
-    test.is(Shell.exec(`make run ${variable}="release/command/mablung-makefile.js get-version" 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-  })
-
+Test.serial('run ...', (test) => {
+  test.is(Shell.exec(`make --dry-run run release/command/mablung-makefile.js get-version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('run', (test) => {
-  test.is(Shell.exec(`make run 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
-})
-
-Test.serial('cover (dry-run)', (test) => {
-  test.is(Shell.exec(`make --dry-run cover 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-})
-
-;[ 'parameter', 'p' ].forEach((variable) => {
-
-  Test.serial(`cover ${variable}=... (dry-run)`, (test) => {
-    test.is(Shell.exec(`make --dry-run cover ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-  })
-
-})
-
-Test.serial('test (dry-run)', (test) => {
-  test.is(Shell.exec(`make --dry-run test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-})
-
-;[ 'parameter', 'p' ].forEach((variable) => {
-
-  Test.serial(`test ${variable}=... (dry-run)`, (test) => {
-    test.is(Shell.exec(`make --dry-run test ${variable}=release/test/make.test.js 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-  })
-
-})
-
-;[ 'version', 'v' ].forEach((variable) => {
-
-  Test.serial(`release ${variable}=... (dry-run, non-dirty)`, (test) => {
-    test.is(Shell.exec(`make --dry-run release ${variable}=prerelease 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-  })
-
+Test.serial('run argument="..."', (test) => {
+  test.is(Shell.exec(`make --dry-run run argument="release/command/mablung-makefile.js get-version" 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 /* c8 ignore next 3 */
-;(Process.env.version ? Test.serial.skip : Test.serial)('release (dry-run, non-dirty)', (test) => {
+;(Process.env.argument ? Test.serial.skip : Test.serial)('run', (test) => {
+  test.is(Shell.exec(`make --dry-run run 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
+})
+
+Test.serial('cover', (test) => {
+  test.is(Shell.exec(`make --dry-run cover 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+})
+
+Test.serial('test', (test) => {
+  test.is(Shell.exec(`make --dry-run test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+})
+
+/* c8 ignore next 3 */
+;(IsDirty ? Test.serial.skip : Test.serial)('release version=...', (test) => {
+  test.is(Shell.exec(`make --dry-run release version=prerelease 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+})
+
+/* c8 ignore next 3 */
+;(IsDirty || Process.env.version ? Test.serial.skip : Test.serial)('release', (test) => {
   test.is(Shell.exec(`make --dry-run release 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test.serial('release (dry-run, dirty)', (test) => {
-
-  let name = `${DateTime.utc().toFormat('yyyyLLddHHmmssSSS')}-test`
-
-  Shell.touch(name)
-
-  try {
-    test.is(Shell.exec(`make --dry-run release 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
-  } finally {
-    Shell.rm(name)
-  }
-
-})
-
-Test.serial('build (dry-run)', (test) => {
+Test.serial('build', (test) => {
   test.is(Shell.exec(`make --dry-run build 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('debug (dry-run)', (test) => {
+Test.serial('debug', (test) => {
   test.is(Shell.exec(`make --dry-run debug 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 

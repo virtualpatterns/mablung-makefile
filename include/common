@@ -103,7 +103,7 @@ version:: pre-version
 	$(if $\
 		$(shell npx shx which mablung-makefile),$\
 		@npx mablung-makefile get-version,$\
-		@$(MAKE) --no-print-directory run parameter="release/command/mablung-makefile.js get-version")
+		@$(MAKE) --no-print-directory run argument="release/command/mablung-makefile.js get-version")
 
 pre-version:: ;
 
