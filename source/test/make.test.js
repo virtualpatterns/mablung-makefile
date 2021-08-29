@@ -35,7 +35,7 @@ Test.serial('commit message=...', (test) => {
 
 /* c8 ignore next 3 */
 ;(Process.env.message ? Test.serial.skip : Test.serial)('commit', (test) => {
-  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
+  test.is(Shell.exec(`make --dry-run commit 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, IsDirty ? 2 : 0)
 })
 
 Test.serial('update', (test) => {
