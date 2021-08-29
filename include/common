@@ -162,7 +162,7 @@ cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage data/coverage
-	@npx c8 ava $(cover-argument)
+	@npx c8 ava $(or $(argument),$(cover-argument))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage
 	@npx shx mv coverage ../Shared/$(project-name)
@@ -173,7 +173,7 @@ test:: test-argument := $(call get-argument,test)
 test:: pre-test build
 	$(info - test -------------------------------------------------------------------------)
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	@npx ava $(test-argument)
+	@npx ava $(or $(argument),$(test-argument))
 
 pre-test:: ;
 

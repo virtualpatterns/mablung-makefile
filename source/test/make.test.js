@@ -58,12 +58,13 @@ Test.serial('clean', (test) => {
   test.is(Shell.exec(`make --dry-run clean 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('run ...', (test) => {
-  test.is(Shell.exec(`make --dry-run run release/command/mablung-makefile.js get-version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
-})
-
 Test.serial('run argument="..."', (test) => {
   test.is(Shell.exec(`make --dry-run run argument="release/command/mablung-makefile.js get-version" 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
+})
+
+/* c8 ignore next 3 */
+;(Process.env.argument ? Test.serial.skip : Test.serial)('run ...', (test) => {
+  test.is(Shell.exec(`make --dry-run run release/command/mablung-makefile.js get-version 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
 /* c8 ignore next 3 */
@@ -71,11 +72,13 @@ Test.serial('run argument="..."', (test) => {
   test.is(Shell.exec(`make --dry-run run 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 2)
 })
 
-Test.serial('cover', (test) => {
+/* c8 ignore next 3 */
+;(Process.env.argument ? Test.serial.skip : Test.serial)('cover', (test) => {
   test.is(Shell.exec(`make --dry-run cover 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
-Test.serial('test', (test) => {
+/* c8 ignore next 3 */
+;(Process.env.argument ? Test.serial.skip : Test.serial)('test', (test) => {
   test.is(Shell.exec(`make --dry-run test 1>> ${LogPath} 2>> ${LogPath}`, { 'silent': true }).code, 0)
 })
 
