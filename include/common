@@ -3,6 +3,10 @@ ifneq ($(verbose),true)
 override verbose =
 endif
 
+ifndef project-name
+export project-name = $(notdir $(CURDIR))
+endif
+
 ifndef current-build-folder
 
 # --------------------
@@ -99,11 +103,17 @@ endif
 .PHONY: version pre-version
 # --------------------
 
+ifeq ($(project-name),mablung-makefile)
+
 version:: pre-version
-	$(if $\
-		$(shell npx shx which mablung-makefile),$\
-		@npx mablung-makefile get-version,$\
-		@$(MAKE) --no-print-directory run argument="release/command/mablung-makefile.js get-version")
+	@$(MAKE) --no-print-directory run argument="release/command/index.js get-version"
+
+else
+
+version:: pre-version
+	@npx mablung-makefile get-version
+
+endif
 
 pre-version:: ;
 
@@ -156,7 +166,6 @@ endif
 .PHONY: cover pre-cover test pre-test
 # --------------------
 
-cover:: project-name = $(notdir $(CURDIR))
 cover:: cover-argument := $(call get-argument,cover)
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
