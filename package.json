@@ -25,24 +25,25 @@
   "type": "module",
   "version": "0.0.26-81",
   "dependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
     "@pwn/is": "^1.0.2",
     "ava": "^3.15.0",
-    "c8": "^7.8.0",
-    "commander": "^8.1.0",
+    "c8": "^7.9.0",
+    "commander": "^8.2.0",
     "eslint": "^7.32.0",
     "fs-extra": "^10.0.0",
-    "npm-check-updates": "^11.8.3",
+    "npm-check-updates": "^11.8.5",
     "shx": "^0.3.3"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.15.0",
-    "@babel/preset-env": "^7.15.0",
-    "@virtualpatterns/mablung-worker": "0.0.2-40",
+    "@babel/eslint-parser": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
+    "@virtualpatterns/mablung-worker": "0.0.2-47",
     "babel-plugin-add-header-comment": "^1.0.3",
     "depcheck": "^1.4.2",
     "eslint-plugin-babel": "^5.3.1",
+    "nodegit": "^0.27.0",
     "shelljs": "^0.8.4"
   }
 }

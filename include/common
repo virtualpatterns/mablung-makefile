@@ -149,6 +149,7 @@ ifneq ($(or $(argument),$(run-argument)),)
 
 run:: pre-run build
 	$(info - run --------------------------------------------------------------------------)
+	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
 
@@ -169,6 +170,7 @@ endif
 cover:: cover-argument := $(call get-argument,cover)
 cover:: pre-cover build
 	$(info - cover ------------------------------------------------------------------------)
+	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage data/coverage
 	@npx c8 ava $(or $(argument),$(cover-argument))
@@ -181,6 +183,7 @@ pre-cover:: ;
 test:: test-argument := $(call get-argument,test)
 test:: pre-test build
 	$(info - test -------------------------------------------------------------------------)
+	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx ava $(or $(argument),$(test-argument))
 

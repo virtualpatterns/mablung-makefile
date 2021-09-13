@@ -1,9 +1,9 @@
 import Is from '@pwn/is'
 import Path from 'path'
 
-import { MablungMakefileError } from './mablung-makefile-error.js'
+import { IndexError } from './index-error.js'
 
-class UpdateConfigurationError extends MablungMakefileError {
+class UpdateConfigurationError extends IndexError {
 
   constructor(path) {
     /* c8 ignore next 1 */
