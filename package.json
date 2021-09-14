@@ -43,7 +43,6 @@
     "babel-plugin-add-header-comment": "^1.0.3",
     "depcheck": "^1.4.2",
     "eslint-plugin-babel": "^5.3.1",
-    "nodegit": "^0.27.0",
-    "shelljs": "^0.8.4"
+    "nodegit": "^0.27.0"
   }
 }

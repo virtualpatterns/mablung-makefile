@@ -39,9 +39,9 @@ commit::
 endif
 
 pre-commit::
-	$(info - commit -----------------------------------------------------------------------)
+	$(info - commit -----------------------------------------)
 	$(info The following items will be committed ... $(commit-item))
-	$(info --------------------------------------------------------------------------------)
+	$(info --------------------------------------------------)
 	@:
 
 else
@@ -61,13 +61,13 @@ endif
 # --------------------
 
 install:: pre-install
-	$(info - install ----------------------------------------------------------------------)
+	$(info - install ----------------------------------------)
 	@npm install
 
 pre-install:: ;
 
 re-install:: pre-re-install
-	$(info - re-install -------------------------------------------------------------------)
+	$(info - re-install -------------------------------------)
 	@rm -Rf node_modules package-lock.json
 	@npm install
 
@@ -83,7 +83,7 @@ update:: pre-update update-0
 pre-update:: ;
 
 update-0:
-	$(info - update -----------------------------------------------------------------------)
+	$(info - update -----------------------------------------)
 	@npx ncu
 	@$(MAKE) --no-print-directory update-1
 
@@ -122,7 +122,7 @@ pre-version:: ;
 # --------------------
 
 clean:: pre-clean
-	$(info - clean ------------------------------------------------------------------------)
+	$(info - clean ------------------------------------------)
 	@npx shx rm -Rf release
 
 pre-clean:: ;
@@ -148,7 +148,7 @@ run-argument := $(call get-argument,run)
 ifneq ($(or $(argument),$(run-argument)),)
 
 run:: pre-run build
-	$(info - run --------------------------------------------------------------------------)
+	$(info - run --------------------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
@@ -169,7 +169,7 @@ endif
 
 cover:: cover-argument := $(call get-argument,cover)
 cover:: pre-cover build
-	$(info - cover ------------------------------------------------------------------------)
+	$(info - cover ------------------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx shx rm -Rf coverage data/coverage
@@ -182,7 +182,7 @@ pre-cover:: ;
 
 test:: test-argument := $(call get-argument,test)
 test:: pre-test build
-	$(info - test -------------------------------------------------------------------------)
+	$(info - test -------------------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	@npx ava $(or $(argument),$(test-argument))
@@ -198,7 +198,7 @@ ifeq ($(dirty-item),)
 ifneq ($(version),)
 
 release:: pre-release
-	$(info - release ----------------------------------------------------------------------)
+	$(info - release ----------------------------------------)
 	@npm version $(version)
 	@$(MAKE) --no-print-directory clean test source-map=false
 	@npm publish --access public
@@ -213,7 +213,7 @@ release::
 endif
 
 pre-release:: pre-pre-release update
-	$(info - pre-release ------------------------------------------------------------------)
+	$(info - pre-release ------------------------------------)
 	@npm version prerelease
 	@$(MAKE) --no-print-directory clean cover source-map=true
 	@git push origin master

@@ -5,9 +5,13 @@ async function main() {
   try {
 
     let repository = await Git.Repository.open('.')
-    await Git.Status.foreach(repository, (path) => {
-      console.log(path)
+    let status = await repository.getStatus()
+      
+    status.forEach((item) => {
+      console.log(item.path())
     })
+
+    console.log()
 
   } catch (error) {
     console.error(error)
