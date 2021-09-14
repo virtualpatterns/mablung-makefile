@@ -39,7 +39,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.4",
     "@babel/preset-env": "^7.15.6",
-    "@virtualpatterns/mablung-worker": "0.0.2-47",
+    "@virtualpatterns/mablung-worker": "0.0.2-54",
     "babel-plugin-add-header-comment": "^1.0.3",
     "depcheck": "^1.4.2",
     "eslint-plugin-babel": "^5.3.1",
