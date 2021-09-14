@@ -18,7 +18,7 @@ async function main() {
   const Status = await Repository.getStatus()
   const IsDirty = Status.length > 0 ? true : false
 
-  Test.before(async (test) => {
+  Test.before(async () => {
     await FileSystem.ensureDir(Path.dirname(LogPath))
     await FileSystem.remove(LogPath)
   })
