@@ -20,7 +20,7 @@ ifndef current-build-folder
 .PHONY: build pre-build
 
 build:: pre-build
-	$(info - build ------------------------------------------)
+	$(info - build --------------------------------)
 	$(if $(verbose),@echo create .... source/header)
 	@npx shx mkdir -p release/header
 	$(if $(verbose),@echo build ..... source/header)
@@ -89,13 +89,13 @@ build-item = $(call $\
 
 .PHONY: build pre-build copy ignore
 
-# $(info --------------------)
+# $(info ----------)
 # $(info current-build-folder ... $(current-build-folder))
 # $(info exclude-build-folder ... $(exclude-build-folder))
 # $(info make-folder ............ $(make-folder))
 # $(info build-folder ........... $(build-folder))
 # $(info build-item ............. $(build-item))
-# $(info --------------------)
+# $(info ----------)
 
 build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@:
