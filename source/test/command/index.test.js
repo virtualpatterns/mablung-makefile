@@ -17,37 +17,37 @@ Test.before(async () => {
   await FileSystem.remove(LogPath)
 })
 
-Test.serial('default', async (test) => {
+Test('default', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'))
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('get-version', async (test) => {
+Test('get-version', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-version': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('get-version throws Error', async (test) => {
+Test('get-version throws Error', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-version': true }, { 'execArgv': [ ...Process.execArgv, '--require', Require.resolve('./require/get-version.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('get-path', async (test) => {
+Test('get-path', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-path': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('get-path throws Error', async (test) => {
+Test('get-path throws Error', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-path': true }, { 'execArgv': [ ...Process.execArgv, '--require', Require.resolve('./require/get-path.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update-configuration', async (test) => {
+Test('update-configuration', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update-configuration': true })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update-configuration configuration-0', async (test) => {
+Test('update-configuration configuration-0', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
   let sourceCheckPath = `${sourcePath}/.eslintrc.json`
@@ -104,7 +104,7 @@ Test.serial('update-configuration configuration-0', async (test) => {
 
 })
 
-Test.serial('update-configuration configuration-1', async (test) => {
+Test('update-configuration configuration-1', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
   let sourceCheckPath = `${sourcePath}/.eslintrc.json`
