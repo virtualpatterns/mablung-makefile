@@ -7,10 +7,10 @@ import URL from 'url'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
-const LogPath = FilePath.replace(/\/release\//, '/data/').replace(/\.c?js$/, '.log')
-const Require = CreateRequire(import.meta.url)
-
+const LogPath = FilePath.replace(/\/release\//, '/data/').replace(/\.test\.c?js$/, '.log')
 const LoggedProcess = CreateLoggedProcess(ForkedProcess, LogPath)
+const Process = process
+const Require = CreateRequire(import.meta.url)
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -27,9 +27,19 @@ Test.serial('get-version', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
+Test.serial('get-version throws Error', async (test) => {
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-version': true }, { 'execArgv': [ ...Process.execArgv, '--require', Require.resolve('./require/get-version.cjs') ] })
+  test.is(await process.whenExit(), 1)
+})
+
 Test.serial('get-path', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-path': true })
   test.is(await process.whenExit(), 0)
+})
+
+Test.serial('get-path throws Error', async (test) => {
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-path': true }, { 'execArgv': [ ...Process.execArgv, '--require', Require.resolve('./require/get-path.cjs') ] })
+  test.is(await process.whenExit(), 1)
 })
 
 Test.serial('update-configuration', async (test) => {

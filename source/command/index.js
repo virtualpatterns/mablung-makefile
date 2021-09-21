@@ -29,7 +29,6 @@ Command
 
     try {
       console.log(`${Package.name}@${Package.version}`)
-    /* c8 ignore next 4 */
     } catch (error) {
       console.error(error)
       Process.exitCode = 1
@@ -46,7 +45,6 @@ Command
 
     try {
       console.log(Require.resolve('../../makefile'))
-    /* c8 ignore next 4 */
     } catch (error) {
       console.error(error)
       Process.exitCode = 1
@@ -90,7 +88,6 @@ Command
         throw new UpdateConfigurationError(path)
       }
 
-    /* c8 ignore next 4 */
     } catch (error) {
       console.error(error)
       Process.exitCode = 1

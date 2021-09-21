@@ -6,10 +6,9 @@ import Test from 'ava'
 import URL from 'url'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
-const LogPath = FilePath.replace(/\/release\//, '/data/').replace(/\.c?js$/, '.log')
-const Require = CreateRequire(import.meta.url)
-
+const LogPath = FilePath.replace(/\/release\//, '/data/').replace(/\.test\.c?js$/, '.log')
 const LoggedProcess = CreateLoggedProcess(ForkedProcess, LogPath)
+const Require = CreateRequire(import.meta.url)
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))

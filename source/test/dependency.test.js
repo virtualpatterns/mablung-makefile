@@ -12,7 +12,8 @@ Test('default', async (test) => {
       'babel-plugin-add-header-comment',
       'c8',
       'npm-check-updates',
-      'shx'
+      'shx',
+      'sinon'
     ],
     'parsers': {
       '**/*.js': [ Check.parser.es7.default ]
