@@ -1,4 +1,5 @@
-import { CreateLoggedProcess, SpawnedProcess } from '@virtualpatterns/mablung-worker'
+import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
+import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
 import Git from 'nodegit'
 import Path from 'path'
@@ -9,9 +10,10 @@ async function main() {
 
   const FilePath = URL.fileURLToPath(import.meta.url)
   const FolderPath = Path.dirname(FilePath)
-  const LogPath = FilePath.replace(/\/release\//, '/data/').replace(/\.test\.c?js$/, '.log')
-  const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
   const Process = process
+
+  const LogPath = FilePath.replace('/release/', '/data/').replace(/\.test\.c?js$/, '.log')
+  const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
   const Repository = await Git.Repository.open(Path.resolve(`${FolderPath}/../..`))
   const Status = await Repository.getStatus()

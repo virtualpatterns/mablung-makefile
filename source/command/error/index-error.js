@@ -1,7 +1,7 @@
 class IndexError extends Error {
 
-  constructor(...parameter) {
-    super(...parameter)
+  constructor(...argument) {
+    super(...argument)
   }
 
 }
