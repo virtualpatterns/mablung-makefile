@@ -7,6 +7,22 @@ ifndef project-name
 export project-name = $(notdir $(CURDIR))
 endif
 
+get-content = $(strip $\
+								$(filter-out $\
+									$(1)/. $\
+									$(1)/..,$\
+									$(patsubst $\
+										./%,$\
+										%,$\
+										$(wildcard $(1)/.*) $\
+										$(wildcard $(1)/*))))
+
+trim-folder-path = $(patsubst $\
+										%/,$\
+										%,$\
+										$(dir $\
+											$(1)))
+
 ifndef current-build-folder
 
 # --------------------
@@ -77,10 +93,8 @@ pre-re-install:: ;
 .PHONY: update pre-update update-0 update-1
 # --------------------
 
-update:: pre-update update-0
+update:: update-0
 	@:
-
-pre-update:: ;
 
 update-0:
 	$(info - update -------------------------------)
@@ -117,15 +131,15 @@ endif
 
 pre-version:: ;
 
-# --------------------
-.PHONY: clean pre-clean
-# --------------------
+# # --------------------
+# .PHONY: clean pre-clean
+# # --------------------
 
-clean:: pre-clean
-	$(info - clean --------------------------------)
-	@npx shx rm -Rf data release
+# clean:: pre-clean
+# 	$(info - clean --------------------------------)
+# 	@npx shx rm -Rf data release
 
-pre-clean:: ;
+# pre-clean:: ;
 
 # --------------------
 .PHONY: run pre-run

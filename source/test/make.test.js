@@ -65,11 +65,6 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  Test.serial('clean', async (test) => {
-    let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'clean' ])
-    test.is(await process.whenExit(), 0)
-  })
-
   Test.serial('run argument="..."', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run', 'argument=release/command/index.js get-version' ])
     test.is(await process.whenExit(), 0)
@@ -107,6 +102,11 @@ async function main() {
 
   Test.serial('build', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'build' ])
+    test.is(await process.whenExit(), 0)
+  })
+
+  Test.serial('clean', async (test) => {
+    let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'clean'])
     test.is(await process.whenExit(), 0)
   })
 

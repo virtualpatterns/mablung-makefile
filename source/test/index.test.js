@@ -19,6 +19,7 @@ Test('index.js', async (test) => {
     Require.resolve('../../makefile'),
     Require.resolve('../../include/common'),
     Require.resolve('../../include/build'),
+    Require.resolve('../../include/clean'),
     Require.resolve('../../include/debug')
   ])
 })

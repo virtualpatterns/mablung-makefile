@@ -1,20 +1,4 @@
 
-get-content = $(strip $\
-								$(filter-out $\
-									$(1)/. $\
-									$(1)/..,$\
-									$(patsubst $\
-										./%,$\
-										%,$\
-										$(wildcard $(1)/.*) $\
-										$(wildcard $(1)/*))))
-
-trim-folder-path = $(patsubst $\
-										%/,$\
-										%,$\
-										$(dir $\
-											$(1)))
-
 ifndef current-build-folder
 
 # --------------------
@@ -90,7 +74,7 @@ build-item = $(call $\
 											$(item))))))
 
 # --------------------
-.PHONY: build pre-build copy ignore
+.PHONY: build copy ignore
 # --------------------
 
 # $(info ----------)
@@ -101,10 +85,8 @@ build-item = $(call $\
 # $(info build-item ............. $(build-item))
 # $(info ----------)
 
-build:: pre-build $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
+build:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@:
-
-pre-build:: ;
 
 source/%.make:
 	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
