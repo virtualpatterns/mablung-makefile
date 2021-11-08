@@ -123,7 +123,7 @@ pre-version:: ;
 
 clean:: pre-clean
 	$(info - clean --------------------------------)
-	@npx shx rm -Rf release
+	@npx shx rm -Rf data release
 
 pre-clean:: ;
 
