@@ -43,8 +43,6 @@ async function main() {
 
   ;(Process.env.message ? Test.serial.skip : Test.serial.only)('commit', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'commit'])
-    test.log(`Process.env.GIT_IS_DIRTY = ${Process.env.GIT_IS_DIRTY}`)
-    test.log(`Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0 = ${Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0}`)
     test.is(await process.whenExit(), Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0)
   })
 

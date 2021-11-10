@@ -29,7 +29,7 @@ Test('MAKEFILE_PATH', (test) => {
 })
 
 Test('IS_DIRTY', (test) => {
-  test.not(Process.env.IS_DIRTY, undefined)
+  test.not(Process.env.GIT_IS_DIRTY, undefined)
 })
 
 Test('compile.json', async (test) => {
