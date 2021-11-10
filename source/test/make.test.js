@@ -40,7 +40,7 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.message ? Test.serial.skip : Test.serial)('commit', async (test) => {
+  ;(Process.env.message ? Test.serial.skip : Test.serial.only)('commit', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'commit' ])
     test.is(await process.whenExit(), Process.env.IS_DIRTY ? 2 : 0)
   })
