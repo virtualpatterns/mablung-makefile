@@ -191,7 +191,7 @@ cover:: pre-cover build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
 		$(eval export GIT_IS_DIRTY = 1),\
-		$(eval export GIT_IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = -1))
 	@npx shx rm -Rf coverage data/coverage
 	@npx c8 ava $(or $(argument),$(cover-argument))
 	@npx shx mkdir -p ../Shared/$(project-name)
