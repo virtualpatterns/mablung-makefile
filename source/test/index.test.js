@@ -13,8 +13,12 @@ Test('index.js', async (test) => {
   test.true((await import('../index.js')).OK)
 })
 
-/* c8 ignore next 3 */
-;(Process.env.MAKEFILE_PATH ? Test : Test.skip)('MAKEFILE_PATH', (test) => {
+Test('MAKE_PATH', (test) => {
+  test.not(Process.env.MAKE_PATH, undefined)
+})
+
+Test('MAKEFILE_PATH', (test) => {
+  test.not(Process.env.MAKEFILE_PATH, undefined)
   test.deepEqual(Process.env.MAKEFILE_PATH.split(' '), [
     Require.resolve('../../makefile'),
     Require.resolve('../../include/common'),
@@ -22,6 +26,10 @@ Test('index.js', async (test) => {
     Require.resolve('../../include/clean'),
     Require.resolve('../../include/debug')
   ])
+})
+
+Test('IS_DIRTY', (test) => {
+  test.not(Process.env.IS_DIRTY, undefined)
 })
 
 Test('compile.json', async (test) => {

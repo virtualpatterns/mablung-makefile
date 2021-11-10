@@ -1,22 +1,22 @@
-import Git from 'nodegit'
+// import Git from 'nodegit'
 
-async function main() {
+// async function main() {
 
-  try {
+//   try {
 
-    let repository = await Git.Repository.open('.')
-    let status = await repository.getStatus()
+//     let repository = await Git.Repository.open('.')
+//     let status = await repository.getStatus()
       
-    status.forEach((item) => {
-      console.log(item.path())
-    })
+//     status.forEach((item) => {
+//       console.log(item.path())
+//     })
 
-    console.log()
+//     console.log()
 
-  } catch (error) {
-    console.error(error)
-  }
+//   } catch (error) {
+//     console.error(error)
+//   }
 
-}
+// }
 
-main()
+// main()

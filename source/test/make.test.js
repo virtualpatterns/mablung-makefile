@@ -1,7 +1,7 @@
 import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
 import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
-import Git from 'nodegit'
+// import Git from 'nodegit'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
@@ -9,15 +9,15 @@ import URL from 'url'
 async function main() {
 
   const FilePath = URL.fileURLToPath(import.meta.url)
-  const FolderPath = Path.dirname(FilePath)
+  // const FolderPath = Path.dirname(FilePath)
   const Process = process
 
   const LogPath = FilePath.replace('/release/', '/data/').replace(/\.test\.c?js$/, '.log')
   const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-  const Repository = await Git.Repository.open(Path.resolve(`${FolderPath}/../..`))
-  const Status = await Repository.getStatus()
-  const IsDirty = Status.length > 0 ? true : false
+  // const Repository = await Git.Repository.open(Path.resolve(`${FolderPath}/../..`))
+  // const Status = await Repository.getStatus()
+  // const IsDirty = Status.length > 0 ? true : false
 
   Test.before(async () => {
     await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -42,7 +42,7 @@ async function main() {
 
   ;(Process.env.message ? Test.serial.skip : Test.serial)('commit', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'commit' ])
-    test.is(await process.whenExit(), IsDirty ? 2 : 0)
+    test.is(await process.whenExit(), Process.env.IS_DIRTY ? 2 : 0)
   })
 
   Test.serial('update', async (test) => {
@@ -90,12 +90,12 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(IsDirty ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
+  ;(Process.env.IS_DIRTY ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release', 'version=prerelease' ])
     test.is(await process.whenExit(), 0)
   })
 
-  ;(IsDirty || Process.env.version ? Test.serial.skip : Test.serial)('release', async (test) => {
+  ;(Process.env.IS_DIRTY || Process.env.version ? Test.serial.skip : Test.serial)('release', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release' ])
     test.is(await process.whenExit(), 2)
   })
