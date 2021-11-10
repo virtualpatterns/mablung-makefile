@@ -167,7 +167,7 @@ run:: pre-run build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
 		$(eval export GIT_IS_DIRTY = 1),\
-		$(eval export GIT_IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = -1))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
 
 pre-run::
@@ -207,7 +207,7 @@ test:: pre-test build
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
 		$(eval export GIT_IS_DIRTY = 1),\
-		$(eval export GIT_IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = -1))
 	@npx ava $(or $(argument),$(test-argument))
 
 pre-test:: ;
