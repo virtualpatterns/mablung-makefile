@@ -2,6 +2,7 @@ import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
 import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
 // import Git from 'nodegit'
+import Is from '@pwn/is'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
@@ -43,8 +44,8 @@ async function main() {
   ;(Process.env.message ? Test.serial.skip : Test.serial.only)('commit', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'commit'])
     test.log(`Process.env.GIT_IS_DIRTY = ${Process.env.GIT_IS_DIRTY}`)
-    test.log(`Process.env.GIT_IS_DIRTY ? 2 : 0 = ${Process.env.GIT_IS_DIRTY ? 2 : 0}`)
-    test.is(await process.whenExit(), Process.env.GIT_IS_DIRTY ? 2 : 0)
+    test.log(`Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0 = ${Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0}`)
+    test.is(await process.whenExit(), Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0)
   })
 
   Test.serial('update', async (test) => {
@@ -92,7 +93,7 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.GIT_IS_DIRTY ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
+  ;(Is.equal(Process.env.GIT_IS_DIRTY, 1) ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release', 'version=prerelease' ])
     test.is(await process.whenExit(), 0)
   })
