@@ -166,8 +166,8 @@ run:: pre-run build
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
-		$(eval export IS_DIRTY = 1),\
-		$(eval export IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = 1),\
+		$(eval export GIT_IS_DIRTY = 0))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
 
 pre-run::
@@ -190,8 +190,8 @@ cover:: pre-cover build
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
-		$(eval export IS_DIRTY = 1),\
-		$(eval export IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = 1),\
+		$(eval export GIT_IS_DIRTY = 0))
 	@npx shx rm -Rf coverage data/coverage
 	@npx c8 ava $(or $(argument),$(cover-argument))
 	@npx shx mkdir -p ../Shared/$(project-name)
@@ -206,8 +206,8 @@ test:: pre-test build
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
 	$(if $(dirty-item),\
-		$(eval export IS_DIRTY = 1),\
-		$(eval export IS_DIRTY = 0))
+		$(eval export GIT_IS_DIRTY = 1),\
+		$(eval export GIT_IS_DIRTY = 0))
 	@npx ava $(or $(argument),$(test-argument))
 
 pre-test:: ;
