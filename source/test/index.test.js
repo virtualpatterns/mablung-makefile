@@ -28,7 +28,7 @@ Test('MAKEFILE_PATH', (test) => {
   ])
 })
 
-Test('IS_DIRTY', (test) => {
+Test('GIT_IS_DIRTY', (test) => {
   test.not(Process.env.GIT_IS_DIRTY, undefined)
 })
 

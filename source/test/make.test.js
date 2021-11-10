@@ -41,9 +41,14 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.message ? Test.serial.skip : Test.serial.only)('commit', async (test) => {
+  ;(Process.env.message ? Test.serial.skip : Test.serial)('commit', async (test) => {
+    
+    test.log(`typeof Process.env.GIT_IS_DIRTY = ${typeof Process.env.GIT_IS_DIRTY}`)
+    test.log(`       Process.env.GIT_IS_DIRTY = ${Is.string(Process.env.GIT_IS_DIRTY) ? `'${Process.env.GIT_IS_DIRTY}'` : Process.env.GIT_IS_DIRTY}`)
+    
     let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'commit'])
-    test.is(await process.whenExit(), Is.equal(Process.env.GIT_IS_DIRTY, 1) ? 2 : 0)
+    test.is(await process.whenExit(), Is.equal(Process.env.GIT_IS_DIRTY, 'true') ? 2 : 0)
+  
   })
 
   Test.serial('update', async (test) => {
@@ -91,12 +96,12 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Is.equal(Process.env.GIT_IS_DIRTY, 1) ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
+  ;(Is.equal(Process.env.GIT_IS_DIRTY, 'true') ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release', 'version=prerelease' ])
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.GIT_IS_DIRTY || Process.env.version ? Test.serial.skip : Test.serial)('release', async (test) => {
+  ;(Is.equal(Process.env.GIT_IS_DIRTY, 'true') || Process.env.version ? Test.serial.skip : Test.serial)('release', async (test) => {
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release' ])
     test.is(await process.whenExit(), 2)
   })
