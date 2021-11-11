@@ -84,9 +84,14 @@ Test('resource/copy/index.json', async (test) => {
   test.true((await FileSystem.readJson(Require.resolve('./resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
-/* c8 ignore next 3 */
-;(FileSystem.pathExistsSync(`${FolderPath}/../../source/test/resource/empty`) ? Test : Test.skip)('resource/empty', async (test) => {
-  test.true(await FileSystem.pathExists(`${FolderPath}/resource/empty`))
+Test('resource/empty', async (test) => {
+
+  let path = Path.normalize(`${FolderPath}/../../source/test/resource/empty`)
+
+  if (!FileSystem.pathExistsSync(path)) { test.log(`'${Path.relative('', path)}' does not exist!`) }
+
+  (FileSystem.pathExistsSync(path) ? test.true : test.true.skip)(await FileSystem.pathExists(`${FolderPath}/resource/empty`))
+
 })
 
 Test('resource/ignore', async (test) => {

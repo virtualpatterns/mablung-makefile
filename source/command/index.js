@@ -7,7 +7,8 @@ import Is from '@pwn/is'
 import Path from 'path'
 import URL from 'url'
 
-import { Package } from './library/package.js'
+import { Package as ThisPackage } from './library/this-package.js'
+import { Package as ThatPackage } from './library/that-package.js'
 
 import { UpdateConfigurationError } from './error/update-configuration-error.js'
 
@@ -17,18 +18,18 @@ const Process = process
 const Require = CreateRequire(import.meta.url)
 
 Command
-  .name(Package.name.replace(/^(.*)\/(.*)$/, '$2'))
-  .version(Package.version)
+  .name(ThisPackage.name.replace(/^(.*)\/(.*)$/, '$2'))
+  .version(ThisPackage.version)
 
 Command
   .command('get-version')
-  .description('Return the name and version of the package.')
+  .description('Return the name and version of the @virtualpatterns/mablung-makefile package.')
   .action(() => {
 
     Process.exitCode = 0
 
     try {
-      console.log(`${Package.name}@${Package.version}`)
+      console.log(`${ThisPackage.name}@${ThisPackage.version}`)
     } catch (error) {
       Process.exitCode = 1
       console.error(error)
@@ -38,13 +39,38 @@ Command
 
 Command
   .command('get-path')
-  .description('Return the path of the makefile.')
+  .description('Return the path of the @virtualpatterns/mablung-makefile makefile.')
   .action(() => {
 
     Process.exitCode = 0
 
     try {
       console.log(Require.resolve('../../makefile'))
+    } catch (error) {
+      Process.exitCode = 1
+      console.error(error)
+    }
+
+  })
+
+Command
+  .command('get-header')
+  .description('Return the name, description, etc. of the package.')
+  .action(() => {
+
+    Process.exitCode = 0
+
+    try {
+
+      console.log()
+      console.log(`Package:     ${ThatPackage.name}`)
+      console.log(`Description: ${ThatPackage.description}`)
+      console.log(`Version:     ${ThatPackage.version}`)
+      console.log(`License:     ${ThatPackage.license}`)
+      console.log(`Author:      ${ThatPackage.author}`)
+      console.log(`Repository:  ${ThatPackage.repository.url}`)
+      console.log(`Source:      ${Process.env.SOURCE_PATH}`)
+
     } catch (error) {
       Process.exitCode = 1
       console.error(error)

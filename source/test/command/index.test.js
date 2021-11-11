@@ -44,6 +44,16 @@ Test.serial('get-path throws Error', async (test) => {
   test.is(await process.whenExit(), 1)
 })
 
+Test.serial('get-header', async (test) => {
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-header': true })
+  test.is(await process.whenExit(), 0)
+})
+
+Test.serial('get-header throws Error', async (test) => {
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'get-header': true }, { 'execArgv': [ ...Process.execArgv, '--require', Require.resolve('./require/get-header.cjs') ] })
+  test.is(await process.whenExit(), 1)
+})
+
 Test.serial('update-configuration', async (test) => {
   let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update-configuration': true })
   test.is(await process.whenExit(), 1)

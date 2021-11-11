@@ -17,7 +17,7 @@
     },
     {
       "exclude": [
-        "source/header",
+        "source/command",
         "source/sandbox",
         "source/test",
         "source/index.js"
@@ -27,7 +27,7 @@
           "babel-plugin-add-header-comment",
           {
             "header": [
-              "!node release/header/index.js"
+              "!npx --no-install --package @virtualpatterns/mablung-makefile mablung-makefile get-header"
             ]
           }
         ]

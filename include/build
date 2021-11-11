@@ -7,14 +7,10 @@ ifndef current-build-folder
 
 build:: pre-build
 	$(info - build --------------------------------)
-	$(if $(verbose),@echo create .... source/header)
-	@npx shx mkdir -p release/header
-	$(if $(verbose),@echo build ..... source/header)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source/header
 	$(if $(verbose),@echo create .... source)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source exclude-build-folder=source/header
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source
 
 pre-build:: ;
 
