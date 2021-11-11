@@ -18,6 +18,6 @@ Test.before(async () => {
 })
 
 Test.serial('default', async (test) => {
-  let process = new LoggedProcess(Require.resolve('../../header/index.js'))
+  let process = new LoggedProcess(Require.resolve('@virtualpatterns/mablung-makefile/header'))
   test.is(await process.whenExit(), 0)
 })

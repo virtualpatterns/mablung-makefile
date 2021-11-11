@@ -7,7 +7,7 @@ import Is from '@pwn/is'
 import Path from 'path'
 import URL from 'url'
 
-import { Package } from '../library/package.js'
+import { Package } from './library/package.js'
 
 import { UpdateConfigurationError } from './error/update-configuration-error.js'
 

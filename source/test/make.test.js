@@ -1,7 +1,6 @@
 import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
 import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
-// import Git from 'nodegit'
 import Is from '@pwn/is'
 import Path from 'path'
 import Test from 'ava'
@@ -10,15 +9,12 @@ import URL from 'url'
 async function main() {
 
   const FilePath = URL.fileURLToPath(import.meta.url)
-  // const FolderPath = Path.dirname(FilePath)
   const Process = process
 
   const LogPath = FilePath.replace('/release/', '/data/').replace(/\.test\.c?js$/, '.log')
   const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-  // const Repository = await Git.Repository.open(Path.resolve(`${FolderPath}/../..`))
-  // const Status = await Repository.getStatus()
-  // const IsDirty = Status.length > 0 ? true : false
+  const IsDirty = Is.equal(Process.env.GIT_IS_DIRTY, 'true')
 
   Test.before(async () => {
     await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -41,13 +37,13 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.message ? Test.serial.skip : Test.serial)('commit', async (test) => {
-    
-    test.log(`Process.env.GIT_IS_DIRTY = ${Is.string(Process.env.GIT_IS_DIRTY) ? `'${Process.env.GIT_IS_DIRTY}'` : Process.env.GIT_IS_DIRTY} (${typeof Process.env.GIT_IS_DIRTY})`)
-    
+  Test.serial('commit', async (test) => {
+
+    if (Process.env.message) { test.log(`Process.env.message = '${Process.env.message}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'commit'])
-    test.is(await process.whenExit(), Is.equal(Process.env.GIT_IS_DIRTY, 'true') ? 2 : 0)
-  
+    ;(Process.env.message ? test.is.skip : test.is)(await process.whenExit(), IsDirty ? 2 : 0)
+    
   })
 
   Test.serial('update', async (test) => {
@@ -75,34 +71,59 @@ async function main() {
     test.is(await process.whenExit(), 0)
   })
 
-  ;(Process.env.argument ? Test.serial.skip : Test.serial)('run ...', async (test) => {
+  Test.serial('run ...', async (test) => {
+
+    if (Process.env.argument) { test.log(`Process.env.argument = '${Process.env.argument}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run', 'release/command/index.js', 'get-version' ])
-    test.is(await process.whenExit(), 0)
+    ;(Process.env.argument ? test.is.skip : test.is)(await process.whenExit(), 0)
+      
   })
 
-  ;(Process.env.argument ? Test.serial.skip : Test.serial)('run', async (test) => {
+  Test.serial('run', async (test) => {
+
+    if (Process.env.argument) { test.log(`Process.env.argument = '${Process.env.argument}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run' ])
-    test.is(await process.whenExit(), 2)
+    ;(Process.env.argument ? test.is.skip : test.is)(await process.whenExit(), 2)
+
   })
 
-  ;(Process.env.argument ? Test.serial.skip : Test.serial)('cover', async (test) => {
+  Test.serial('cover', async (test) => {
+ 
+    if (Process.env.argument) { test.log(`Process.env.argument = '${Process.env.argument}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'cover' ])
-    test.is(await process.whenExit(), 0)
+    ;(Process.env.argument ? test.is.skip : test.is)(await process.whenExit(), 0)
+
   })
 
-  ;(Process.env.argument ? Test.serial.skip : Test.serial)('test', async (test) => {
+  Test.serial('test', async (test) => {
+
+    if (Process.env.argument) { test.log(`Process.env.argument = '${Process.env.argument}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'test' ])
-    test.is(await process.whenExit(), 0)
+    ;(Process.env.argument ? test.is.skip : test.is)(await process.whenExit(), 0)
+
   })
 
-  ;(Is.equal(Process.env.GIT_IS_DIRTY, 'true') ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
+  Test.serial('release version=...', async (test) => {
+
+    if (IsDirty) { test.log(`IsDirty = ${IsDirty}`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release', 'version=prerelease' ])
-    test.is(await process.whenExit(), 0)
+    ;(IsDirty ? test.is.skip : test.is)(await process.whenExit(), 0)
+
   })
 
-  ;(Is.equal(Process.env.GIT_IS_DIRTY, 'true') || Process.env.version ? Test.serial.skip : Test.serial)('release', async (test) => {
+  Test.serial('release', async (test) => {
+
+    if (IsDirty) { test.log(`IsDirty = ${IsDirty}`) }
+    if (Process.env.version) { test.log(`Process.env.version = '${Process.env.version}'`) }
+
     let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release' ])
-    test.is(await process.whenExit(), 2)
+    ;(IsDirty || Process.env.version ? test.is.skip : test.is)(await process.whenExit(), 2)
+
   })
 
   Test.serial('build', async (test) => {

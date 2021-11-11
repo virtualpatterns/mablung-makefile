@@ -1,7 +1,6 @@
+import { Package } from '@virtualpatterns/mablung-makefile/package'
 import Test from 'ava'
 
-import { Package } from '../../../header/library/package.js'
-
-Test('name', (test) => {
+Test('default', (test) => {
   test.is(Package.name, '@virtualpatterns/mablung-makefile')
 })
