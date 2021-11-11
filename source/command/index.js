@@ -30,8 +30,8 @@ Command
     try {
       console.log(`${Package.name}@${Package.version}`)
     } catch (error) {
-      console.error(error)
       Process.exitCode = 1
+      console.error(error)
     }
 
   })
@@ -46,8 +46,8 @@ Command
     try {
       console.log(Require.resolve('../../makefile'))
     } catch (error) {
-      console.error(error)
       Process.exitCode = 1
+      console.error(error)
     }
 
   })
@@ -89,8 +89,8 @@ Command
       }
 
     } catch (error) {
-      console.error(error)
       Process.exitCode = 1
+      console.error(error)
     }
 
   })
