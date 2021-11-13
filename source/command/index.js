@@ -10,7 +10,7 @@ import URL from 'url'
 import { Package as ThisPackage } from './library/this-package.js'
 import { Package as ThatPackage } from './library/that-package.js'
 
-import { UpdateConfigurationError } from './error/update-configuration-error.js'
+import { UpdateError } from './error/update-error.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
@@ -79,9 +79,9 @@ Command
   })
 
 Command
-  .command('update-configuration')
+  .command('update')
   .argument('[path]', 'Path to update', '.')
-  .description('Update the .eslintrc.json and babel.config.json files at the given path.')
+  .description('Update the .eslintrc.json, babel.config.json, and get-header.js files at the given path.')
   .action(async (path) => {
 
     Process.exitCode = 0
@@ -96,22 +96,24 @@ Command
         await FileSystem.ensureDir(targetPath)
 
         let sourceCheckPath = Require.resolve(`${sourcePath}/.eslintrc.json`)
-        let sourceCheckConfiguration = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
+        let sourceCheck = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
 
-        await FileSystem.writeJson(`${targetPath}/.eslintrc.json`, sourceCheckConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+        await FileSystem.writeJson(`${targetPath}/.eslintrc.json`, sourceCheck, { 'encoding': 'utf-8', 'spaces': 2 })
 
         let sourceCompilePath = Require.resolve(`${sourcePath}/babel.config.json`)
-        let sourceCompileConfiguration = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
+        let sourceCompile = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
 
         let targetCompilePath = `${targetPath}/babel.config.json`
-        let targetCompileConfiguration = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
+        let targetCompile = (await FileSystem.pathExists(targetCompilePath)) ? (await FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })) : { 'overrides': [ {}, { 'exclude': [] } ] }
 
-        sourceCompileConfiguration.overrides[1].exclude = targetCompileConfiguration.overrides[1].exclude
+        sourceCompile.overrides[1].exclude = targetCompile.overrides[1].exclude
 
-        await FileSystem.writeJson(targetCompilePath, sourceCompileConfiguration, { 'encoding': 'utf-8', 'spaces': 2 })
+        await FileSystem.writeJson(targetCompilePath, sourceCompile, { 'encoding': 'utf-8', 'spaces': 2 })
+
+        await FileSystem.copy(Require.resolve(`${sourcePath}/get-header.js`), `${targetPath}/get-header.js`, { 'overwrite': true  })
 
       } else {
-        throw new UpdateConfigurationError(path)
+        throw new UpdateError(path)
       }
 
     } catch (error) {

@@ -54,30 +54,31 @@ Test.serial('get-header throws Error', async (test) => {
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update-configuration', async (test) => {
-  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update-configuration': true })
+Test.serial('update', async (test) => {
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update': true })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update-configuration configuration-0', async (test) => {
+Test.serial('update target-0', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
   let sourceCheckPath = `${sourcePath}/.eslintrc.json`
   let sourceCompilePath = `${sourcePath}/babel.config.json`
 
-  let targetPath = `${FolderPath}/resource/configuration-0`
+  let targetPath = `${FolderPath}/resource/target-0`
   let targetCheckPath = `${targetPath}/.eslintrc.json`
   let targetCompilePath = `${targetPath}/babel.config.json`
+  let targetGetHeaderPath = `${targetPath}/get-header.js`
 
   let [
-    sourceCheckConfiguration,
-    sourceCompileConfiguration
+    sourceCheck,
+    sourceCompile
   ] = await Promise.all([
     FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
     FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
   ])
 
-  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update-configuration': targetPath })
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update': targetPath })
 
   try {
 
@@ -85,85 +86,99 @@ Test.serial('update-configuration configuration-0', async (test) => {
 
     test.deepEqual(await Promise.all([
       FileSystem.pathExists(targetCheckPath),
-      FileSystem.pathExists(targetCompilePath)
+      FileSystem.pathExists(targetCompilePath),
+      FileSystem.pathExists(targetGetHeaderPath)
     ]), [
+      true,
       true,
       true
     ])
     
     let [
-      targetCheckConfigurationAfter,
-      targetCompileConfigurationAfter
+      targetCheckAfter,
+      targetCompileAfter
     ] = await Promise.all([
       FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
       FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
     ])
 
-    test.deepEqual(targetCheckConfigurationAfter, sourceCheckConfiguration)
-    test.deepEqual(targetCompileConfigurationAfter.overrides[1].exclude, [])
+    test.deepEqual(targetCheckAfter, sourceCheck)
+    test.deepEqual(targetCompileAfter.overrides[1].exclude, [])
 
-    sourceCompileConfiguration.overrides[1].exclude = []
-    test.deepEqual(targetCompileConfigurationAfter, sourceCompileConfiguration)
+    sourceCompile.overrides[1].exclude = []
+    test.deepEqual(targetCompileAfter, sourceCompile)
 
   } finally {
 
     await Promise.all([
       FileSystem.remove(targetCheckPath),
-      FileSystem.remove(targetCompilePath)
+      FileSystem.remove(targetCompilePath),
+      FileSystem.remove(targetGetHeaderPath)
     ])
 
   }
 
 })
 
-Test.serial('update-configuration configuration-1', async (test) => {
+Test.serial('update target-1', async (test) => {
 
   let sourcePath = `${FolderPath}/../../..`
   let sourceCheckPath = `${sourcePath}/.eslintrc.json`
   let sourceCompilePath = `${sourcePath}/babel.config.json`
+  let sourceGetHeaderPath = `${sourcePath}/get-header.js`
 
-  let targetPath = `${FolderPath}/resource/configuration-1`
+  let targetPath = `${FolderPath}/resource/target-1`
   let targetCheckPath = `${targetPath}/.eslintrc.json`
   let targetCompilePath = `${targetPath}/babel.config.json`
+  let targetGetHeaderPath = `${targetPath}/get-header.js`
 
   let [
-    sourceCheckConfiguration,
-    sourceCompileConfiguration,
-    targetCheckConfigurationBefore,
-    targetCompileConfigurationBefore
+    sourceCheck,
+    sourceCompile,
+    sourceGetHeader,
+    targetCheckBefore,
+    targetCompileBefore,
+    targetGetHeaderBefore
   ] = await Promise.all([
     FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
     FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' }),
+    FileSystem.readFile(sourceGetHeaderPath, { 'encoding': 'utf-8' }),
     FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
-    FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+    FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' }),
+    FileSystem.readFile(targetGetHeaderPath, { 'encoding': 'utf-8' })
   ])
 
-  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update-configuration': targetPath })
+  let process = new LoggedProcess(Require.resolve('../../command/index.js'), { 'update': targetPath })
 
   try {
 
     test.is(await process.whenExit(), 0)
 
     let [
-      targetCheckConfigurationAfter,
-      targetCompileConfigurationAfter
+      targetCheckAfter,
+      targetCompileAfter,
+      targetGetHeaderAfter
     ] = await Promise.all([
       FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
-      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' }),
+      FileSystem.readFile(targetGetHeaderPath, { 'encoding': 'utf-8' })
     ])
 
-    test.deepEqual(targetCheckConfigurationAfter, sourceCheckConfiguration)
-    test.deepEqual(targetCompileConfigurationAfter.overrides[1].exclude, targetCompileConfigurationBefore.overrides[1].exclude)
+    test.deepEqual(targetCheckAfter, sourceCheck)
+    test.deepEqual(targetCompileAfter.overrides[1].exclude, targetCompileBefore.overrides[1].exclude)
 
-    sourceCompileConfiguration.overrides[1].exclude = []
-    targetCompileConfigurationAfter.overrides[1].exclude = []
-    test.deepEqual(targetCompileConfigurationAfter, sourceCompileConfiguration)
+    sourceCompile.overrides[1].exclude = []
+    targetCompileAfter.overrides[1].exclude = []
+    test.deepEqual(targetCompileAfter, sourceCompile)
+
+    test.is(targetGetHeaderAfter, sourceGetHeader)
 
   } finally {
 
     await Promise.all([
-      FileSystem.writeJson(targetCheckPath, targetCheckConfigurationBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
-      FileSystem.writeJson(targetCompilePath, targetCompileConfigurationBefore, { 'encoding': 'utf-8', 'spaces': 2 })
+      FileSystem.writeJson(targetCheckPath, targetCheckBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
+      FileSystem.writeJson(targetCompilePath, targetCompileBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
+      FileSystem.writeFile(targetGetHeaderPath, targetGetHeaderBefore, { 'encoding': 'utf-8' })
     ])
 
   }

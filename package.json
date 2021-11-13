@@ -10,6 +10,7 @@
     "release/command",
     ".eslintrc.json",
     "babel.config.json",
+    "get-header.js",
     "makefile"
   ],
   "license": "GPL-3.0+",

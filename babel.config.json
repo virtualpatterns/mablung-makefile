@@ -17,14 +17,16 @@
     },
     {
       "exclude": [
-        "source"
+        "source/sandbox",
+        "source/test",
+        "source/index.js"
       ],
       "plugins": [
         [
           "babel-plugin-add-header-comment",
           {
             "header": [
-              "!npx mablung-makefile get-header"
+              "!node get-header.js"
             ]
           }
         ]

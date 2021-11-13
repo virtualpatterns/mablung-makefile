@@ -3,7 +3,7 @@ import Path from 'path'
 
 import { IndexError } from './index-error.js'
 
-class UpdateConfigurationError extends IndexError {
+class UpdateError extends IndexError {
 
   constructor(path) {
     /* c8 ignore next 1 */
@@ -12,4 +12,4 @@ class UpdateConfigurationError extends IndexError {
 
 }
 
-export { UpdateConfigurationError }
+export { UpdateError }
