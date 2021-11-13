@@ -1,6 +1,7 @@
 {
   "all": true,
   "exclude": [
+    "release/test/command/resource",
     "release/sandbox",
     "ava.config.cjs"
   ],
