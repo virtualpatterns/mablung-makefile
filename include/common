@@ -93,7 +93,7 @@ pre-re-install:: ;
 .PHONY: update pre-update update-0 update-1
 # --------------------
 
-update:: update-0
+update:: pre-update update-0
 	@:
 
 update-0:
@@ -112,6 +112,8 @@ update-1:
 	@:
 
 endif
+
+pre-update:: ;
 
 # --------------------
 .PHONY: version pre-version
