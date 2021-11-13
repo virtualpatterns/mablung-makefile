@@ -3,15 +3,11 @@
   "bin": "./release/command/index.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
-    "./header": "./release/header/index.js",
-    "./package": "./release/header/library/package.js",
     "./package.json": "./package.json"
   },
   "files": [
     "include",
     "release/command",
-    "release/header",
-    "release/library",
     ".eslintrc.json",
     "babel.config.json",
     "makefile"
