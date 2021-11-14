@@ -23,8 +23,8 @@ Test('MAKEFILE_PATH', (test) => {
     Require.resolve('../../makefile'),
     Require.resolve('../../include/common'),
     Require.resolve('../../include/build'),
-    Require.resolve('../../include/clean'),
-    Require.resolve('../../include/debug')
+    Require.resolve('../../include/debug'),
+    Require.resolve('../../include/clean')
   ])
 })
 
