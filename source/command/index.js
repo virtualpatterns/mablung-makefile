@@ -81,7 +81,7 @@ Command
 Command
   .command('update')
   .argument('[path]', 'Path to update', '.')
-  .description('Update the .eslintrc.json, babel.config.json, and get-header.js files at the given path.')
+  .description('Update the .eslintrc.json, babel.config.json, and get-header.js files at the given path.\nNOTE:  Designed to be used by the pre-build step of the @virtualpatterns/babel-preset-mablung-makefile and @virtualpatterns/eslint-config-mablung-makefile projects.')
   .action(async (path) => {
 
     Process.exitCode = 0
