@@ -45,11 +45,9 @@ commit:: pre-commit $(addsuffix .add,$(commit-item))
 	@git commit --message="$(message)"
 
 %.add:
-	$(if $(verbose),@echo add ....... $(patsubst %.add,%,$@))
 	@git add $(patsubst %.add,%,$@)
 
 else
-
 
 commit::
 	$(info A message must be specified (e.g. message="make tests"))
@@ -57,9 +55,7 @@ commit::
 
 endif
 
-pre-commit::
-	$(info - pre-commit ---------------------------)
-	@:
+pre-commit:: ;
 
 else
 
