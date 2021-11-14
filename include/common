@@ -227,6 +227,7 @@ release:: pre-release
 	@git push origin master
 
 publish:: pre-publish
+	$(info - publish ------------------------------)
 	@npm publish --access public
 
 pre-publish:: ;
