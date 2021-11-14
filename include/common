@@ -41,6 +41,7 @@ ifneq ($(commit-item),)
 ifneq ($(message),)
 
 commit:: pre-commit $(addsuffix .add,$(commit-item))
+	$(info - commit -------------------------------)
 	@git commit --message="$(message)"
 
 %.add:
@@ -56,7 +57,7 @@ commit::
 endif
 
 pre-commit::
-	$(info - commit -------------------------------)
+	$(info - pre-commit ---------------------------)
 	@:
 
 else
