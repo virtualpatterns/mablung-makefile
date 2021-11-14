@@ -50,6 +50,7 @@ commit:: pre-commit $(addsuffix .add,$(commit-item))
 
 else
 
+
 commit::
 	$(info A message must be specified (e.g. message="make tests"))
 	$(error Error)
