@@ -41,9 +41,11 @@ ifneq ($(commit-item),)
 ifneq ($(message),)
 
 commit:: pre-commit $(addsuffix .add,$(commit-item))
+	$(info - commit -------------------------------)
 	@git commit --message="$(message)"
 
 %.add:
+	$(if $(verbose),@echo add ....... $(patsubst %.add,%,$@))
 	@git add $(patsubst %.add,%,$@)
 
 else
@@ -55,9 +57,7 @@ commit::
 endif
 
 pre-commit::
-	$(info - commit -------------------------------)
-	$(info The following items will be committed ... $(commit-item))
-	$(info ----------------------------------------)
+	$(info - pre-commit ---------------------------)
 	@:
 
 else
@@ -172,7 +172,7 @@ run:: pre-run build
 		$(eval export GIT_IS_DIRTY = false))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
 
-pre-run::
+pre-run:: ;
 
 else
 
@@ -226,8 +226,13 @@ release:: pre-release
 	$(info - release ------------------------------)
 	@npm version $(version)
 	@$(MAKE) --no-print-directory clean test source-map=false
-	@npm publish --access public
+	@$(MAKE) --no-print-directory publish
 	@git push origin master
+
+publish:: pre-publish
+	@npm publish --access public
+
+pre-publish:: ;
 
 else
 

@@ -9,22 +9,24 @@ debug:: pre-debug
 	$(info - debug --------------------------------)
 	$(info )
 	$(info .FEATURES .............. $(.FEATURES))
-	$(info MAKEFILE_LIST .......... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST))))
+	$(info MAKE_PATH .............. $(MAKE))
+	$(info MAKEFILE_PATH .......... $(patsubst $(CURDIR)/%,%,$(realpath $(MAKEFILE_LIST))))
+	$(if $(dirty-item),\
+		$(info GIT_IS_DIRTY ........... true),\
+		$(info GIT_IS_DIRTY ........... false))
 	$(info )
 	@$(MAKE) --no-print-directory debug current-build-folder=source
 
-pre-debug::
+pre-debug:: ;
 
 else
 
 # --------------------
-.PHONY: debug pre-debug debug-0 debug-1
+.PHONY: debug debug-0 debug-1
 # --------------------
 
-debug:: pre-debug debug-0 debug-1
+debug:: debug-0 debug-1
 	@:
-
-pre-debug:: ;
 
 debug-0:
 	$(info current-build-folder ... $(current-build-folder))
