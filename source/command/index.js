@@ -109,10 +109,11 @@ Command
 
         sourceCompile.overrides[1].exclude = targetCompile.overrides[1].exclude
 
-        await FileSystem.writeJson(targetCompilePath, sourceCompile, { 'encoding': 'utf-8', 'spaces': 2 })
-
-        await FileSystem.copy(Require.resolve(`${sourcePath}/get-header.js`), `${targetPath}/get-header.js`, { 'overwrite': true  })
-
+        await Promise.all([
+          FileSystem.writeJson(targetCompilePath, sourceCompile, { 'encoding': 'utf-8', 'spaces': 2 }),
+          FileSystem.copy(Require.resolve(`${sourcePath}/get-header.js`), `${targetPath}/get-header.js`, { 'overwrite': true })
+        ])
+        
       } else {
         throw new UpdateError(path)
       }

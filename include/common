@@ -222,7 +222,7 @@ ifneq ($(version),)
 release:: pre-release
 	$(info - release ------------------------------)
 	@npm version $(version)
-	@$(MAKE) --no-print-directory clean test source-map=false
+	@$(MAKE) --no-print-directory clean test source-map=true
 	@$(MAKE) --no-print-directory publish
 	@git push origin master
 
