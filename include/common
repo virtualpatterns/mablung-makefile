@@ -222,7 +222,6 @@ ifneq ($(version),)
 release:: pre-release
 	$(info - release ------------------------------)
 	@npm version $(version)
-	@$(MAKE) --no-print-directory clean test source-map=true
 	@$(MAKE) --no-print-directory publish
 	@git push origin master
 
@@ -243,7 +242,7 @@ endif
 pre-release:: pre-pre-release update
 	$(info - pre-release --------------------------)
 	@npm version prerelease
-	@$(MAKE) --no-print-directory clean cover source-map=true
+	@$(MAKE) --no-print-directory clean cover
 	@git push origin master
 
 pre-pre-release:: ;
