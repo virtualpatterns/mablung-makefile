@@ -90,6 +90,7 @@ Test.serial('run argument="..."', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
+/* c8 ignore next 4 */
 ;(IsDirty || Is.not.nil(Process.env.version) ? Test.serial.skip : Test.serial)('release', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release' ])
   test.is(await process.whenExit(), 2)
