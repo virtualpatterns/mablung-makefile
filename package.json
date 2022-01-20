@@ -31,12 +31,12 @@
     "commander": "^8.3.0",
     "eslint": "^8.7.0",
     "fs-extra": "^10.0.0",
-    "npm-check-updates": "^12.1.0",
+    "npm-check-updates": "^12.2.0",
     "shx": "^0.3.4"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
-    "@babel/preset-env": "^7.16.10",
+    "@babel/preset-env": "^7.16.11",
     "@virtualpatterns/mablung-worker": "0.0.2-115",
     "depcheck": "^1.4.3",
     "eslint-plugin-babel": "^5.3.1",
