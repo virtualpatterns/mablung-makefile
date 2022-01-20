@@ -7,7 +7,7 @@ ifndef current-build-folder
 
 build:: pre-build
 	$(info - build --------------------------------)
-	@npx eslint --cache --cache-location ./data/cache/eslint.json $(eslint-parameter) source 
+	@npx eslint --cache --cache-location data/cache/eslint.json $(eslint-parameter) source 
 	$(if $(verbose),@echo create .... release)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
