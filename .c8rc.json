@@ -1,9 +1,10 @@
 {
   "all": true,
   "exclude": [
-    "release/test/command/resource",
+    "ava.config.cjs",
     "release/sandbox",
-    "ava.config.cjs"
+    "release/test/command/resource",
+    "release/test/resource/copy"
   ],
   "reportDir": "data/c8", 
   "reporter": [
