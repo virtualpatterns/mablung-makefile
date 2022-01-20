@@ -9,7 +9,8 @@ import URL from 'url'
 const FilePath = URL.fileURLToPath(import.meta.url)
 const Process = process
 
-const LogPath = FilePath.replace('/release/', '/data/').replace(/\.test\.c?js$/, '.log')
+const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
+const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
 const IsDirty = Is.equal(Process.env.GIT_IS_DIRTY, 'true')

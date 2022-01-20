@@ -9,7 +9,8 @@ const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
 const Process = process
 
-const LogPath = FilePath.replace('/release/', '/data/').replace(/\.test\.c?js$/, '.log')
+const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
+const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(ForkedProcess, LogPath)
 
 Test.before(async () => {
@@ -28,7 +29,7 @@ Test.serial('get-version', async (test) => {
 })
 
 Test.serial('get-version throws Error', async (test) => {
-  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-version': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, './require/get-version.cjs') ] })
+  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-version': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, 'require/get-version.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
@@ -38,7 +39,7 @@ Test.serial('get-path', async (test) => {
 })
 
 Test.serial('get-path throws Error', async (test) => {
-  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-path': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, './require/get-path.cjs') ] })
+  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-path': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, 'require/get-path.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
