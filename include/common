@@ -93,6 +93,8 @@ pre-re-install:: ;
 update:: pre-update update-0
 	@:
 
+pre-update:: ;
+
 update-0:
 	$(info - update -------------------------------)
 	@npx ncu
@@ -109,8 +111,6 @@ update-1:
 	@:
 
 endif
-
-pre-update:: ;
 
 # --------------------
 .PHONY: version pre-version
@@ -181,11 +181,11 @@ cover:: pre-cover build
 	$(if $(dirty-item),\
 		$(eval export GIT_IS_DIRTY = true),\
 		$(eval export GIT_IS_DIRTY = false))
-	@npx shx rm -Rf coverage data/cache/coverage
+	@npx shx rm -Rf coverage data/c8
 	@npx c8 ava $(or $(argument),$(cover-argument))
-	@npx shx mkdir -p ../Shared/$(project-name)
-	@npx shx rm -Rf ../Shared/$(project-name)/coverage
-	@npx shx mv coverage ../Shared/$(project-name)
+	@npx shx mkdir -p ../Shared/$(project-name)/data
+	@npx shx rm -Rf ../Shared/$(project-name)/coverage ../Shared/$(project-name)/data/c8
+	@npx shx mv data/c8 ../Shared/$(project-name)/data
 
 pre-cover:: ;
 

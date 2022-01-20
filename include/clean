@@ -2,21 +2,23 @@
 ifndef current-clean-folder
 
 # --------------------
-.PHONY: clean pre-clean
+.PHONY: clean pre-clean clean-0 clean-1 clean-2
 # --------------------
 
-clean:: pre-clean clean-data clean-release
-	@:
+clean:: pre-clean
+	$(info - clean --------------------------------)
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean-0
 
 pre-clean:: ;
 
-clean-data::
-	$(info - clean-data ---------------------------)
+clean-0: clean-1 clean-2
+	@:
+
+clean-1:
 	$(if $(verbose),@echo clean ..... data)
 	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=data
 
-clean-release::
-	$(info - clean-release ------------------------)
+clean-2:
 	$(if $(verbose),@echo clean ..... release)
 	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=release
 
@@ -86,7 +88,7 @@ clean-item = $(call $\
 
 clean:: clean-0
 
-clean-0:: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
+clean-0: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
 	@$(MAKE) --no-print-directory clean-1
 
 %.make:

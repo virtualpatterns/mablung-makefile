@@ -2,24 +2,18 @@
 ifndef current-build-folder
 
 # --------------------
-.PHONY: build pre-build build-lint build-babel
+.PHONY: build pre-build
 # --------------------
 
-build:: pre-build build-lint build-babel
-	@:
-
-pre-build:: ;
-
-build-lint::
-	$(info - build-lint ---------------------------)
+build:: pre-build
+	$(info - build --------------------------------)
 	@npx eslint --cache --cache-location ./data/cache/eslint.json $(eslint-parameter) source 
-
-build-babel::
-	$(info - build-babel --------------------------)
 	$(if $(verbose),@echo create .... release)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build-babel current-build-folder=source
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source
+
+pre-build:: ;
 
 else
 
@@ -77,7 +71,7 @@ build-item = $(call $\
 											$(item))))))
 
 # --------------------
-.PHONY: build-babel copy ignore
+.PHONY: build copy ignore
 # --------------------
 
 # $(info ----------)
@@ -88,7 +82,7 @@ build-item = $(call $\
 # $(info build-item ............. $(build-item))
 # $(info ----------)
 
-build-babel:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
+build:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@:
 
 source/%.make:
@@ -97,7 +91,7 @@ source/%.make:
 
 source/%.build: release/%.create
 	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
-	@$(MAKE) --no-print-directory build-babel current-build-folder=$(patsubst %.build,%,$@) 
+	@$(MAKE) --no-print-directory build current-build-folder=$(patsubst %.build,%,$@) 
 
 release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
