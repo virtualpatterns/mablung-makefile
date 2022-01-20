@@ -7,8 +7,18 @@ const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
 const Process = process
 
-Test('index.js', async (test) => {
-  test.true((await import('../index.js')).OK)
+const EmptyPathExists = FileSystem.pathExistsSync(Path.resolve(FolderPath, '../../source/test/resource/empty'))
+
+;[
+  'LoadPackage',
+  'LoadPackageSync'
+].forEach((name) => {
+
+  Test(name, async (test) => {
+    let index = await import('@virtualpatterns/mablung-makefile')
+    test.truthy(index[name])
+  })
+
 })
 
 Test('MAKE_PATH', (test) => {
@@ -27,14 +37,6 @@ Test('MAKEFILE_PATH', (test) => {
 
 Test('GIT_IS_DIRTY', (test) => {
   test.not(Process.env.GIT_IS_DIRTY, undefined)
-})
-
-Test('compile.json', async (test) => {
-  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, '../compile.json')))
-})
-
-Test('check.json', async (test) => {
-  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, '../check.json')))
 })
 
 Test('sample.babelrc.json', async (test) => {
@@ -77,18 +79,32 @@ Test('resource/copy/makefile', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(FolderPath, 'resource/copy/makefile')))
 })
 
+Test('resource/copy/index.cjs', async (test) => {
+  test.true((await import('./resource/copy/index.cjs')).OK)
+})
+
+Test('resource/copy/index.js', async (test) => {
+  test.true((await import('./resource/copy/index.js')).OK)
+})
+
 Test('resource/copy/index.json', async (test) => {
   test.true((await FileSystem.readJson(Path.resolve(FolderPath, 'resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
 })
 
-Test('resource/empty', async (test) => {
+Test('resource/copy/folder/index.cjs', async (test) => {
+  test.true((await import('./resource/copy/folder/index.cjs')).OK)
+})
 
-  let path = Path.normalize(Path.resolve(FolderPath, '../../source/test/resource/empty'))
+Test('resource/copy/folder/index.js', async (test) => {
+  test.true((await import('./resource/copy/folder/index.js')).OK)
+})
 
-  if (!FileSystem.pathExistsSync(path)) { test.log(`'${Path.relative('', path)}' does not exist!`) }
+Test('resource/copy/folder/index.json', async (test) => {
+  test.true((await FileSystem.readJson(Path.resolve(FolderPath, 'resource/copy/folder/index.json'), { 'encoding': 'utf-8' })).OK)
+})
 
-  (FileSystem.pathExistsSync(path) ? test.true : test.true.skip)(await FileSystem.pathExists(Path.resolve(FolderPath, 'resource/empty')))
-
+;(EmptyPathExists ? Test : Test.skip)('resource/empty', async (test) => {
+  test.true(await FileSystem.pathExists(Path.resolve(FolderPath, 'resource/empty')))
 })
 
 Test('resource/ignore', async (test) => {

@@ -1,1 +1,1 @@
-export const OK = true
+export * from './library/load-package.js'
