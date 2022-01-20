@@ -5,14 +5,20 @@ ifndef current-clean-folder
 .PHONY: clean pre-clean
 # --------------------
 
-clean:: pre-clean
-	$(info - clean --------------------------------)
-	$(if $(verbose),@echo delete .... release)
-	@npx shx rm -Rf release
+clean:: pre-clean clean-data clean-release
+	@:
+
+pre-clean:: ;
+
+clean-data::
+	$(info - clean-data ---------------------------)
 	$(if $(verbose),@echo clean ..... data)
 	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=data
 
-pre-clean:: ;
+clean-release::
+	$(info - clean-release ------------------------)
+	$(if $(verbose),@echo clean ..... release)
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=release
 
 else
 
@@ -80,7 +86,7 @@ clean-item = $(call $\
 
 clean:: clean-0
 
-clean-0:: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder)) $(addsuffix .delete,$(clean-item))
+clean-0:: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
 	@$(MAKE) --no-print-directory clean-1
 
 %.make:
@@ -91,15 +97,11 @@ clean-0:: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder)) 
 	$(if $(verbose),@echo clean ..... $(patsubst %.clean,%,$@))
 	@$(MAKE) --no-print-directory clean current-clean-folder=$(patsubst %.clean,%,$@) 
 
-%.delete:
-	$(if $(verbose),@echo delete .... $(patsubst %.delete,%,$@))
-	@npx shx rm -Rf $(patsubst %.delete,%,$@)
-
 ignore::
 	$(if $(verbose),@echo ignore .... $(current-clean-folder))
 	@:
 
-ifeq ($(call get-content,$(current-clean-folder)),)
+ifeq ($(strip $(make-folder) $(clean-folder)),)
 
 clean-1:
 	$(if $(verbose),@echo delete .... $(current-clean-folder))
@@ -107,8 +109,12 @@ clean-1:
 
 else
 
-clean-1:
+clean-1: $(addsuffix .delete,$(clean-item))
 	@:
+
+%.delete:
+	$(if $(verbose),@echo delete .... $(patsubst %.delete,%,$@))
+	@npx shx rm -Rf $(patsubst %.delete,%,$@)
 
 endif
 

@@ -1,0 +1,36 @@
+{
+  "overrides": [
+    {
+      "include": [
+        "source/**/*.cjs"
+      ],
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "exclude": [
+        "source/index.js",
+        "source/sandbox",
+        "source/test"
+      ],
+      "plugins": [
+        [
+          "babel-plugin-add-header-comment",
+          {
+            "header": [
+              "!node get-header.js"
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}

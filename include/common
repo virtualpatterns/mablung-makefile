@@ -130,16 +130,6 @@ endif
 
 pre-version:: ;
 
-# # --------------------
-# .PHONY: clean pre-clean
-# # --------------------
-
-# clean:: pre-clean
-# 	$(info - clean --------------------------------)
-# 	@npx shx rm -Rf data release
-
-# pre-clean:: ;
-
 # --------------------
 .PHONY: run pre-run
 # --------------------
@@ -191,7 +181,7 @@ cover:: pre-cover build
 	$(if $(dirty-item),\
 		$(eval export GIT_IS_DIRTY = true),\
 		$(eval export GIT_IS_DIRTY = false))
-	@npx shx rm -Rf coverage data/coverage
+	@npx shx rm -Rf coverage data/cache/coverage
 	@npx c8 ava $(or $(argument),$(cover-argument))
 	@npx shx mkdir -p ../Shared/$(project-name)
 	@npx shx rm -Rf ../Shared/$(project-name)/coverage

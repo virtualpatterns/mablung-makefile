@@ -101,10 +101,10 @@ Test.serial('build', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('debug', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'debug' ])
-  test.is(await process.whenExit(), 0)
-})
+// Test.serial('debug', async (test) => {
+//   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'debug' ])
+//   test.is(await process.whenExit(), 0)
+// })
 
 Test.serial('clean', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'clean'])

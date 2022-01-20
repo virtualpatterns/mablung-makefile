@@ -2,24 +2,17 @@
 ifndef current-build-folder
 
 # --------------------
-.PHONY: build pre-build build-lint build-babel
+.PHONY: build pre-build
 # --------------------
 
-build:: pre-build build-lint build-babel
-	@:
-
-pre-build:: ;
-
-build-lint::
-	$(info - build-lint ---------------------------)
-	@npx eslint --cache --cache-location ./data/cache/eslint.json $(eslint-parameter) source 
-
-build-babel::
-	$(info - build-babel --------------------------)
-	$(if $(verbose),@echo create .... release)
+build:: pre-build
+	$(info - build --------------------------------)
+	$(if $(verbose),@echo create .... source)
 	@npx shx mkdir -p release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build-babel current-build-folder=source
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source
+
+pre-build:: ;
 
 else
 
@@ -77,7 +70,7 @@ build-item = $(call $\
 											$(item))))))
 
 # --------------------
-.PHONY: build-babel copy ignore
+.PHONY: build copy ignore
 # --------------------
 
 # $(info ----------)
@@ -88,7 +81,7 @@ build-item = $(call $\
 # $(info build-item ............. $(build-item))
 # $(info ----------)
 
-build-babel:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
+build:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-item)
 	@:
 
 source/%.make:
@@ -97,7 +90,7 @@ source/%.make:
 
 source/%.build: release/%.create
 	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
-	@$(MAKE) --no-print-directory build-babel current-build-folder=$(patsubst %.build,%,$@) 
+	@$(MAKE) --no-print-directory build current-build-folder=$(patsubst %.build,%,$@) 
 
 release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
@@ -117,15 +110,23 @@ release/%/.eslintrc.json: source/%/.eslintrc.json
 	$(if $(verbose),@echo ignore .... $<)
 
 release/%.cjs: source/%.cjs
-	@echo compile ... $@ $(babel-parameter)
-	@npx babel $< --out-file $@ --source-maps true $(babel-parameter)
+	$(eval export SOURCE_PATH := $<)
+	$(eval export RELEASE_PATH := $@)
+	@echo check ..... $< $(eslint-parameter)
+	@npx eslint $< $(eslint-parameter)
+	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%.js: source/%.js
-	@echo compile ... $@ $(babel-parameter)
-	@npx babel $< --out-file $@ --source-maps true $(babel-parameter)
+	$(eval export SOURCE_PATH := $<)
+	$(eval export RELEASE_PATH := $@)
+	@echo check ..... $< $(eslint-parameter)
+	@npx eslint $< $(eslint-parameter)
+	@echo compile ... $@ --source-maps $(or $(source-map),true) $(babel-parameter)
+	@npx babel $< --out-file $@ --source-maps $(or $(source-map),true) $(babel-parameter)
 
 release/%: source/%
-	$(if $(verbose),@echo copy ...... $@)
+	@echo copy ...... $@
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
