@@ -12,7 +12,8 @@ const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-const Content = 'include makefile\n\n.DEFAULT_GOAL := ignore'
+const DeleteContent = 'include makefile\n\n.DEFAULT_GOAL := delete'
+const IgnoreContent = 'include makefile\n\n.DEFAULT_GOAL := ignore'
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
@@ -80,14 +81,40 @@ Test.serial('clean data/0/0.json', async (test) => {
 
 })
 
-Test.serial('clean data/0/makefile', async (test) => {
+Test.serial('clean data/0/makefile when deleted', async (test) => {
 
   let path = [
     Path.resolve(DataPath, '0/makefile'),
     Path.resolve(DataPath, '0/0.json')
   ]
 
-  await FileSystem.outputFile(path[0], Content, { 'encoding': 'utf-8' })
+  await FileSystem.outputFile(path[0], DeleteContent, { 'encoding': 'utf-8' })
+  await FileSystem.ensureFile(path[1])
+
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+    'clean',
+    'job-count=1',
+    'verbose=true',
+    `current-clean-folder=${DataPath}`
+  ])
+
+  test.is(await process.whenExit(), 0)
+
+  test.is(await FileSystem.pathExists(path[1]), false)
+  test.is(await FileSystem.pathExists(path[0]), false)
+  test.is(await FileSystem.pathExists(Path.dirname(path[0])), false)
+  test.is(await FileSystem.pathExists(DataPath), false)
+
+})
+
+Test.serial('clean data/0/makefile when ignored', async (test) => {
+
+  let path = [
+    Path.resolve(DataPath, '0/makefile'),
+    Path.resolve(DataPath, '0/0.json')
+  ]
+
+  await FileSystem.outputFile(path[0], IgnoreContent, { 'encoding': 'utf-8' })
 
   try {
 

@@ -1,4 +1,5 @@
 
+ifndef current-build-folder
 ifndef current-clean-folder
 
 # --------------------
@@ -99,6 +100,10 @@ clean-0: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
 	$(if $(verbose),@echo clean ..... $(patsubst %.clean,%,$@))
 	@$(MAKE) --no-print-directory clean current-clean-folder=$(patsubst %.clean,%,$@) 
 
+delete::
+	@echo delete .... $(current-clean-folder)
+	@npx shx rm -Rf $(current-clean-folder)
+
 ignore::
 	$(if $(verbose),@echo ignore .... $(current-clean-folder))
 	@:
@@ -106,7 +111,7 @@ ignore::
 ifeq ($(strip $(make-folder) $(clean-folder)),)
 
 clean-1:
-	$(if $(verbose),@echo delete .... $(current-clean-folder))
+	@echo delete .... $(current-clean-folder)
 	@npx shx rm -Rf $(current-clean-folder)
 
 else
@@ -115,9 +120,10 @@ clean-1: $(addsuffix .delete,$(clean-item))
 	@:
 
 %.delete:
-	$(if $(verbose),@echo delete .... $(patsubst %.delete,%,$@))
+	@echo delete .... $(patsubst %.delete,%,$@)
 	@npx shx rm -Rf $(patsubst %.delete,%,$@)
 
 endif
 
+endif
 endif

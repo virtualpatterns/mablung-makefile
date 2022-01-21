@@ -24,6 +24,7 @@ trim-folder-path = $(patsubst $\
 											$(1)))
 
 ifndef current-build-folder
+ifndef current-clean-folder
 
 # --------------------
 .PHONY: commit pre-commit
@@ -143,7 +144,7 @@ get-argument = $(strip $\
 										$(if $\
 											$(find-argument-$(1)),$\
 											$(item)$\
-											$(eval $(item):;@:),$\
+											$(eval $(item)::;@:),$\
 											$(eval find-argument-$(1) = $(item))))))
 
 run-argument := $(call get-argument,run)
@@ -249,4 +250,5 @@ pre-release::
 
 endif
 
+endif
 endif

@@ -1,4 +1,5 @@
 
+ifndef current-clean-folder
 ifndef current-build-folder
 
 # --------------------
@@ -133,4 +134,5 @@ ignore::
 	$(if $(verbose),@echo ignore .... $(current-build-folder))
 	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
 
+endif
 endif
