@@ -10,7 +10,8 @@
     "babel.config.json",
     "include",
     "makefile",
-    "release/command"
+    "release/command",
+    "release/library"
   ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",
