@@ -3,7 +3,6 @@
   "bin": "./release/command/index.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
-    ".": "./release/index.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -11,8 +10,7 @@
     "babel.config.json",
     "include",
     "makefile",
-    "release/command",
-    "release/library"
+    "release/command"
   ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",

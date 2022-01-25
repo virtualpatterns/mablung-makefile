@@ -9,16 +9,8 @@ const Process = process
 
 const EmptyPathExists = FileSystem.pathExistsSync(Path.resolve(FolderPath, '../../source/test/resource/empty'))
 
-;[
-  'LoadPackage',
-  'LoadPackageSync'
-].forEach((name) => {
-
-  Test(name, async (test) => {
-    let index = await import('@virtualpatterns/mablung-makefile')
-    test.truthy(index[name])
-  })
-
+Test('default', async (test) => {
+  test.true((await import('../index.js')).OK)
 })
 
 Test('MAKE_PATH', (test) => {

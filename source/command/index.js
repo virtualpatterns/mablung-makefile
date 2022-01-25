@@ -6,15 +6,13 @@ import Is from '@pwn/is'
 import Path from 'path'
 import URL from 'url'
 
-import { LoadPackageSync } from '../library/load-package.js'
+import { Package } from '../library/package.js'
 
 import { UpdateError } from './error/update-error.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const FolderPath = Path.dirname(FilePath)
 const Process = process
-
-const Package = LoadPackageSync(Path.resolve(FolderPath, '../../package.json'))
 
 Command
   .name(Package.name.replace(/^(.*)\/(.*)$/, '$2'))
