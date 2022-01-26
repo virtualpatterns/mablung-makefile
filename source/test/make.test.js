@@ -20,18 +20,18 @@ Test.before(async () => {
   await FileSystem.remove(LogPath)
 })
 
-Test.serial('default', async (test) => {
+Test('default', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [])
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('null', async (test) => {
+Test('null', async (test) => {
   // an invalid target fails
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'null' ])
   test.is(await process.whenExit(), 2)
 })
 
-Test.serial('commit message=...', async (test) => {
+Test('commit message=...', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'commit', 'message=test' ])
   test.is(await process.whenExit(), 0)
 })
@@ -41,27 +41,27 @@ Test.serial('commit message=...', async (test) => {
   test.is(await process.whenExit(), IsDirty ? 2 : 0)
 })
 
-Test.serial('update', async (test) => {
+Test('update', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'update' ])
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('version', async (test) => {
+Test('version', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'version' ])
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('install', async (test) => {
+Test('install', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'install' ])
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('re-install', async (test) => {
+Test('re-install', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 're-install' ])
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('run argument="..."', async (test) => {
+Test('run argument="..."', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run', 'argument=release/command/index.js get-version' ])
   test.is(await process.whenExit(), 0)
 })
@@ -97,17 +97,12 @@ Test.serial('run argument="..."', async (test) => {
   test.is(await process.whenExit(), 2)
 })
 
-Test.serial('build', async (test) => {
+Test('build', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'build' ])
   test.is(await process.whenExit(), 0)
 })
 
-// Test.serial('debug', async (test) => {
-//   let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'debug' ])
-//   test.is(await process.whenExit(), 0)
-// })
-
-Test.serial('clean', async (test) => {
+Test('clean', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'clean'])
   test.is(await process.whenExit(), 0)
 })

@@ -18,37 +18,37 @@ Test.before(async () => {
   return FileSystem.remove(LogPath)
 })
 
-Test.serial('default', async (test) => {
+Test('default', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'))
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('get-version', async (test) => {
+Test('get-version', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-version': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('get-version throws Error', async (test) => {
+Test('get-version throws Error', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-version': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, 'require/get-version.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('get-path', async (test) => {
+Test('get-path', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-path': true })
   test.is(await process.whenExit(), 0)
 })
 
-Test.serial('get-path throws Error', async (test) => {
+Test('get-path throws Error', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'get-path': true }, { 'execArgv': [ ...Process.execArgv, '--require', Path.resolve(FolderPath, 'require/get-path.cjs') ] })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update', async (test) => {
+Test('update', async (test) => {
   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': true })
   test.is(await process.whenExit(), 1)
 })
 
-Test.serial('update target-0', async (test) => {
+Test('update target-0', async (test) => {
 
   let sourcePath = Path.resolve(FolderPath, '../../..')
   let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
@@ -102,7 +102,7 @@ Test.serial('update target-0', async (test) => {
 
 })
 
-Test.serial('update target-1', async (test) => {
+Test('update target-1', async (test) => {
 
   let sourcePath = Path.resolve(FolderPath, '../../..')
   let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')

@@ -4,14 +4,18 @@ import Command from 'commander'
 import FileSystem from 'fs-extra'
 import Is from '@pwn/is'
 import Path from 'path'
+import SourceMapSupport from 'source-map-support'
 import URL from 'url'
 
 import { Package } from '../library/package.js'
 
 import { UpdateError } from './error/update-error.js'
 
-const FilePath = URL.fileURLToPath(import.meta.url)
-const FolderPath = Path.dirname(FilePath)
+SourceMapSupport.install({
+  'handleUncaughtExceptions': false
+})
+
+const FolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const Process = process
 
 Command
@@ -67,16 +71,11 @@ Command
 
         await FileSystem.ensureDir(targetPath)
 
-        let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
-        let sourceCheck = await FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' })
+        await Promise.all([
+          FileSystem.copy(Path.resolve(sourcePath, '.eslintrc.json'), Path.resolve(targetPath, '.eslintrc.json'), { 'overwrite': true }),
+          FileSystem.copy(Path.resolve(sourcePath, 'babel.config.json'), Path.resolve(targetPath, 'babel.config.json'), { 'overwrite': true })
+        ])
 
-        await FileSystem.writeJson(Path.resolve(targetPath, '.eslintrc.json'), sourceCheck, { 'encoding': 'utf-8', 'spaces': 2 })
-
-        let sourceCompilePath = Path.resolve(sourcePath, 'babel.config.json')
-        let sourceCompile = await FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
-
-        await FileSystem.writeJson(Path.resolve(targetPath, 'babel.config.json'), sourceCompile, { 'encoding': 'utf-8', 'spaces': 2 })
-        
       } else {
         throw new UpdateError(path)
       }

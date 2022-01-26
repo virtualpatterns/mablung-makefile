@@ -31,7 +31,8 @@
     "eslint": "^8.7.0",
     "fs-extra": "^10.0.0",
     "npm-check-updates": "^12.2.1",
-    "shx": "^0.3.4"
+    "shx": "^0.3.4",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
