@@ -15,9 +15,13 @@ const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
 const IsDirty = Is.equal(Process.env.GIT_IS_DIRTY, 'true')
 
-Test.before(async () => {
+Test.before(async (test) => {
+
+  test.timeout(15000)
+
   await FileSystem.ensureDir(Path.dirname(LogPath))
-  await FileSystem.remove(LogPath)
+  return FileSystem.remove(LogPath)
+
 })
 
 Test('default', async (test) => {
