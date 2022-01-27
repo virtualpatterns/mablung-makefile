@@ -15,13 +15,9 @@ const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
 const IsDirty = Is.equal(Process.env.GIT_IS_DIRTY, 'true')
 
-Test.before(async (test) => {
-
-  test.timeout(15000)
-
+Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
   return FileSystem.remove(LogPath)
-
 })
 
 Test('default', async (test) => {
@@ -31,7 +27,7 @@ Test('default', async (test) => {
 
 Test('null', async (test) => {
   // an invalid target fails
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'null' ])
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'null' ])
   test.is(await process.whenExit(), 2)
 })
 
@@ -40,8 +36,8 @@ Test('commit message=...', async (test) => {
   test.is(await process.whenExit(), 0)
 })
 
-;(Is.nil(Process.env.message) ? Test.serial : Test.serial.skip)('commit', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'commit'])
+;(Is.nil(Process.env.message) ? Test : Test.skip)('commit', async (test) => {
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'commit' ])
   test.is(await process.whenExit(), IsDirty ? 2 : 0)
 })
 
@@ -51,7 +47,7 @@ Test('update', async (test) => {
 })
 
 Test('version', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'version' ])
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'version' ])
   test.is(await process.whenExit(), 0)
 })
 
@@ -66,47 +62,47 @@ Test('re-install', async (test) => {
 })
 
 Test('run argument="..."', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run', 'argument=release/command/index.js get-version' ])
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'run', 'argument=release/command/index.js get-version' ])
   test.is(await process.whenExit(), 0)
 })
 
-;(Is.nil(Process.env.argument) ? Test.serial : Test.serial.skip)('run ...', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run', 'release/command/index.js', 'get-version' ])
+;(Is.nil(Process.env.argument) ? Test : Test.skip)('run ...', async (test) => {
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'run', 'release/command/index.js', 'get-version' ])
   test.is(await process.whenExit(), 0)
 })
 
-;(Is.nil(Process.env.argument) ? Test.serial : Test.serial.skip)('run', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'run' ])
+;(Is.nil(Process.env.argument) ? Test : Test.skip)('run', async (test) => {
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'run' ])
   test.is(await process.whenExit(), 2)
 })
 
-;(Is.nil(Process.env.argument) ? Test.serial : Test.serial.skip)('cover', async (test) => {
+;(Is.nil(Process.env.argument) ? Test : Test.skip)('cover', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'cover' ])
   test.is(await process.whenExit(), 0)
 })
 
-;(Is.nil(Process.env.argument) ? Test.serial : Test.serial.skip)('test', async (test) => {
+;(Is.nil(Process.env.argument) ? Test : Test.skip)('test', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'test' ])
   test.is(await process.whenExit(), 0)
 })
 
-;(IsDirty ? Test.serial.skip : Test.serial)('release version=...', async (test) => {
+;(IsDirty ? Test.skip : Test)('release version=...', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release', 'version=prerelease' ])
   test.is(await process.whenExit(), 0)
 })
 
 /* c8 ignore next 4 */
-;(IsDirty || Is.not.nil(Process.env.version) ? Test.serial.skip : Test.serial)('release', async (test) => {
+;(IsDirty || Is.not.nil(Process.env.version) ? Test.skip : Test)('release', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'release' ])
   test.is(await process.whenExit(), 2)
 })
 
 Test('build', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ 'build' ])
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'build' ])
   test.is(await process.whenExit(), 0)
 })
 
 Test('clean', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, ['--dry-run', 'clean'])
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'clean' ])
   test.is(await process.whenExit(), 0)
 })
