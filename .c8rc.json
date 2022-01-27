@@ -1,7 +1,7 @@
 {
   "all": true,
   "exclude": [
-    "ava.config.cjs",
+    "ava.config.js",
     "release/sandbox",
     "release/test/command/resource",
     "release/test/resource/copy"
