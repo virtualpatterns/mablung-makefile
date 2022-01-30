@@ -27,8 +27,8 @@
     "@pwn/is": "^1.0.2",
     "ava": "^4.0.1",
     "c8": "^7.11.0",
-    "commander": "^8.3.0",
-    "eslint": "^8.7.0",
+    "commander": "^9.0.0",
+    "eslint": "^8.8.0",
     "fs-extra": "^10.0.0",
     "npm-check-updates": "^12.2.1",
     "shx": "^0.3.4",
@@ -40,6 +40,6 @@
     "@virtualpatterns/mablung-worker": "0.0.2-115",
     "depcheck": "^1.4.3",
     "eslint-plugin-babel": "^5.3.1",
-    "sinon": "^12.0.1"
+    "sinon": "^13.0.0"
   }
 }
