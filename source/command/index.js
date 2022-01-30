@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import Command from 'commander'
+import { program as Command } from 'commander'
 import FileSystem from 'fs-extra'
 import Is from '@pwn/is'
 import Path from 'path'
