@@ -2,12 +2,15 @@
 ifndef current-clean-folder
 ifndef current-build-folder
 
+export build-ignore := .DS_Store .babelrc.json .eslintrc.json
+
 # --------------------
 .PHONY: build pre-build
 # --------------------
 
 build:: pre-build
 	$(info - build --------------------------------)
+	@npx shx mkdir -p source
 	@npx eslint --cache --cache-location data/cache/eslint.json $(eslint-parameter) source 
 	$(if $(verbose),@echo create .... release)
 	@npx shx mkdir -p release
@@ -98,18 +101,26 @@ release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
-release/.DS_Store: source/.DS_Store
-	$(if $(verbose),@echo ignore .... $<)
-release/%/.DS_Store: source/%/.DS_Store
-	$(if $(verbose),@echo ignore .... $<)
-release/.babelrc.json: source/.babelrc.json
-	$(if $(verbose),@echo ignore .... $<)
-release/%/.babelrc.json: source/%/.babelrc.json
-	$(if $(verbose),@echo ignore .... $<)
-release/.eslintrc.json: source/.eslintrc.json
-	$(if $(verbose),@echo ignore .... $<)
-release/%/.eslintrc.json: source/%/.eslintrc.json
-	$(if $(verbose),@echo ignore .... $<)
+# release/.DS_Store: source/.DS_Store
+# 	$(if $(verbose),@echo ignore .... $<)
+# release/%/.DS_Store: source/%/.DS_Store
+# 	$(if $(verbose),@echo ignore .... $<)
+# release/.babelrc.json: source/.babelrc.json
+# 	$(if $(verbose),@echo ignore .... $<)
+# release/%/.babelrc.json: source/%/.babelrc.json
+# 	$(if $(verbose),@echo ignore .... $<)
+# release/.eslintrc.json: source/.eslintrc.json
+# 	$(if $(verbose),@echo ignore .... $<)
+# release/%/.eslintrc.json: source/%/.eslintrc.json
+# 	$(if $(verbose),@echo ignore .... $<)
+
+$(foreach	item,\
+					$(build-ignore),\
+					$(eval release/$(item):source/$(item);$(if $(verbose),@echo ignore .... $$<)))
+
+$(foreach	item,\
+					$(build-ignore),\
+					$(eval release/%/$(item):source/%/$(item);$(if $(verbose),@echo ignore .... $$<)))
 
 release/%.cjs: source/%.cjs
 	@echo compile ... $@ $(babel-parameter)

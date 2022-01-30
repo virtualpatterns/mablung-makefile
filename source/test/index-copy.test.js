@@ -5,8 +5,12 @@ import URL from 'url'
 
 const FolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 
-Test('./resource/copy/makefile', async (test) => {
-  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/copy/makefile')))
+Test('./resource/copy/.babelrc.json', async (test) => {
+  test.true(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
+})
+
+Test('./resource/copy/.eslintrc.json', async (test) => {
+  test.true(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
 })
 
 Test('./resource/copy/index.cjs', async (test) => {
@@ -19,6 +23,10 @@ Test('./resource/copy/index.js', async (test) => {
 
 Test('./resource/copy/index.json', async (test) => {
   test.true((await FileSystem.readJson(Path.resolve(FolderPath, './resource/copy/index.json'), { 'encoding': 'utf-8' })).OK)
+})
+
+Test('./resource/copy/makefile', async (test) => {
+  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/copy/makefile')))
 })
 
 Test('./resource/copy/folder/index.cjs', async (test) => {
