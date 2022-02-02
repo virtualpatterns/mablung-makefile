@@ -2,22 +2,36 @@
 ifndef current-clean-folder
 ifndef current-build-folder
 
-export build-ignore := .DS_Store .babelrc.json .eslintrc.json
+export build-ignore += .DS_Store .babelrc.json .eslintrc.json
 
 # --------------------
-.PHONY: build pre-build
+.PHONY: build pre-build lint pre-lint
 # --------------------
 
-build:: pre-build
-	$(info - build --------------------------------)
-	@npx shx mkdir -p source
+build:: pre-build lint build-0 build-1
+	@:
+
+pre-build:: ;
+
+lint:: pre-lint
+	$(info - lint ---------------------------------)
 	@npx eslint --cache --cache-location data/cache/eslint.json $(eslint-parameter) source 
+
+pre-lint:: ;
+
+build-0::
+	$(info - build --------------------------------)
+	@npx babel --copy-files --extensions .cjs,.js --keep-file-extension --out-dir release --quiet --source-maps true $(babel-parameter) source
+
+pre-build-0:: ;
+
+build-1::
 	$(if $(verbose),@echo create .... release)
-	@npx shx mkdir -p release
+	@npx shx mkdir -p source release
 	$(if $(verbose),@echo build ..... source)
 	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source
 
-pre-build:: ;
+pre-build-1:: ;
 
 else
 
