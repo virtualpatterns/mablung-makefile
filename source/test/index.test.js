@@ -15,8 +15,16 @@ Test('../.eslintrc.json', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
 })
 
+Test('../index.cjs', async (test) => {
+  test.true((await import(test.title)).OK)
+})
+
 Test('../index.js', async (test) => {
   test.true((await import(test.title)).OK)
+})
+
+Test('../index.json', async (test) => {
+  test.true((await FileSystem.readJson(Path.resolve(FolderPath, test.title), { 'encoding': 'utf-8' })).OK)
 })
 
 Test('./resource/.babelrc.json', async (test) => {

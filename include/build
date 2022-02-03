@@ -2,8 +2,6 @@
 ifndef current-clean-folder
 ifndef current-build-folder
 
-export build-ignore += .DS_Store .babelrc.json .eslintrc.json
-
 # --------------------
 .PHONY: build pre-build lint pre-lint
 # --------------------
@@ -129,12 +127,12 @@ release/%.create:
 # 	$(if $(verbose),@echo ignore .... $<)
 
 $(foreach	item,\
-					$(build-ignore),\
-					$(eval release/$(item):source/$(item);$(if $(verbose),@echo ignore .... $$<)))
+	.DS_Store .babelrc.json .eslintrc.json,\
+	$(eval release/$(item):source/$(item);$(if $(verbose),@echo ignore .... $$<)))
 
 $(foreach	item,\
-					$(build-ignore),\
-					$(eval release/%/$(item):source/%/$(item);$(if $(verbose),@echo ignore .... $$<)))
+	.DS_Store .babelrc.json .eslintrc.json,\
+	$(eval release/%/$(item):source/%/$(item);$(if $(verbose),@echo ignore .... $$<)))
 
 release/%.cjs: source/%.cjs
 	@echo compile ... $@ $(babel-parameter)
