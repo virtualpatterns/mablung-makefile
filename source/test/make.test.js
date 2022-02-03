@@ -97,6 +97,11 @@ Test('run argument="..."', async (test) => {
   test.is(await process.whenExit(), 2)
 })
 
+Test('lint', async (test) => {
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'lint' ])
+  test.is(await process.whenExit(), 0)
+})
+
 Test('build', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'build' ])
   test.is(await process.whenExit(), 0)
