@@ -17,12 +17,11 @@
   "rules": {
     "arrow-parens": "error",
     "comma-dangle": [
-      "error",
+      "warn",
       "never"
     ],
-    "no-debugger": "warn",
     "indent": [
-      "error",
+      "warn",
       2,
       {
         "SwitchCase": 1
@@ -33,13 +32,14 @@
       "unix"
     ],
     "no-console": "warn",
+    "no-debugger": "warn",
     "no-unused-vars": "warn",
     "quotes": [
       "error",
       "single"
     ],
     "semi": [
-      "error",
+      "warn",
       "never"
     ]
   }
