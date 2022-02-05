@@ -20,7 +20,7 @@
     "url": "https://github.com/virtualpatterns/mablung-makefile"
   },
   "type": "module",
-  "version": "0.0.26-181",
+  "version": "0.0.26-182",
   "dependencies": {
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.0",
