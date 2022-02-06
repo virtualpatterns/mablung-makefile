@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 import { program as Command } from 'commander'
-import FileSystem from 'fs-extra'
-import Is from '@pwn/is'
+// import FileSystem from 'fs-extra'
+// import Is from '@pwn/is'
 import Path from 'path'
 import SourceMapSupport from 'source-map-support'
 import URL from 'url'
 
 import { Package } from '../library/package.js'
 
-import { UpdateError } from './error/update-error.js'
+// import { UpdateError } from './error/update-error.js'
 
 SourceMapSupport.install({
   'handleUncaughtExceptions': false
@@ -54,38 +54,38 @@ Command
 
   })
 
-Command
-  .command('update')
-  .argument('[path]', 'Path to update', '.')
-  .description('Update the .eslintrc.json and babel.config.json files at the given path.\nNOTE:  Designed to be used by the pre-build step of the @virtualpatterns/babel-preset-mablung-makefile and @virtualpatterns/eslint-config-mablung-makefile projects.')
-  .action(async (path) => {
+// Command
+//   .command('update')
+//   .argument('[path]', 'Path to update', '.')
+//   .description('Update the .eslintrc.json and babel.config.json files at the given path.\nNOTE:  Designed to be used by the pre-build step of the @virtualpatterns/babel-preset-mablung-makefile and @virtualpatterns/eslint-config-mablung-makefile projects.')
+//   .action(async (path) => {
 
-    Process.exitCode = 0
+//     Process.exitCode = 0
 
-    try {
+//     try {
 
-      let sourcePath = Path.resolve(FolderPath, '../..')
-      let targetPath = Path.resolve(path)
+//       let sourcePath = Path.resolve(FolderPath, '../..')
+//       let targetPath = Path.resolve(path)
 
-      if (Is.not.equal(targetPath, sourcePath)) {
+//       if (Is.not.equal(targetPath, sourcePath)) {
 
-        await FileSystem.ensureDir(targetPath)
+//         await FileSystem.ensureDir(targetPath)
 
-        await Promise.all([
-          FileSystem.copy(Path.resolve(sourcePath, '.eslintrc.json'), Path.resolve(targetPath, '.eslintrc.json'), { 'overwrite': true }),
-          FileSystem.copy(Path.resolve(sourcePath, 'babel.config.json'), Path.resolve(targetPath, 'babel.config.json'), { 'overwrite': true })
-        ])
+//         await Promise.all([
+//           FileSystem.copy(Path.resolve(sourcePath, '.eslintrc.json'), Path.resolve(targetPath, '.eslintrc.json'), { 'overwrite': true }),
+//           FileSystem.copy(Path.resolve(sourcePath, 'babel.config.json'), Path.resolve(targetPath, 'babel.config.json'), { 'overwrite': true })
+//         ])
 
-      } else {
-        throw new UpdateError(path)
-      }
+//       } else {
+//         throw new UpdateError(path)
+//       }
 
-    } catch (error) {
-      Process.exitCode = 1
-      console.error(error)
-    }
+//     } catch (error) {
+//       Process.exitCode = 1
+//       console.error(error)
+//     }
 
-  })
+//   })
 
 Command
   .parse(Process.argv)

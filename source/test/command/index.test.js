@@ -43,111 +43,111 @@ Test('get-path throws Error', async (test) => {
   test.is(await process.whenExit(), 1)
 })
 
-Test('update', async (test) => {
-  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': true })
-  test.is(await process.whenExit(), 1)
-})
+// Test('update', async (test) => {
+//   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': true })
+//   test.is(await process.whenExit(), 1)
+// })
 
-Test('update target-0', async (test) => {
+// Test('update target-0', async (test) => {
 
-  let sourcePath = Path.resolve(FolderPath, '../../..')
-  let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
-  let sourceCompilePath = Path.resolve(sourcePath, 'babel.config.json')
+//   let sourcePath = Path.resolve(FolderPath, '../../..')
+//   let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
+//   let sourceCompilePath = Path.resolve(sourcePath, 'babel.config.json')
 
-  let targetPath = Path.resolve(FolderPath, 'resource/target-0')
-  let targetCheckPath = Path.resolve(targetPath, '.eslintrc.json')
-  let targetCompilePath = Path.resolve(targetPath, 'babel.config.json')
+//   let targetPath = Path.resolve(FolderPath, 'resource/target-0')
+//   let targetCheckPath = Path.resolve(targetPath, '.eslintrc.json')
+//   let targetCompilePath = Path.resolve(targetPath, 'babel.config.json')
 
-  let [
-    sourceCheck,
-    sourceCompile
-  ] = await Promise.all([
-    FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
-    FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
-  ])
+//   let [
+//     sourceCheck,
+//     sourceCompile
+//   ] = await Promise.all([
+//     FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
+//     FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' })
+//   ])
 
-  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': targetPath })
+//   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': targetPath })
 
-  try {
+//   try {
 
-    test.is(await process.whenExit(), 0)
+//     test.is(await process.whenExit(), 0)
 
-    test.deepEqual(await Promise.all([
-      FileSystem.pathExists(targetCheckPath),
-      FileSystem.pathExists(targetCompilePath)
-    ]), [
-      true,
-      true
-    ])
+//     test.deepEqual(await Promise.all([
+//       FileSystem.pathExists(targetCheckPath),
+//       FileSystem.pathExists(targetCompilePath)
+//     ]), [
+//       true,
+//       true
+//     ])
     
-    let [
-      targetCheckAfter,
-      targetCompileAfter
-    ] = await Promise.all([
-      FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
-      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
-    ])
+//     let [
+//       targetCheckAfter,
+//       targetCompileAfter
+//     ] = await Promise.all([
+//       FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+//       FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+//     ])
 
-    test.deepEqual(targetCheckAfter, sourceCheck)
-    test.deepEqual(targetCompileAfter, sourceCompile)
+//     test.deepEqual(targetCheckAfter, sourceCheck)
+//     test.deepEqual(targetCompileAfter, sourceCompile)
 
-  } finally {
+//   } finally {
 
-    await Promise.all([
-      FileSystem.remove(targetCheckPath),
-      FileSystem.remove(targetCompilePath)
-    ])
+//     await Promise.all([
+//       FileSystem.remove(targetCheckPath),
+//       FileSystem.remove(targetCompilePath)
+//     ])
 
-  }
+//   }
 
-})
+// })
 
-Test('update target-1', async (test) => {
+// Test('update target-1', async (test) => {
 
-  let sourcePath = Path.resolve(FolderPath, '../../..')
-  let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
-  let sourceCompilePath = Path.resolve(sourcePath, 'babel.config.json')
+//   let sourcePath = Path.resolve(FolderPath, '../../..')
+//   let sourceCheckPath = Path.resolve(sourcePath, '.eslintrc.json')
+//   let sourceCompilePath = Path.resolve(sourcePath, 'babel.config.json')
 
-  let targetPath = Path.resolve(FolderPath, 'resource/target-1')
-  let targetCheckPath = Path.resolve(targetPath, '.eslintrc.json')
-  let targetCompilePath = Path.resolve(targetPath, 'babel.config.json')
+//   let targetPath = Path.resolve(FolderPath, 'resource/target-1')
+//   let targetCheckPath = Path.resolve(targetPath, '.eslintrc.json')
+//   let targetCompilePath = Path.resolve(targetPath, 'babel.config.json')
 
-  let [
-    sourceCheck,
-    sourceCompile,
-    targetCheckBefore,
-    targetCompileBefore
-  ] = await Promise.all([
-    FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
-    FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' }),
-    FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
-    FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
-  ])
+//   let [
+//     sourceCheck,
+//     sourceCompile,
+//     targetCheckBefore,
+//     targetCompileBefore
+//   ] = await Promise.all([
+//     FileSystem.readJson(sourceCheckPath, { 'encoding': 'utf-8' }),
+//     FileSystem.readJson(sourceCompilePath, { 'encoding': 'utf-8' }),
+//     FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+//     FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+//   ])
 
-  let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': targetPath })
+//   let process = new LoggedProcess(Path.resolve(FolderPath, '../../command/index.js'), { 'update': targetPath })
 
-  try {
+//   try {
 
-    test.is(await process.whenExit(), 0)
+//     test.is(await process.whenExit(), 0)
 
-    let [
-      targetCheckAfter,
-      targetCompileAfter
-    ] = await Promise.all([
-      FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
-      FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
-    ])
+//     let [
+//       targetCheckAfter,
+//       targetCompileAfter
+//     ] = await Promise.all([
+//       FileSystem.readJson(targetCheckPath, { 'encoding': 'utf-8' }),
+//       FileSystem.readJson(targetCompilePath, { 'encoding': 'utf-8' })
+//     ])
 
-    test.deepEqual(targetCheckAfter, sourceCheck)
-    test.deepEqual(targetCompileAfter, sourceCompile)
+//     test.deepEqual(targetCheckAfter, sourceCheck)
+//     test.deepEqual(targetCompileAfter, sourceCompile)
 
-  } finally {
+//   } finally {
 
-    await Promise.all([
-      FileSystem.writeJson(targetCheckPath, targetCheckBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
-      FileSystem.writeJson(targetCompilePath, targetCompileBefore, { 'encoding': 'utf-8', 'spaces': 2 })
-    ])
+//     await Promise.all([
+//       FileSystem.writeJson(targetCheckPath, targetCheckBefore, { 'encoding': 'utf-8', 'spaces': 2 }),
+//       FileSystem.writeJson(targetCompilePath, targetCompileBefore, { 'encoding': 'utf-8', 'spaces': 2 })
+//     ])
 
-  }
+//   }
 
-})
+// })

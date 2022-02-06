@@ -15,6 +15,10 @@ Test('default', async (test) => {
       'shx',
       'sinon'
     ],
+    'ignorePatterns': [
+      'source/test/resource/copy',
+      'source/test/resource/ignore'
+    ],
     'parsers': {
       '**/*.js': [ Check.parser.es7.default ]
       // '**/*.cjs': [ Check.parser.es6, Check.parser.es7.default ],
