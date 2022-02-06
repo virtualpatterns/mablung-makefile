@@ -3,6 +3,7 @@
   "bin": "./release/command/index.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
+    "./test": "./release/test/index.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -11,7 +12,9 @@
     "include",
     "makefile",
     "release/command",
-    "release/library"
+    "release/library",
+    "release/test/index.*",
+    "release/test/library/path-exists.*"
   ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",

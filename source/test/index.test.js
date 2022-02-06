@@ -1,3 +1,4 @@
+import { PathExists } from '@virtualpatterns/mablung-makefile/test'
 import FileSystem from 'fs-extra'
 import Path from 'path'
 import Test from 'ava'
@@ -47,10 +48,15 @@ Test('./resource/index.json', async (test) => {
   test.true((await FileSystem.readJson(Path.resolve(FolderPath, test.title), { 'encoding': 'utf-8' })).OK)
 })
 
+Test('./resource/copy', async (test) => {
+  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+})
+
 ;(EmptyPathExists ? Test : Test.skip)('./resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
 })
 
 Test('./resource/ignore', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
+
 })
