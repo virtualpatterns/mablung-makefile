@@ -29,7 +29,7 @@
     "postinstall-020": "echo The makefile provided by this package is available at ...",
     "postinstall-030": "mablung-makefile get-path",
     "postinstall-040": "echo --------------------------------------------------",
-    "postinstall": "run-s --silent postinstall-*"
+    "postinstall": "npx run-s --silent postinstall-*"
   },
   "type": "module",
   "version": "0.0.26-202",
