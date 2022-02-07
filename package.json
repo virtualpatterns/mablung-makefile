@@ -24,6 +24,13 @@
     "type": "git",
     "url": "https://github.com/virtualpatterns/mablung-makefile"
   },
+  "scripts": {
+    "postinstall-010": "echo --------------------------------------------------",
+    "postinstall-020": "echo The makefile provided by this package is available at ...",
+    "postinstall-030": "mablung-makefile get-path",
+    "postinstall-040": "echo --------------------------------------------------",
+    "postinstall": "run-s --silent postinstall-*"
+  },
   "type": "module",
   "version": "0.0.26-199",
   "dependencies": {
@@ -45,6 +52,7 @@
     "@virtualpatterns/mablung-worker": "0.0.2-115",
     "depcheck": "^1.4.3",
     "eslint-plugin-babel": "^5.3.1",
+    "npm-run-all": "^4.1.5",
     "sinon": "^13.0.1"
   }
 }
