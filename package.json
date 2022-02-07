@@ -13,8 +13,10 @@
     "makefile",
     "release/command",
     "release/library",
-    "release/test/index.*",
-    "release/test/library/path-exists.*"
+    "release/test/index.js",
+    "release/test/index.js.map",
+    "release/test/library/path-exists.js",
+    "release/test/library/path-exists.js.map"
   ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",
