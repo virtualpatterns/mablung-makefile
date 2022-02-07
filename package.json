@@ -32,7 +32,7 @@
     "postinstall": "run-s --silent postinstall-*"
   },
   "type": "module",
-  "version": "0.0.26-201",
+  "version": "0.0.26-202",
   "dependencies": {
     "@babel/cli": "^7.17.0",
     "@babel/core": "^7.17.0",
