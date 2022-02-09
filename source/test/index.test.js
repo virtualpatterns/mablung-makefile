@@ -28,6 +28,9 @@ Test('../index.json', async (test) => {
   test.true((await FileSystem.readJson(Path.resolve(FolderPath, test.title), { 'encoding': 'utf-8' })).OK)
 })
 
+Test('../makefile', async (test) => {
+  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
+})
 Test('./resource/.babelrc.json', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(FolderPath, test.title)))
 })
@@ -49,7 +52,12 @@ Test('./resource/index.json', async (test) => {
 })
 
 Test('./resource/copy', async (test) => {
-  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /\.babelrc\.json$|\.eslintrc\.json|makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+})
+
+Test('./resource/custom', async (test) => {
+  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /\.babelrc\.json$|\.eslintrc\.json|makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+  test.true(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/folder/file')))
 })
 
 ;(EmptyPathExists ? Test : Test.skip)('./resource/empty', async (test) => {

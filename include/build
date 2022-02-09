@@ -6,7 +6,7 @@ ifndef current-build-folder
 .PHONY: build pre-build lint pre-lint
 # --------------------
 
-exclude-build-file += .DS_Store .babelrc.json .eslintrc.json
+export exclude-build-file += .babelrc.json .DS_Store .eslintrc.json makefile
 
 build:: pre-build lint build-0 build-1
 	@:
@@ -29,7 +29,7 @@ build-1::
 	$(if $(verbose),@echo create .... release)
 	@npx shx mkdir -p source release
 	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source exclude-build-file="$(exclude-build-file)"
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-build-folder=source
 
 pre-build-1:: ;
 
@@ -75,28 +75,19 @@ build-file = $(strip $\
 										$(item)))))
 
 # --------------------
-.PHONY: build copy ignore
+.PHONY: build copy ignore debug
 # --------------------
-
-# $(info ----------)
-# $(info current-build-folder ... $(current-build-folder))
-# $(info exclude-build-folder ... $(exclude-build-folder))
-# $(info exclude-build-file ..... $(exclude-build-file))
-# $(info make-folder ............ $(make-folder))
-# $(info build-folder ........... $(build-folder))
-# $(info build-file ............. $(build-file))
-# $(info ----------)
 
 build:: $(addsuffix .make,$(make-folder)) $(addsuffix .build,$(build-folder)) $(build-file)
 	@:
 
-source/%.make:
+source/%.make: release/%.create
 	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
-	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-build-folder=$(patsubst %.make,%,$@) exclude-build-file="$(exclude-build-file)"
+	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-build-folder=$(patsubst %.make,%,$@)
 
 source/%.build: release/%.create
 	$(if $(verbose),@echo build ..... $(patsubst %.build,%,$@))
-	@$(MAKE) --no-print-directory build current-build-folder=$(patsubst %.build,%,$@) exclude-build-file="$(exclude-build-file)"
+	@$(MAKE) --no-print-directory build current-build-folder=$(patsubst %.build,%,$@)
 
 release/%.create:
 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
@@ -136,15 +127,30 @@ release/%: source/%
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
-	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
-	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
-	@npx shx cp -R $(current-build-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-build-folder)))
-	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
-	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
+	$(if $(verbose),@echo delete .... $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file)))
+	@npx shx rm -f $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file))
+
+# the build-0 step already does this
+# $(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
+# @npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
+# @npx shx cp -R $(current-build-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-build-folder)))
 
 ignore::
 	$(if $(verbose),@echo ignore .... $(current-build-folder))
 	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
+
+debug::
+	$(info - debug --------------------------------)
+	$(info current-build-folder ... $(current-build-folder))
+	$(info exclude-build-folder ... $(exclude-build-folder))
+	$(info exclude-build-file ..... $(exclude-build-file))
+	$(info make-folder ............ $(make-folder))
+	$(info build-folder ........... $(build-folder))
+	$(info build-file ............. $(build-file))
+	$(info ----------------------------------------)
+	$(if $(verbose),@echo delete .... $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file)))
+	@npx shx rm -f $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file))
+	@$(MAKE) --no-print-directory build
 
 endif
 endif
