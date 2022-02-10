@@ -154,8 +154,6 @@ debug::
 	$(info build-folder ........... $(build-folder))
 	$(info build-file ............. $(build-file))
 	$(info ----------------------------------------)
-	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
-	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 	@$(MAKE) --no-print-directory build
 
 endif
