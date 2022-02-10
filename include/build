@@ -21,7 +21,10 @@ pre-lint:: ;
 
 build-0::
 	$(info - build --------------------------------)
-	@npx babel --copy-files --extensions .cjs,.js --keep-file-extension --out-dir release --quiet --source-maps true $(babel-parameter) source
+	@:
+
+# if babel compiles the files it doesn't copy the .babelrc/.eslintrc.json files to release
+# @npx babel --copy-files --extensions .cjs,.js --keep-file-extension --out-dir release --quiet --source-maps true $(babel-parameter) source
 
 pre-build-0:: ;
 
@@ -127,10 +130,13 @@ release/%: source/%
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
+	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
+	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
+	@npx shx cp -R $(current-build-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-build-folder)))
 	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
 	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 
-# the build-0 step already does this
+# the build-0 step already does this ... but doesn't 
 # $(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
 # @npx shx rm -Rf $(patsubst source/%,release/%,$(current-build-folder))
 # @npx shx cp -R $(current-build-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-build-folder)))

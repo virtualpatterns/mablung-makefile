@@ -52,11 +52,10 @@ Test('./resource/index.json', async (test) => {
 })
 
 Test('./resource/copy', async (test) => {
-  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /\.babelrc\.json$|\.eslintrc\.json|makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
 })
 
 Test('./resource/custom', async (test) => {
-  test.true(await PathExists(Path.resolve(FolderPath, '../../source/test', test.title), Path.resolve(FolderPath, test.title), (sourcePath, targetPath) => /\.babelrc\.json$|\.eslintrc\.json|makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
   test.true(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/folder/file')))
 })
 

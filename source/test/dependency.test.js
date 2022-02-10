@@ -17,6 +17,7 @@ Test('default', async (test) => {
     ],
     'ignorePatterns': [
       'source/test/resource/copy',
+      'source/test/resource/custom',
       'source/test/resource/ignore'
     ],
     'parsers': {

@@ -25,67 +25,41 @@ clean-2:
 
 else
 
-ifndef filter-make-folder
-filter-make-folder = $(1)
-endif
-
-make-folder = $(call $\
-								filter-make-folder,$\
-								$(strip $\
-									$(foreach $\
-										item,$\
-										$(filter-out $\
-											$(exclude-clean-folder),$\
-											$(call get-content,$(current-clean-folder))),$\
-										$(if $\
-											$(call get-content,$(item)),$\
-											$(if $\
-												$(wildcard $(item)/makefile),$\
-												$(item))))))
-
-ifndef filter-clean-folder
-filter-clean-folder = $(1)
-endif
-
-clean-folder = $(call $\
-								filter-clean-folder,$\
-								$(strip $\
-									$(foreach $\
-										item,$\
-										$(filter-out $\
-											$(exclude-clean-folder),$\
-											$(call get-content,$(current-clean-folder))),$\
-										$(if $\
-											$(call get-content,$(item)),$\
-											$(if $\
-												$(wildcard $(item)/makefile),,$\
-												$(item))))))
-
-ifndef filter-clean-item
-filter-clean-item = $(1)
-endif
-
-clean-item = $(call $\
-							filter-clean-item,$\
-							$(strip $\
+make-folder = $(strip $\
 								$(foreach $\
 									item,$\
-									$(call get-content,$(current-clean-folder)),$\
+									$(filter-out $\
+										$(exclude-clean-folder),$\
+										$(call get-content,$(current-clean-folder))),$\
 									$(if $\
-										$(call get-content,$(item)),,$\
-										$(item)))))
+										$(call get-content,$(item)),$\
+										$(if $\
+											$(wildcard $(item)/makefile),$\
+											$(item)))))
+
+clean-folder = $(strip $\
+								$(foreach $\
+									item,$\
+									$(filter-out $\
+										$(exclude-clean-folder),$\
+										$(call get-content,$(current-clean-folder))),$\
+									$(if $\
+										$(call get-content,$(item)),$\
+										$(if $\
+											$(wildcard $(item)/makefile),,$\
+											$(item)))))
+
+clean-file = $(strip $\
+							$(foreach $\
+								item,$\
+								$(call get-content,$(current-clean-folder)),$\
+								$(if $\
+									$(call get-content,$(item)),,$\
+									$(item))))
 
 # --------------------
-.PHONY: clean ignore
+.PHONY: clean delete ignore debug
 # --------------------
-
-# $(info ----------)
-# $(info current-clean-folder ... $(current-clean-folder))
-# $(info exclude-clean-folder ... $(exclude-clean-folder))
-# $(info make-folder ............ $(make-folder))
-# $(info clean-folder ........... $(clean-folder))
-# $(info clean-item ............. $(clean-item))
-# $(info ----------)
 
 clean:: clean-0
 
@@ -101,26 +75,38 @@ clean-0: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
 	@$(MAKE) --no-print-directory clean current-clean-folder=$(patsubst %.clean,%,$@) 
 
 delete::
-	@echo delete .... $(current-clean-folder)
+	$(if $(verbose),@echo delete .... $(current-clean-folder))
 	@npx shx rm -Rf $(current-clean-folder)
 
 ignore::
 	$(if $(verbose),@echo ignore .... $(current-clean-folder))
 	@:
 
+debug::
+	$(info - debug --------------------------------)
+	$(info current-clean-folder ... $(current-clean-folder))
+	$(info exclude-clean-folder ... $(exclude-clean-folder))
+	$(info make-folder ............ $(make-folder))
+	$(info clean-folder ........... $(clean-folder))
+	$(info clean-file ............. $(clean-file))
+	$(info ----------------------------------------)
+	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
+	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
+	@$(MAKE) --no-print-directory clean
+
 ifeq ($(strip $(make-folder) $(clean-folder)),)
 
 clean-1:
-	@echo delete .... $(current-clean-folder)
+	$(if $(verbose),@echo delete .... $(current-clean-folder))
 	@npx shx rm -Rf $(current-clean-folder)
 
 else
 
-clean-1: $(addsuffix .delete,$(clean-item))
+clean-1: $(addsuffix .delete,$(clean-file))
 	@:
 
 %.delete:
-	@echo delete .... $(patsubst %.delete,%,$@)
+	$(if $(verbose),@echo delete .... $(patsubst %.delete,%,$@))
 	@npx shx rm -Rf $(patsubst %.delete,%,$@)
 
 endif
