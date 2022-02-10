@@ -127,8 +127,8 @@ release/%: source/%
 	@npx shx cp -R $< $(call trim-folder-path,$@)
 
 copy::
-	$(if $(verbose),@echo delete .... $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file)))
-	@npx shx rm -f $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file))
+	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
+	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 
 # the build-0 step already does this
 # $(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-build-folder)))
@@ -148,8 +148,8 @@ debug::
 	$(info build-folder ........... $(build-folder))
 	$(info build-file ............. $(build-file))
 	$(info ----------------------------------------)
-	$(if $(verbose),@echo delete .... $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file)))
-	@npx shx rm -f $(addprefix $(patsubst source/%,release/%,$(current-build-folder))/,$(exclude-build-file))
+	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
+	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 	@$(MAKE) --no-print-directory build
 
 endif
