@@ -56,6 +56,9 @@ Test('./resource/copy', async (test) => {
 })
 
 Test('./resource/custom', async (test) => {
+  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/.eslintrc.json')))
+  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/index.js')))
+  test.false(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/makefile')))
   test.true(await FileSystem.pathExists(Path.resolve(FolderPath, './resource/custom/folder/file')))
 })
 
