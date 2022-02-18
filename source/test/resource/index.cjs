@@ -1,1 +1,1 @@
-module.exports = { 'OK': true }
+export const OK = true
