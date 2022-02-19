@@ -23,9 +23,6 @@ get-folder = $(patsubst $\
 							$(dir $\
 								$(1)))
 
-ifneq ($(is-building),true)
-ifneq ($(is-cleaning),true)
-
 # --------------------
 .PHONY: default pre-default
 # --------------------
@@ -33,6 +30,9 @@ ifneq ($(is-cleaning),true)
 default:: pre-default;
 
 pre-default:: ;
+
+ifneq ($(is-building),true)
+ifneq ($(is-cleaning),true)
 
 # --------------------
 .PHONY: commit pre-commit
@@ -232,9 +232,11 @@ release::
 
 endif
 
-pre-release::
+pre-release:: update
+	@$(MAKE) --no-print-directory pre-release-post-update
+
+pre-release-post-update:: clean cover
 	$(info - pre-release --------------------------)
-	@$(MAKE) --no-print-directory update commit clean cover include-commit-item="package.json package-lock.json" message=post-update
 	@npm version prerelease
 	@npm publish --access public --dry-run
 	@git push origin master
@@ -246,6 +248,10 @@ release::
 	$(error Error)
 
 pre-release::
+	$(info Git working directory not clean ... $(get-dirty-item))
+	$(error Error)
+
+pre-release-post-update::
 	$(info Git working directory not clean ... $(get-dirty-item))
 	$(error Error)
 
