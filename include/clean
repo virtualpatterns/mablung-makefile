@@ -1,27 +1,27 @@
 
-ifndef current-build-folder
-ifndef current-clean-folder
+ifneq ($(is-building),true)
+ifneq ($(is-cleaning),true)
 
 # --------------------
-.PHONY: clean pre-clean clean-0 clean-1 clean-2
+.PHONY: clean pre-clean clean-all clean-data clean-release
 # --------------------
 
 clean:: pre-clean
 	$(info - clean --------------------------------)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean-0
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean-all
 
 pre-clean:: ;
 
-clean-0: clean-1 clean-2
+clean-all: clean-data clean-release
 	@:
 
-clean-1:
-	$(if $(verbose),@echo clean ..... data)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=data
+clean-data:
+	$(if $(is-verbose),@echo clean ..... data)
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean is-cleaning=true current-clean-folder=data
 
-clean-2:
-	$(if $(verbose),@echo clean ..... release)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean current-clean-folder=release
+clean-release:
+	$(if $(is-verbose),@echo clean ..... release)
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory clean is-cleaning=true current-clean-folder=release
 
 else
 
@@ -30,9 +30,9 @@ make-folder = $(strip $\
 									item,$\
 									$(filter-out $\
 										$(exclude-clean-folder),$\
-										$(call get-content,$(current-clean-folder))),$\
+										$(call get-content-item,$(current-clean-folder))),$\
 									$(if $\
-										$(call get-content,$(item)),$\
+										$(call get-content-item,$(item)),$\
 										$(if $\
 											$(wildcard $(item)/makefile),$\
 											$(item)))))
@@ -42,9 +42,9 @@ clean-folder = $(strip $\
 									item,$\
 									$(filter-out $\
 										$(exclude-clean-folder),$\
-										$(call get-content,$(current-clean-folder))),$\
+										$(call get-content-item,$(current-clean-folder))),$\
 									$(if $\
-										$(call get-content,$(item)),$\
+										$(call get-content-item,$(item)),$\
 										$(if $\
 											$(wildcard $(item)/makefile),,$\
 											$(item)))))
@@ -52,9 +52,9 @@ clean-folder = $(strip $\
 clean-file = $(strip $\
 							$(foreach $\
 								item,$\
-								$(call get-content,$(current-clean-folder)),$\
+								$(call get-content-item,$(current-clean-folder)),$\
 								$(if $\
-									$(call get-content,$(item)),,$\
+									$(call get-content-item,$(item)),,$\
 									$(item))))
 
 # --------------------
@@ -67,37 +67,32 @@ clean-0: $(addsuffix .make,$(make-folder)) $(addsuffix .clean,$(clean-folder))
 	@$(MAKE) --no-print-directory clean-1
 
 %.make:
-	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
+	$(if $(is-verbose),@echo make ...... $(patsubst %.make,%,$@))
 	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-clean-folder=$(patsubst %.make,%,$@)
 
 %.clean:
-	$(if $(verbose),@echo clean ..... $(patsubst %.clean,%,$@))
+	$(if $(is-verbose),@echo clean ..... $(patsubst %.clean,%,$@))
 	@$(MAKE) --no-print-directory clean current-clean-folder=$(patsubst %.clean,%,$@) 
 
-delete::
-	$(if $(verbose),@echo delete .... $(current-clean-folder))
-	@npx shx rm -Rf $(current-clean-folder)
-
 ignore::
-	$(if $(verbose),@echo ignore .... $(current-clean-folder))
+	$(if $(is-verbose),@echo ignore .... $(current-clean-folder))
 	@:
 
 debug::
 	$(info - debug --------------------------------)
 	$(info current-clean-folder ... $(current-clean-folder))
+	$(info ----------------------------------------)
 	$(info exclude-clean-folder ... $(exclude-clean-folder))
 	$(info make-folder ............ $(make-folder))
 	$(info clean-folder ........... $(clean-folder))
 	$(info clean-file ............. $(clean-file))
 	$(info ----------------------------------------)
-	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-build-folder))/makefile)
-	@npx shx rm -f $(patsubst source/%,release/%,$(current-build-folder))/makefile
 	@$(MAKE) --no-print-directory clean
 
 ifeq ($(strip $(make-folder) $(clean-folder)),)
 
 clean-1:
-	$(if $(verbose),@echo delete .... $(current-clean-folder))
+	$(if $(is-verbose),@echo delete .... $(current-clean-folder))
 	@npx shx rm -Rf $(current-clean-folder)
 
 else
@@ -106,7 +101,7 @@ clean-1: $(addsuffix .delete,$(clean-file))
 	@:
 
 %.delete:
-	$(if $(verbose),@echo delete .... $(patsubst %.delete,%,$@))
+	$(if $(is-verbose),@echo delete .... $(patsubst %.delete,%,$@))
 	@npx shx rm -Rf $(patsubst %.delete,%,$@)
 
 endif

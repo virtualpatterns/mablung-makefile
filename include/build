@@ -1,13 +1,13 @@
 
-ifndef current-clean-folder
-ifndef current-compile-folder
+ifneq ($(is-cleaning),true)
+ifneq ($(is-building),true)
 
 # --------------------
-.PHONY: build pre-build lint pre-lint
+.PHONY: build pre-build lint pre-lint compile pre-compile
 # --------------------
 
-export exclude-compile-folder += makefile
-export exclude-compile-file += .babelrc.json .DS_Store .eslintrc.json makefile
+export exclude-source-folder += makefile
+export exclude-source-file += .babelrc.json .DS_Store .eslintrc.json makefile
 
 build:: pre-build lint compile
 	@:
@@ -22,10 +22,10 @@ pre-lint:: ;
 
 compile:: pre-compile
 	$(info - compile ------------------------------)
-	$(if $(verbose),@echo create .... release)
+	$(if $(is-verbose),@echo create .... release)
 	@npx shx mkdir -p release
-	$(if $(verbose),@echo build ..... source)
-	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build current-compile-folder=source
+	$(if $(is-verbose),@echo build ..... source)
+	@$(MAKE) $(if $(job-count),--jobs=$(job-count),--jobs) --no-print-directory build is-building=true current-source-folder=source current-release-folder=release
 
 pre-compile:: ;
 
@@ -35,58 +35,58 @@ make-folder = $(strip $\
 								$(foreach $\
 									item,$\
 									$(filter-out $\
-										$(exclude-compile-folder),$\
-										$(call get-content,$(current-compile-folder))),$\
+										$(exclude-source-folder),$\
+										$(call get-content-item,$(current-source-folder))),$\
 									$(if $\
-										$(call get-content,$(item)),$\
+										$(call get-content-item,$(item)),$\
 										$(if $\
 											$(wildcard $(item)/makefile),$\
 											$(item)))))
 
-compile-folder = $(strip $\
+build-folder = $(strip $\
 									$(foreach $\
 										item,$\
 										$(filter-out $\
-											$(exclude-compile-folder),$\
-											$(call get-content,$(current-compile-folder))),$\
+											$(exclude-source-folder),$\
+											$(call get-content-item,$(current-source-folder))),$\
 										$(if $\
-											$(call get-content,$(item)),$\
+											$(call get-content-item,$(item)),$\
 											$(if $\
 												$(wildcard $(item)/makefile),,$\
 												$(item)))))
 
-compile-file = $(strip $\
+build-file = $(strip $\
 								$(foreach $\
 									item,$\
 									$(filter-out $\
 										$(addprefix $\
-											$(current-compile-folder)/,$\
-											$(exclude-compile-file)),$\
-										$(call get-content,$(current-compile-folder))),$\
+											$(current-source-folder)/,$\
+											$(exclude-source-file)),$\
+										$(call get-content-item,$(current-source-folder))),$\
 									$(patsubst $\
 										source/%,$\
 										release/%,$\
 										$(if $\
-											$(call get-content,$(item)),,$\
+											$(call get-content-item,$(item)),,$\
 											$(item)))))
 
 # --------------------
 .PHONY: build copy ignore debug
 # --------------------
 
-build:: $(addsuffix .make,$(make-folder)) $(addsuffix .compile,$(compile-folder)) $(compile-file)
+build:: $(addsuffix .make,$(make-folder)) $(addsuffix .compile,$(build-folder)) $(build-file)
 	@:
 
 source/%.make: release/%.create
-	$(if $(verbose),@echo make ...... $(patsubst %.make,%,$@))
-	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-compile-folder=$(patsubst %.make,%,$@) current-source-folder=$(patsubst %.make,%,$@) current-release-folder=$(patsubst %.create,%,$<)
+	$(if $(is-verbose),@echo make ...... $(patsubst %.make,%,$@))
+	@$(MAKE) --makefile=$(patsubst %.make,%,$@)/makefile --no-print-directory current-source-folder=$(patsubst %.make,%,$@) current-release-folder=$(patsubst %.create,%,$<)
 
 source/%.compile: release/%.create
-	$(if $(verbose),@echo build ..... $(patsubst %.compile,%,$@))
-	@$(MAKE) --no-print-directory build current-compile-folder=$(patsubst %.compile,%,$@)
+	$(if $(is-verbose),@echo build ..... $(patsubst %.compile,%,$@))
+	@$(MAKE) --no-print-directory build current-source-folder=$(patsubst %.compile,%,$@) current-release-folder=$(patsubst %.create,%,$<)
 
 release/%.create:
-	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
+	$(if $(is-verbose),@echo create .... $(patsubst %.create,%,$@))
 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 release/%.cjs: source/%.cjs
@@ -99,29 +99,29 @@ release/%.js: source/%.js
 
 release/%: source/%
 	@echo copy ...... $@
-	@npx shx cp -R $< $(call trim-folder-path,$@)
+	@npx shx cp -R $< $(call get-folder,$@)
 
 copy::
-	$(if $(verbose),@echo copy ...... $(patsubst source/%,release/%,$(current-compile-folder)))
-	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-compile-folder))
-	@npx shx cp -R $(current-compile-folder) $(call trim-folder-path,$(patsubst source/%,release/%,$(current-compile-folder)))
-	$(if $(verbose),@echo delete .... $(patsubst source/%,release/%,$(current-compile-folder))/makefile)
-	@npx shx rm -f $(patsubst source/%,release/%,$(current-compile-folder))/makefile
+	$(if $(is-verbose),@echo copy ...... $(current-release-folder))
+	@npx shx rm -Rf $(current-release-folder)
+	@npx shx cp -R $(current-source-folder) $(call get-folder,$(current-release-folder))
+	$(if $(is-verbose),@echo delete .... $(current-release-folder)/makefile)
+	@npx shx rm -f $(current-release-folder)/makefile
 
 ignore::
-	$(if $(verbose),@echo ignore .... $(current-compile-folder))
-	@npx shx rm -Rf $(patsubst source/%,release/%,$(current-compile-folder))
+	$(if $(is-verbose),@echo ignore .... $(current-source-folder))
+	@npx shx rm -Rf $(current-release-folder)
 
 debug::
 	$(info - debug --------------------------------)
 	$(info current-source-folder .... $(current-source-folder))
 	$(info current-release-folder ... $(current-release-folder))
 	$(info ----------------------------------------)
-	$(info exclude-compile-folder ... $(exclude-compile-folder))
-	$(info exclude-compile-file ..... $(exclude-compile-file))
+	$(info exclude-source-folder .... $(exclude-source-folder))
+	$(info exclude-source-file ...... $(exclude-source-file))
 	$(info make-folder .............. $(make-folder))
-	$(info compile-folder ........... $(compile-folder))
-	$(info compile-file ............. $(compile-file))
+	$(info build-folder ............. $(build-folder))
+	$(info build-file ............... $(build-file))
 	$(info ----------------------------------------)
 	@$(MAKE) --no-print-directory build
 

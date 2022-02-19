@@ -9,8 +9,8 @@ include $(--mablung-makefile-path)/include/clean
 
 # ifeq ($(project-name),mablung-makefile)
 
-# ifndef current-clean-folder
-# ifndef current-build-folder
+# ifneq ($(is-cleaning),true)
+# ifneq ($(is-building),true)
 
 # pre-build::
 # 	$(info - pre-build ----------------------------)
@@ -32,7 +32,7 @@ include $(--mablung-makefile-path)/include/clean
 
 # source/commonjs/%.cjs: source/esmodule/%.js
 # 	@echo create .... $@
-# 	@npx shx mkdir -p $(call trim-folder-path,$@)
+# 	@npx shx mkdir -p $(call get-folder,$@)
 # 	@npx shx cp $< $@
 # 	@npx shx sed -i "s/\.js/.cjs/g" $@ > /dev/null
 # 	@npx shx sed -i "s/Path\.dirname\(URL\.fileURLToPath\(import\.meta\.url\)\)/__dirname/g" $@ > /dev/null
@@ -47,5 +47,3 @@ include $(--mablung-makefile-path)/include/clean
 # endif
 
 # endif
-
-.DEFAULT_GOAL := version

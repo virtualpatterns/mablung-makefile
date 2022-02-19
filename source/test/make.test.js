@@ -13,7 +13,7 @@ const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-const IsDirty = Is.equal(Process.env.GIT_IS_DIRTY, 'true')
+const IsDirty = Is.equal(Process.env.IS_DIRTY, 'true')
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))

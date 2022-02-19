@@ -1,47 +1,55 @@
 
-ifneq ($(verbose),true)
-override verbose =
+ifneq ($(is-verbose),true)
+override is-verbose =
 endif
 
 ifndef project-name
 export project-name = $(notdir $(CURDIR))
 endif
 
-get-content = $(strip $\
-								$(filter-out $\
-									$(1)/. $\
-									$(1)/..,$\
-									$(patsubst $\
-										./%,$\
-										%,$\
-										$(wildcard $(1)/.*) $\
-										$(wildcard $(1)/*))))
+get-content-item = $(strip $\
+										$(filter-out $\
+											$(1)/. $\
+											$(1)/..,$\
+											$(patsubst $\
+												./%,$\
+												%,$\
+												$(wildcard $(1)/.*) $\
+												$(wildcard $(1)/*))))
 
-trim-folder-path = $(patsubst $\
-										%/,$\
-										%,$\
-										$(dir $\
-											$(1)))
+get-folder = $(patsubst $\
+							%/,$\
+							%,$\
+							$(dir $\
+								$(1)))
 
-ifndef current-build-folder
-ifndef current-clean-folder
+ifneq ($(is-building),true)
+ifneq ($(is-cleaning),true)
+
+# --------------------
+.PHONY: default pre-default
+# --------------------
+
+default:: pre-default;
+
+pre-default:: ;
 
 # --------------------
 .PHONY: commit pre-commit
 # --------------------
 
-dirty-item = $(strip $\
-							$(shell git status --porcelain | awk '{print $$2}'))
+get-dirty-item = $(strip $\
+									$(shell git status --porcelain | awk '{print $$2}'))
 
-commit-item = $(filter $\
-								$(or $(include-commit-item),%),$\
-								$(dirty-item))
+get-commit-item = $(filter $\
+										$(or $(include-commit-item),%),$\
+										$(get-dirty-item))
 
-ifneq ($(commit-item),)
+ifneq ($(get-commit-item),)
 
 ifneq ($(message),)
 
-commit:: pre-commit $(addsuffix .add,$(commit-item))
+commit:: pre-commit $(addsuffix .add,$(get-commit-item))
 	$(info - commit -------------------------------)
 	@git commit --message="$(message)"
 
@@ -101,7 +109,7 @@ update-0:
 	@npx ncu
 	@$(MAKE) --no-print-directory update-1
 
-ifneq ($(filter package.json,$(dirty-item)),)
+ifneq ($(filter package.json,$(get-dirty-item)),)
 
 update-1:
 	@$(MAKE) --no-print-directory re-install
@@ -155,9 +163,9 @@ run:: pre-run build
 	$(info - run ----------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	$(if $(dirty-item),\
-		$(eval export GIT_IS_DIRTY = true),\
-		$(eval export GIT_IS_DIRTY = false))
+	$(if $(get-dirty-item),\
+		$(eval export IS_DIRTY = true),\
+		$(eval export IS_DIRTY = false))
 	@node $(node-parameter) $(or $(argument),$(run-argument))
 
 pre-run:: ;
@@ -179,9 +187,9 @@ cover:: pre-cover build
 	$(info - cover --------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	$(if $(dirty-item),\
-		$(eval export GIT_IS_DIRTY = true),\
-		$(eval export GIT_IS_DIRTY = false))
+	$(if $(get-dirty-item),\
+		$(eval export IS_DIRTY = true),\
+		$(eval export IS_DIRTY = false))
 	@npx shx rm -Rf coverage data/c8
 	@npx c8 ava $(or $(argument),$(cover-argument))
 	@npx shx mkdir -p ../Shared/$(project-name)/data
@@ -195,32 +203,26 @@ test:: pre-test build
 	$(info - test ---------------------------------)
 	$(eval export MAKE_PATH = $(MAKE))
 	$(eval export MAKEFILE_PATH = $(realpath $(MAKEFILE_LIST)))
-	$(if $(dirty-item),\
-		$(eval export GIT_IS_DIRTY = true),\
-		$(eval export GIT_IS_DIRTY = false))
+	$(if $(get-dirty-item),\
+		$(eval export IS_DIRTY = true),\
+		$(eval export IS_DIRTY = false))
 	@npx ava $(or $(argument),$(test-argument))
 
 pre-test:: ;
 
 # --------------------
-.PHONY: release pre-release pre-pre-release
+.PHONY: release pre-release
 # --------------------
 
-ifeq ($(dirty-item),)
+ifeq ($(get-dirty-item),)
 
 ifneq ($(version),)
 
 release:: pre-release
 	$(info - release ------------------------------)
 	@npm version $(version)
-	@$(MAKE) --no-print-directory publish
-	@git push origin master
-
-publish:: pre-publish
-	$(info - publish ------------------------------)
 	@npm publish --access public
-
-pre-publish:: ;
+	@git push origin master
 
 else
 
@@ -230,22 +232,21 @@ release::
 
 endif
 
-pre-release:: pre-pre-release update
+pre-release::
 	$(info - pre-release --------------------------)
+	@$(MAKE) --no-print-directory update commit clean cover include-commit-item="package.json package-lock.json" message=post-update
 	@npm version prerelease
-	@$(MAKE) --no-print-directory clean cover
+	@npm publish --access public --dry-run
 	@git push origin master
-
-pre-pre-release:: ;
 
 else
 
 release::
-	$(info Git working directory not clean ... $(dirty-item))
+	$(info Git working directory not clean ... $(get-dirty-item))
 	$(error Error)
 
 pre-release::
-	$(info Git working directory not clean ... $(dirty-item))
+	$(info Git working directory not clean ... $(get-dirty-item))
 	$(error Error)
 
 endif

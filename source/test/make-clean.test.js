@@ -12,7 +12,7 @@ const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-const DeleteContent = 'include makefile\n\n.DEFAULT_GOAL := delete'
+const DebugContent = 'include makefile\n\n.DEFAULT_GOAL := debug'
 const IgnoreContent = 'include makefile\n\n.DEFAULT_GOAL := ignore'
 
 Test.before(async () => {
@@ -29,8 +29,9 @@ Test.serial('clean data', async (test) => {
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
+    'is-verbose=true',
     'job-count=1',
-    'verbose=true',
+    'is-cleaning=true',
     `current-clean-folder=${DataPath}`
   ])
 
@@ -40,16 +41,17 @@ Test.serial('clean data', async (test) => {
 
 })
 
-Test.serial('clean data/0.json', async (test) => {
+Test.serial('clean data/file.json', async (test) => {
 
-  let path = [ Path.resolve(DataPath, '0.json') ]
+  let path = [ Path.resolve(DataPath, 'file.json') ]
 
   await FileSystem.ensureFile(path[0])
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
+    'is-verbose=true',
     'job-count=1',
-    'verbose=true',
+    'is-cleaning=true',
     `current-clean-folder=${DataPath}`
   ])
 
@@ -60,16 +62,17 @@ Test.serial('clean data/0.json', async (test) => {
 
 })
 
-Test.serial('clean data/0/0.json', async (test) => {
+Test.serial('clean data/folder/file.json', async (test) => {
 
-  let path = [ Path.resolve(DataPath, '0/0.json') ]
+  let path = [ Path.resolve(DataPath, 'folder/file.json') ]
 
   await FileSystem.ensureFile(path[0])
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
+    'is-verbose=true',
     'job-count=1',
-    'verbose=true',
+    'is-cleaning=true',
     `current-clean-folder=${DataPath}`
   ])
 
@@ -81,20 +84,23 @@ Test.serial('clean data/0/0.json', async (test) => {
 
 })
 
-Test.serial('clean data/0/makefile when deleted', async (test) => {
+Test.serial('clean data/folder/makefile when debugged', async (test) => {
 
   let path = [
-    Path.resolve(DataPath, '0/makefile'),
-    Path.resolve(DataPath, '0/0.json')
+    Path.resolve(DataPath, 'folder/makefile'),
+    Path.resolve(DataPath, 'folder/file.json')
   ]
 
-  await FileSystem.outputFile(path[0], DeleteContent, { 'encoding': 'utf-8' })
-  await FileSystem.ensureFile(path[1])
+  await Promise.all([
+    FileSystem.outputFile(path[0], DebugContent, { 'encoding': 'utf-8' }),
+    FileSystem.ensureFile(path[1])
+  ])
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
+    'is-verbose=true',
     'job-count=1',
-    'verbose=true',
+    'is-cleaning=true',
     `current-clean-folder=${DataPath}`
   ])
 
@@ -107,11 +113,11 @@ Test.serial('clean data/0/makefile when deleted', async (test) => {
 
 })
 
-Test.serial('clean data/0/makefile when ignored', async (test) => {
+Test.serial('clean data/folder/makefile when ignored', async (test) => {
 
   let path = [
-    Path.resolve(DataPath, '0/makefile'),
-    Path.resolve(DataPath, '0/0.json')
+    Path.resolve(DataPath, 'folder/makefile'),
+    Path.resolve(DataPath, 'folder/file.json')
   ]
 
   await FileSystem.outputFile(path[0], IgnoreContent, { 'encoding': 'utf-8' })
@@ -122,8 +128,9 @@ Test.serial('clean data/0/makefile when ignored', async (test) => {
 
     let process = new LoggedProcess(Process.env.MAKE_PATH, [
       'clean',
+      'is-verbose=true',
       'job-count=1',
-      'verbose=true',
+      'is-cleaning=true',
       `current-clean-folder=${DataPath}`
     ])
 

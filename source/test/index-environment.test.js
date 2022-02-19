@@ -5,8 +5,8 @@ import URL from 'url'
 const FolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const Process = process
 
-Test('GIT_IS_DIRTY', (test) => {
-  test.not(Process.env.GIT_IS_DIRTY, undefined)
+Test('IS_DIRTY', (test) => {
+  test.not(Process.env.IS_DIRTY, undefined)
 })
 
 Test('MAKE_PATH', (test) => {
