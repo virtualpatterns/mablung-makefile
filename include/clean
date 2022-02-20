@@ -87,7 +87,6 @@ debug::
 	$(info clean-folder ........... $(clean-folder))
 	$(info clean-file ............. $(clean-file))
 	$(info ----------------------------------------)
-	@$(MAKE) --no-print-directory clean
 
 ifeq ($(strip $(make-folder) $(clean-folder)),)
 

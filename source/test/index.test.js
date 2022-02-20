@@ -10,6 +10,7 @@ const SourceFolderPath = ReleaseFolderPath.replace('/release/', '/source/')
 const EmptyPathExists = FileSystem.pathExistsSync(Path.resolve(ReleaseFolderPath, '../../source/test/resource/empty'))
 
 ;[
+  'CreateId',
   'PathExists'
 ].forEach((name) => {
 

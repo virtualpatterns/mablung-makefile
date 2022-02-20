@@ -1,3 +1,3 @@
 include makefile
 
-.DEFAULT_GOAL := copy
+default:: copy;

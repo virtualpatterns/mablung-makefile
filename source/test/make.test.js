@@ -106,8 +106,3 @@ Test('build', async (test) => {
   let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'build' ])
   test.is(await process.whenExit(), 0)
 })
-
-Test('clean', async (test) => {
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [ '--dry-run', 'clean' ])
-  test.is(await process.whenExit(), 0)
-})

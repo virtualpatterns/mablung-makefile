@@ -1,3 +1,4 @@
+import { CreateId } from '@virtualpatterns/mablung-makefile/test'
 import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
 import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
@@ -12,137 +13,147 @@ const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 const LogPath = DataPath.concat('.log')
 const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
-const DebugContent = 'include makefile\n\n.DEFAULT_GOAL := debug'
-const IgnoreContent = 'include makefile\n\n.DEFAULT_GOAL := ignore'
+const DebugContent = 'include makefile\n\ndefault:: debug clean;'
+const IgnoreContent = 'include makefile\n\ndefault:: ignore;'
 
 Test.before(async () => {
   await FileSystem.ensureDir(Path.dirname(LogPath))
   return FileSystem.remove(LogPath)
 })
 
-Test.beforeEach(async () => {
-  await FileSystem.remove(DataPath)
-  return FileSystem.ensureDir(DataPath)
+Test('clean', async (test) => {
+
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+    '--dry-run',
+    'clean'
+  ])
+  
+  test.is(await process.whenExit(), 0)
+
 })
 
-Test.serial('clean data', async (test) => {
+Test('clean data/id', async (test) => {
+
+  let id = await CreateId()
+  let dataPath = Path.resolve(DataPath, id)
+
+  await FileSystem.ensureDir(dataPath)
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
-    'is-verbose=true',
-    'job-count=1',
     'is-cleaning=true',
-    `current-clean-folder=${DataPath}`
+    `current-clean-folder=${dataPath}`
+  ])
+
+  test.is(await process.whenExit(), 0)
+  test.is(await FileSystem.pathExists(dataPath), false)
+
+})
+
+Test('clean data/id/file.json', async (test) => {
+
+  let id = await CreateId()
+  let dataPath = Path.resolve(DataPath, id)
+
+  let path = Path.resolve(dataPath, 'file.json')
+
+  await FileSystem.ensureFile(path)
+
+  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+    'clean',
+    'is-cleaning=true',
+    `current-clean-folder=${dataPath}`
   ])
 
   test.is(await process.whenExit(), 0)
 
-  test.is(await FileSystem.pathExists(DataPath), false)
+  test.is(await FileSystem.pathExists(path), false)
+  test.is(await FileSystem.pathExists(dataPath), false)
 
 })
 
-Test.serial('clean data/file.json', async (test) => {
+Test('clean data/id/folder/file.json', async (test) => {
 
-  let path = [ Path.resolve(DataPath, 'file.json') ]
+  let id = await CreateId()
+  let dataPath = Path.resolve(DataPath, id)
 
-  await FileSystem.ensureFile(path[0])
+  let path = Path.resolve(dataPath, 'folder/file.json')
+
+  await FileSystem.ensureFile(path)
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
-    'is-verbose=true',
-    'job-count=1',
     'is-cleaning=true',
-    `current-clean-folder=${DataPath}`
+    `current-clean-folder=${dataPath}`
   ])
 
   test.is(await process.whenExit(), 0)
 
-  test.is(await FileSystem.pathExists(path[0]), false)
-  test.is(await FileSystem.pathExists(DataPath), false)
+  test.is(await FileSystem.pathExists(path), false)
+  test.is(await FileSystem.pathExists(dataPath), false)
 
 })
 
-Test.serial('clean data/folder/file.json', async (test) => {
+Test('clean when debugged', async (test) => {
 
-  let path = [ Path.resolve(DataPath, 'folder/file.json') ]
-
-  await FileSystem.ensureFile(path[0])
-
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
-    'clean',
-    'is-verbose=true',
-    'job-count=1',
-    'is-cleaning=true',
-    `current-clean-folder=${DataPath}`
-  ])
-
-  test.is(await process.whenExit(), 0)
-
-  test.is(await FileSystem.pathExists(path[0]), false)
-  test.is(await FileSystem.pathExists(Path.dirname(path[0])), false)
-  test.is(await FileSystem.pathExists(DataPath), false)
-
-})
-
-Test.serial('clean data/folder/makefile when debugged', async (test) => {
+  let id = await CreateId()
+  let dataPath = Path.resolve(DataPath, id)
 
   let path = [
-    Path.resolve(DataPath, 'folder/makefile'),
-    Path.resolve(DataPath, 'folder/file.json')
+    Path.resolve(dataPath, 'folder/file.json'),
+    Path.resolve(dataPath, 'folder/makefile')
   ]
 
   await Promise.all([
-    FileSystem.outputFile(path[0], DebugContent, { 'encoding': 'utf-8' }),
-    FileSystem.ensureFile(path[1])
+    FileSystem.ensureFile(path[0]),
+    FileSystem.outputFile(path[1], DebugContent, { 'encoding': 'utf-8' })
   ])
 
   let process = new LoggedProcess(Process.env.MAKE_PATH, [
     'clean',
-    'is-verbose=true',
-    'job-count=1',
     'is-cleaning=true',
-    `current-clean-folder=${DataPath}`
+    `current-clean-folder=${dataPath}`
   ])
 
   test.is(await process.whenExit(), 0)
 
-  test.is(await FileSystem.pathExists(path[1]), false)
   test.is(await FileSystem.pathExists(path[0]), false)
-  test.is(await FileSystem.pathExists(Path.dirname(path[0])), false)
-  test.is(await FileSystem.pathExists(DataPath), false)
+  test.is(await FileSystem.pathExists(path[1]), false)
+  test.is(await FileSystem.pathExists(dataPath), false)
 
 })
 
-Test.serial('clean data/folder/makefile when ignored', async (test) => {
+Test('clean when ignored', async (test) => {
+
+  let id = await CreateId()
+  let dataPath = Path.resolve(DataPath, id)
 
   let path = [
-    Path.resolve(DataPath, 'folder/makefile'),
-    Path.resolve(DataPath, 'folder/file.json')
+    Path.resolve(dataPath, 'folder/file.json'),
+    Path.resolve(dataPath, 'folder/makefile')
   ]
 
-  await FileSystem.outputFile(path[0], IgnoreContent, { 'encoding': 'utf-8' })
+  await Promise.all([
+    FileSystem.ensureFile(path[0]),
+    FileSystem.outputFile(path[1], IgnoreContent, { 'encoding': 'utf-8' })
+  ])
 
   try {
 
-    await FileSystem.ensureFile(path[1])
-
     let process = new LoggedProcess(Process.env.MAKE_PATH, [
       'clean',
-      'is-verbose=true',
-      'job-count=1',
       'is-cleaning=true',
-      `current-clean-folder=${DataPath}`
+      `current-clean-folder=${dataPath}`
     ])
 
     test.is(await process.whenExit(), 0)
 
-    test.is(await FileSystem.pathExists(path[1]), true)
     test.is(await FileSystem.pathExists(path[0]), true)
-    test.is(await FileSystem.pathExists(Path.dirname(path[0])), true)
+    test.is(await FileSystem.pathExists(path[1]), true)
     test.is(await FileSystem.pathExists(DataPath), true)
 
   } finally {
-    await FileSystem.remove(path[0])
+    await FileSystem.remove(dataPath)
   }
 
 })
