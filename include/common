@@ -50,7 +50,7 @@ ifneq ($(get-commit-item),)
 ifneq ($(message),)
 
 commit:: pre-commit $(addsuffix .add,$(get-commit-item))
-	@git commit --message="$(message)"
+	@git commit --message="$(message)" --quiet
 
 %.add:
 	$(if $(is-verbose),@echo add ....... $(patsubst %.add,%,$@))
