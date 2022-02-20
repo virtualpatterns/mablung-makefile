@@ -33,7 +33,7 @@ Test(`${Path.relative('', ReleaseFolderPath)} vs ${Path.relative('', SourceFolde
   let item = await PathExists(sourcePath, targetPath)
 
   // test.log(item)
-  test.is(item.path, Path.resolve(SourceFolderPath, 'path-exists.js.map'))
+  test.is(item.path, Path.resolve(SourceFolderPath, 'create-id.js.map'))
   test.false(item.exists)
 
 })
