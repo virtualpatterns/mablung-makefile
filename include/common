@@ -50,10 +50,10 @@ ifneq ($(get-commit-item),)
 ifneq ($(message),)
 
 commit:: pre-commit $(addsuffix .add,$(get-commit-item))
-	$(info - commit -------------------------------)
 	@git commit --message="$(message)"
 
 %.add:
+	$(if $(is-verbose),@echo add ....... $(patsubst %.add,%,$@))
 	@git add $(patsubst %.add,%,$@)
 
 else
@@ -64,7 +64,9 @@ commit::
 
 endif
 
-pre-commit:: ;
+pre-commit::
+	$(info - commit -------------------------------)
+	@:
 
 else
 
