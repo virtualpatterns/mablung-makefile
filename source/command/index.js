@@ -7,9 +7,7 @@ import URL from 'url'
 
 import { Package } from '../library/package.js'
 
-SourceMapSupport.install({
-  'handleUncaughtExceptions': false
-})
+SourceMapSupport.install({ 'handleUncaughtExceptions': false })
 
 const FolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const Process = process

@@ -23,11 +23,11 @@ include $(--mablung-makefile-path)/include/clean
 # 	@:
 
 # source/commonjs.create:
-# 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
+# 	$(if $(is-verbose),@echo create .... $(patsubst %.create,%,$@))
 # 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 # source/commonjs/%.create:
-# 	$(if $(verbose),@echo create .... $(patsubst %.create,%,$@))
+# 	$(if $(is-verbose),@echo create .... $(patsubst %.create,%,$@))
 # 	@npx shx mkdir -p $(patsubst %.create,%,$@)
 
 # source/commonjs/%.cjs: source/esmodule/%.js
@@ -40,7 +40,7 @@ include $(--mablung-makefile-path)/include/clean
 
 # pre-clean::
 # 	$(info - pre-clean ----------------------------)
-# 	$(if $(verbose),@echo delete .... source/commonjs)
+# 	$(if $(is-verbose),@echo delete .... source/commonjs)
 # 	@npx shx rm -Rf source/commonjs
 
 # endif

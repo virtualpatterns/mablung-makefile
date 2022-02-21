@@ -254,6 +254,7 @@ pre-release::
 	$(error Error)
 
 pre-release-post-update::
+	$(info - pre-release --------------------------)
 	$(info Git working directory not clean ... $(get-dirty-item))
 	$(error Error)
 
