@@ -43,6 +43,7 @@ Test('../index.json', async (test) => {
 Test('../makefile', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(ReleaseFolderPath, test.title)))
 })
+
 Test('./resource/.babelrc.json', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(ReleaseFolderPath, test.title)))
 })

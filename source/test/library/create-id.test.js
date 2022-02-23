@@ -22,9 +22,9 @@ Test.serial('CreateId() throws Error', async (test) => {
 })
 
 Test.serial('CreateId(8)', async (test) => {
-  test.is((await CreateId(8)).length, 8)
+  test.is(await CreateId(8).then((id) => id.length), 8)
 })
 
 Test.serial('CreateId(9)', async (test) => {
-  test.is((await CreateId(9)).length, 10)
+  test.is(await CreateId(9).then((id) => id.length), 10)
 })
