@@ -1,4 +1,4 @@
-const Sinon = require('sinon')
+import Sinon from 'sinon'
 
 Sinon
   .stub(console, 'log')
