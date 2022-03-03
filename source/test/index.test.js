@@ -1,4 +1,4 @@
-import { PathExists } from '@virtualpatterns/mablung-makefile/test'
+import { PathCompare } from '@virtualpatterns/mablung-makefile/test'
 import FileSystem from 'fs-extra'
 import Path from 'path'
 import Test from 'ava'
@@ -7,11 +7,11 @@ import URL from 'url'
 const ReleaseFolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const SourceFolderPath = ReleaseFolderPath.replace('/release/', '/source/')
 
-const EmptyPathExists = FileSystem.pathExistsSync(Path.resolve(ReleaseFolderPath, '../../source/test/resource/empty'))
+const EmptyPathCompare = FileSystem.pathExistsSync(Path.resolve(ReleaseFolderPath, '../../source/test/resource/empty'))
 
 ;[
   'CreateId',
-  'PathExists'
+  'PathCompare'
 ].forEach((name) => {
 
   Test(name, async (test) => {
@@ -65,7 +65,7 @@ Test('./resource/index.json', async (test) => {
 })
 
 Test('./resource/copy', async (test) => {
-  test.true(await PathExists(Path.resolve(SourceFolderPath, test.title), Path.resolve(ReleaseFolderPath, test.title), (sourcePath, targetPath) => /makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
+  test.true(await PathCompare(Path.resolve(SourceFolderPath, test.title), Path.resolve(ReleaseFolderPath, test.title), (sourcePath, targetPath) => /makefile$/.test(sourcePath) ? [] : [ targetPath ]).then(({ exists }) => exists))
 })
 
 Test('./resource/custom', async (test) => {
@@ -79,7 +79,7 @@ Test('./resource/custom', async (test) => {
 
 })
 
-;(EmptyPathExists ? Test : Test.skip)('./resource/empty', async (test) => {
+;(EmptyPathCompare ? Test : Test.skip)('./resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(Path.resolve(ReleaseFolderPath, test.title)))
 })
 

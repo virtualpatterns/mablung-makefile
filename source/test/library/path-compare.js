@@ -1,7 +1,7 @@
 import FileSystem from 'fs-extra'
 import Path from 'path'
 
-async function pathExists(sourcePath, targetPath, transformFn) { 
+async function pathCompare(sourcePath, targetPath, transformFn) { 
 
   let information = await FileSystem.stat(sourcePath, { 'bigint': false })
   let transformedPath = await transformFn(sourcePath, targetPath)
@@ -14,7 +14,7 @@ async function pathExists(sourcePath, targetPath, transformFn) {
       ...transformedPath
         .map((path) => FileSystem.pathExists(path).then((exists) => ({ path, exists }))),
       ...item
-        .map((item) => pathExists(Path.resolve(sourcePath, item.name), Path.resolve(targetPath, item.name), transformFn))
+        .map((item) => pathCompare(Path.resolve(sourcePath, item.name), Path.resolve(targetPath, item.name), transformFn))
     ])
 
   } else {
@@ -28,9 +28,9 @@ async function pathExists(sourcePath, targetPath, transformFn) {
 
 }
 
-export async function PathExists(sourcePath, targetPath = sourcePath, transformFn = (sourcePath, targetPath) => [ targetPath ]) {
+export async function PathCompare(sourcePath, targetPath = sourcePath, transformFn = (sourcePath, targetPath) => [ targetPath ]) {
   
-  let item = await pathExists(sourcePath, targetPath, transformFn)
+  let item = await pathCompare(sourcePath, targetPath, transformFn)
 
   item = item
     .flat(Infinity)
