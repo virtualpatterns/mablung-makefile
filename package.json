@@ -16,11 +16,11 @@
     "release/test/index.js.map",
     "release/test/library/create-id.js",
     "release/test/library/create-id.js.map",
-    "release/test/library/path-exists.js",
-    "release/test/library/path-exists.js.map",
+    "release/test/library/path-compare.js",
+    "release/test/library/path-compare.js.map",
     "release/library",
     "source/test/library/create-id.*",
-    "source/test/library/path-exists.*"
+    "source/test/library/path-compare.*"
   ],
   "license": "GPL-3.0+",
   "name": "@virtualpatterns/mablung-makefile",
