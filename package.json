@@ -12,7 +12,7 @@
     "makefile",
     "release/command",
     "release/library",
-    "source/test/library/create-id.js",
+    "source/test/library/create-random-id.js",
     "source/test/library/path-compare.js"
   ],
   "license": "GPL-3.0+",
