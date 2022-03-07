@@ -3,7 +3,6 @@
   "bin": "./release/command/index.js",
   "description": "Implements make version, install, re-install, etc. for all mablung-* projects",
   "exports": {
-    "./test": "./release/test/index.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -13,13 +12,6 @@
     "makefile",
     "release/command",
     "release/library",
-    "release/test/index.js",
-    "release/test/index.js.map",
-    "release/test/library/create-id.js",
-    "release/test/library/create-id.js.map",
-    "release/test/library/path-compare.js",
-    "release/test/library/path-compare.js.map",
-    "source/test/index.js",
     "source/test/library/create-id.js",
     "source/test/library/path-compare.js"
   ],

@@ -1,7 +1,8 @@
-import { PathCompare } from '@virtualpatterns/mablung-makefile/test'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
+
+import { PathCompare } from './path-compare.js'
 
 const ReleaseFolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const SourceFolderPath = ReleaseFolderPath.replace('/release/', '/source/')
@@ -33,7 +34,7 @@ Test(`${Path.relative('', ReleaseFolderPath)} vs ${Path.relative('', SourceFolde
   let item = await PathCompare(sourcePath, targetPath)
 
   // test.log(item)
-  test.is(item.path, Path.resolve(SourceFolderPath, 'create-id.js.map'))
+  test.is(item.path, Path.resolve(SourceFolderPath, 'create-random-id.js.map'))
   test.false(item.exists)
 
 })

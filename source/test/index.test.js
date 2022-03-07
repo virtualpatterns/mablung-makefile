@@ -1,24 +1,14 @@
-import { PathCompare } from '@virtualpatterns/mablung-makefile/test'
 import FileSystem from 'fs-extra'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
 
+import { PathCompare } from './library/path-compare.js'
+
 const ReleaseFolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const SourceFolderPath = ReleaseFolderPath.replace('/release/', '/source/')
 
-const EmptyPathCompare = FileSystem.pathExistsSync(Path.resolve(ReleaseFolderPath, '../../source/test/resource/empty'))
-
-;[
-  'CreateId',
-  'PathCompare'
-].forEach((name) => {
-
-  Test(name, async (test) => {
-    test.truthy(await import('@virtualpatterns/mablung-makefile/test').then((module) => module[name]))
-  })
-  
-})
+const EmptyPathExists = FileSystem.pathExistsSync(Path.resolve(SourceFolderPath, 'resource/empty'))
 
 Test('../.babelrc.json', async (test) => {
   test.false(await FileSystem.pathExists(Path.resolve(ReleaseFolderPath, test.title)))
@@ -79,7 +69,7 @@ Test('./resource/custom', async (test) => {
 
 })
 
-;(EmptyPathCompare ? Test : Test.skip)('./resource/empty', async (test) => {
+;(EmptyPathExists ? Test : Test.skip)('./resource/empty', async (test) => {
   test.true(await FileSystem.pathExists(Path.resolve(ReleaseFolderPath, test.title)))
 })
 

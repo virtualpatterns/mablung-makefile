@@ -1,10 +1,11 @@
-import { CreateId } from '@virtualpatterns/mablung-makefile/test'
 import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
 import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
 import FileSystem from 'fs-extra'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
+
+import { CreateRandomId } from './library/create-random-id.js'
 
 const FilePath = URL.fileURLToPath(import.meta.url)
 const Process = process
@@ -34,7 +35,7 @@ Test('clean', async (test) => {
 
 Test('clean data/id', async (test) => {
 
-  let id = await CreateId()
+  let id = await CreateRandomId()
   let dataPath = Path.resolve(DataPath, id)
 
   await FileSystem.ensureDir(dataPath)
@@ -52,7 +53,7 @@ Test('clean data/id', async (test) => {
 
 Test('clean data/id/file.json', async (test) => {
 
-  let id = await CreateId()
+  let id = await CreateRandomId()
   let dataPath = Path.resolve(DataPath, id)
 
   let path = Path.resolve(dataPath, 'file.json')
@@ -74,7 +75,7 @@ Test('clean data/id/file.json', async (test) => {
 
 Test('clean data/id/folder/file.json', async (test) => {
 
-  let id = await CreateId()
+  let id = await CreateRandomId()
   let dataPath = Path.resolve(DataPath, id)
 
   let path = Path.resolve(dataPath, 'folder/file.json')
@@ -96,7 +97,7 @@ Test('clean data/id/folder/file.json', async (test) => {
 
 Test('clean when debugged', async (test) => {
 
-  let id = await CreateId()
+  let id = await CreateRandomId()
   let dataPath = Path.resolve(DataPath, id)
 
   let path = [
@@ -125,7 +126,7 @@ Test('clean when debugged', async (test) => {
 
 Test('clean when ignored', async (test) => {
 
-  let id = await CreateId()
+  let id = await CreateRandomId()
   let dataPath = Path.resolve(DataPath, id)
 
   let path = [
