@@ -5,7 +5,7 @@ import Path from 'path'
 import SourceMapSupport from 'source-map-support'
 import URL from 'url'
 
-import { Package } from '../library/package.js'
+import { Package } from './library/package.js'
 
 SourceMapSupport.install({ 'handleUncaughtExceptions': false })
 

@@ -39,7 +39,7 @@ ifneq ($(is-cleaning),true)
 # --------------------
 
 get-dirty-item = $(strip $\
-									$(shell git status --porcelain | awk '{print $$2}'))
+									$(shell git status --porcelain || awk '{print $$2}'))
 
 get-commit-item = $(filter $\
 										$(or $(include-commit-item),%),$\

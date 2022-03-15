@@ -133,7 +133,7 @@
 # # 	$(eval var := $(shell ls > sandbox/ls.out))
 # # 	@echo $(var)
 
-# # $(info $(shell git status --porcelain | awk '{print $$2}'))
+# # $(info $(shell git status --porcelain || awk '{print $$2}'))
 
 # # asd := $(shell npx npm-check-updates --errorLevel 2 1> /dev/null 2> /dev/null && echo $$?)
 # # $(info asd = $(asd))

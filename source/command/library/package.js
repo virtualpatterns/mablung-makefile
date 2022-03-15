@@ -5,4 +5,4 @@ import URL from 'url'
 
 const FolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 
-export const Package = Json.parse(FileSystem.readFileSync(Path.resolve(FolderPath, '../../package.json'), { 'encoding': 'utf-8' }))
+export const Package = Json.parse(FileSystem.readFileSync(Path.resolve(FolderPath, '../../../package.json'), { 'encoding': 'utf-8' }))
