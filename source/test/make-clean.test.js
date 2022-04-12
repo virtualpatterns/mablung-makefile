@@ -1,30 +1,35 @@
-import { CreateLoggedProcess } from '@virtualpatterns/mablung-worker/test'
-import { SpawnedProcess } from '@virtualpatterns/mablung-worker'
+import { CreateRandomId } from '@virtualpatterns/mablung-worker'
+import { LoggedSpawnedProcess } from '@virtualpatterns/mablung-worker/test'
 import FileSystem from 'fs-extra'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
 
-import { CreateRandomId } from './library/create-random-id.js'
-
 const FilePath = URL.fileURLToPath(import.meta.url)
 const Process = process
 
 const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
-const LogPath = DataPath.concat('.log')
-const LoggedProcess = CreateLoggedProcess(SpawnedProcess, LogPath)
 
 const DebugContent = 'include makefile\n\ndefault:: debug clean;'
 const IgnoreContent = 'include makefile\n\ndefault:: ignore;'
 
 Test.before(async () => {
-  await FileSystem.ensureDir(Path.dirname(LogPath))
-  return FileSystem.remove(LogPath)
+  await FileSystem.remove(DataPath)
+  return FileSystem.ensureDir(DataPath)
+})
+
+Test.beforeEach(async (test) => {
+
+  let id = await CreateRandomId()
+  let logPath = Path.resolve(DataPath, `${id}.log`)
+
+  test.context.logPath = logPath
+
 })
 
 Test('clean', async (test) => {
 
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+  let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
     '--dry-run',
     'clean'
   ])
@@ -40,7 +45,7 @@ Test('clean data/id', async (test) => {
 
   await FileSystem.ensureDir(dataPath)
 
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+  let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
     'clean',
     'is-cleaning=true',
     `current-clean-folder=${dataPath}`
@@ -60,7 +65,7 @@ Test('clean data/id/file.json', async (test) => {
 
   await FileSystem.ensureFile(path)
 
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+  let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
     'clean',
     'is-cleaning=true',
     `current-clean-folder=${dataPath}`
@@ -82,7 +87,7 @@ Test('clean data/id/folder/file.json', async (test) => {
 
   await FileSystem.ensureFile(path)
 
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+  let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
     'clean',
     'is-cleaning=true',
     `current-clean-folder=${dataPath}`
@@ -110,7 +115,7 @@ Test('clean when debugged', async (test) => {
     FileSystem.outputFile(path[1], DebugContent, { 'encoding': 'utf-8' })
   ])
 
-  let process = new LoggedProcess(Process.env.MAKE_PATH, [
+  let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
     'clean',
     'is-cleaning=true',
     `current-clean-folder=${dataPath}`
@@ -141,7 +146,7 @@ Test('clean when ignored', async (test) => {
 
   try {
 
-    let process = new LoggedProcess(Process.env.MAKE_PATH, [
+    let process = new LoggedSpawnedProcess(test.context.logPath, Process.env.MAKE_PATH, [
       'clean',
       'is-cleaning=true',
       `current-clean-folder=${dataPath}`
