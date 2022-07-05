@@ -1,8 +1,7 @@
+import { CreateRandomId } from '@virtualpatterns/mablung-makefile/test' // './library/path-compare.js'
 import Cryptography from 'crypto'
 import Sinon from 'sinon'
 import Test from 'ava'
-
-import { CreateRandomId } from './create-random-id.js'
 
 Test.serial('CreateRandomId()', (test) => {
   return test.notThrowsAsync(CreateRandomId())

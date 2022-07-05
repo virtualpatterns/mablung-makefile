@@ -1,4 +1,4 @@
-import { CreateRandomId } from '@virtualpatterns/mablung-worker'
+import { CreateRandomId } from '@virtualpatterns/mablung-makefile/test'
 import { LoggedForkedProcess } from '@virtualpatterns/mablung-worker/test'
 import FileSystem from 'fs-extra'
 import Path from 'path'
@@ -11,9 +11,8 @@ const Process = process
 
 const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 
-Test.before(async () => {
-  await FileSystem.remove(DataPath)
-  return FileSystem.ensureDir(DataPath)
+Test.before(() => {
+  return FileSystem.emptyDir(DataPath)
 })
 
 Test.beforeEach(async (test) => {

@@ -1,4 +1,4 @@
-import { CreateRandomId } from '@virtualpatterns/mablung-worker'
+import { CreateRandomId } from '@virtualpatterns/mablung-makefile/test'
 import { LoggedSpawnedProcess } from '@virtualpatterns/mablung-worker/test'
 import FileSystem from 'fs-extra'
 import Is from '@pwn/is'
@@ -13,9 +13,8 @@ const DataPath = FilePath.replace('/release/', '/data/').replace('.test.js', '')
 
 const IsDirty = Is.equal(Process.env.IS_DIRTY, 'true')
 
-Test.before(async () => {
-  await FileSystem.remove(DataPath)
-  return FileSystem.ensureDir(DataPath)
+Test.before(() => {
+  return FileSystem.emptyDir(DataPath)
 })
 
 Test.beforeEach(async (test) => {

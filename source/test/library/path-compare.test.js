@@ -1,8 +1,7 @@
+import { PathCompare } from '@virtualpatterns/mablung-makefile/test' // './library/path-compare.js'
 import Path from 'path'
 import Test from 'ava'
 import URL from 'url'
-
-import { PathCompare } from './path-compare.js'
 
 const ReleaseFolderPath = Path.dirname(URL.fileURLToPath(import.meta.url))
 const SourceFolderPath = ReleaseFolderPath.replace('/release/', '/source/')
