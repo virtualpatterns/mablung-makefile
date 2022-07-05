@@ -12,7 +12,9 @@
     "include",
     "makefile",
     "release/command",
-    "release/library",
+    "release/test/library/create-random-id.*",
+    "release/test/library/path-compare.*",
+    "release/test/index.*",
     "source/test/library/create-random-id.js",
     "source/test/library/path-compare.js"
   ],
