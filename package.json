@@ -39,7 +39,7 @@
     "eslint": "^8.19.0",
     "fs-extra": "^10.1.0",
     "json5": "^2.2.1",
-    "npm-check-updates": "^15.0.2",
+    "npm-check-updates": "^15.0.3",
     "shx": "^0.3.4",
     "source-map-support": "^0.5.21"
   },
